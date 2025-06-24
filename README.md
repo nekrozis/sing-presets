@@ -13,22 +13,36 @@ cd singbox-configs
 # 3. 切换到对应分支（v12 或 v11）
 git checkout v12    # 或者 git checkout v11
 
-# 4. 编辑订阅地址（每行一个）
+# 4. 编辑订阅地址和模块启用标记
 nano subscription.txt
 
-# 5. 选择启用模块（保留需要的 features/*.yaml）
-
-# 6. 提交更改
+# 5. 提交更改
 git add .
 git commit -m "update config"
 git push
+````
+
+## 📋 编辑 subscription.txt
+
+在 `subscription.txt` 中：
+
+* 每行写一个订阅链接，不要以 `#` 开头，脚本会自动识别这些行作为订阅地址。
+* 你可以通过添加如下格式的注释来启用对应模块（可选）：
+
 ```
+# enable: fake-ip
+# enable: clash-api
+```
+
+* 支持的模块名即为 `features/` 目录中 `.yaml` 文件的文件名（去掉 `.yaml`）。
+
+脚本会根据这些 `enable` 标记自动保留对应的模块配置，实现按需启用。
 
 ## 📦 分支说明
 
-- `main`：主文档分支（不包含配置）
-- `v12`：适用于 sing-box 1.12 的配置模板（推荐）
-- `v11`：适用于 sing-box 1.11 的配置模板
+* `main`：主文档分支（不包含配置）
+* `v12`：适用于 sing-box 1.12 的配置模板（推荐）
+* `v11`：适用于 sing-box 1.11 的配置模板
 
 ## ⚙️ 自动构建说明
 
