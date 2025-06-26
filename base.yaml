@@ -53,11 +53,11 @@ outbounds:
   - _PROXY_NODES_
 route:
   rules:
-    - outbound: direct
-      ip_is_private: true
     - action: sniff
     - action: hijack-dns
       protocol: dns
+    - outbound: direct
+      ip_is_private: true
     - action: reject
       rule_set:
         - geosite-category-ads-all
