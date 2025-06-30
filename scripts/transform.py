@@ -1,29 +1,19 @@
-import base64
+from dataclasses import dataclass
+from parsers import protocol_parsers
 import requests
 import re
+from .utils import *
 
 SUPPORTED_PROTOCOLS = ["ss", "vmess"]
 
 
+@dataclass
 class ProxyLink:
-    def __init__(self, protocol: str, content: str):
-        self.protocol = protocol
-        self.content = content
+    protocol: str
+    content: str
 
     def __repr__(self):
         return f"ProxyLink(protocol='{self.protocol}', content='{self.content}')"
-
-
-def try_decode_base64(content: str) -> str | None:
-    try:
-        padding = 4 - (len(content) % 4)
-        if padding != 4:
-            content += "=" * padding
-        decoded_bytes = base64.b64decode(content, validate=True)
-        decoded_str = decoded_bytes.decode("utf-8")
-        return decoded_str
-    except Exception:
-        return None
 
 
 def extract_links_from_content(text: str) -> list[ProxyLink]:
@@ -66,11 +56,20 @@ def fetch_and_extract_links(filepath: str) -> list[ProxyLink]:
     return extracted
 
 
-def main():
-    links = fetch_and_extract_links("subscription.txt")
+def generate_configs(subscription_file: str = "subscription.txt") -> list[dict]:
+    links = fetch_and_extract_links(subscription_file)
+    configs = []
+
     for link in links:
-        print(link)
+        parser = protocol_parsers.get(link.protocol)
+        if not parser:
+            print(f"Unsupported protocol: {link.protocol}")
+            continue
 
+        try:
+            config = parser(link.content)
+            configs.append(config)
+        except Exception as e:
+            print(f"Failed to parse {link}: {e}")
 
-if __name__ == "__main__":
-    main()
+    return configs
