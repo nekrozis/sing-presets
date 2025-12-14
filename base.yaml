@@ -1,0 +1,85 @@
+log:
+  disabled: false
+  level: info
+dns:
+  servers:
+    - tag: dns-remote
+      address: tls://dns.quad9.net
+      address_resolver: dns-direct
+      detour: proxy
+    - tag: dns-direct
+      address: tls://dot.pub
+      address_resolver: dns-local
+      detour: direct
+    - tag: dns-local
+      address: udp://223.5.5.5
+      detour: direct
+  rules:
+    - server: dns-direct
+      outbound: any
+    - action: reject
+      rule_set:
+        - geosite-category-ads-all
+    - server: dns-direct
+      rule_set:
+        - geosite-cn
+  final: dns-remote
+  strategy: ipv4_only
+  independent_cache: true
+inbounds:
+  - tag: tun-in
+    type: tun
+    address:
+      - 172.19.0.1/28
+      - fdfe:dcba:9876::1/126
+    mtu: 9000
+    auto_route: true
+    strict_route: true
+    stack: gvisor
+outbounds:
+  - tag: direct
+    type: direct
+  - tag: proxy
+    type: selector
+    outbounds:
+      - auto
+      - _PROXY_TAGS_
+    default: auto
+  - tag: auto
+    type: urltest
+    outbounds:
+      - _PROXY_TAGS_
+    url: https://www.googleapis.com/generate_204
+  - _PROXY_NODES_
+route:
+  rules:
+    - action: sniff
+    - action: hijack-dns
+      protocol: dns
+    - outbound: direct
+      ip_is_private: true
+    - action: reject
+      rule_set:
+        - geosite-category-ads-all
+    - outbound: direct
+      rule_set:
+        - geosite-cn
+        - geoip-cn
+  rule_set:
+    - tag: geosite-category-ads-all
+      type: remote
+      format: binary
+      url: https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs
+    - tag: geosite-cn
+      type: remote
+      format: binary
+      url: https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs
+    - tag: geoip-cn
+      type: remote
+      format: binary
+      url: https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs
+  final: proxy
+  auto_detect_interface: true
+experimental:
+  cache_file:
+    enabled: true
