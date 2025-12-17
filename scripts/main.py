@@ -42,7 +42,6 @@ if __name__ == "__main__":
             return node
 
     cfg = replace_macros(base_yml)
-    cfg = json.dumps(cfg, ensure_ascii=False, indent=2)
     print(cfg)
     with open("../config.json", "w", encoding="utf-8") as f:
         json.dump(cfg, f, ensure_ascii=False, indent=2)
