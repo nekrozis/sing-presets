@@ -4,34 +4,37 @@ log:
 dns:
   servers:
     - tag: dns-remote
-      address: tls://dns.quad9.net
-      address_resolver: dns-direct
+      type: tls
+      server: 149.112.112.10
       detour: proxy
     - tag: dns-direct
-      address: tls://dot.pub
-      address_resolver: dns-local
-      detour: direct
-    - tag: dns-local
-      address: udp://223.5.5.5
-      detour: direct
+      type: tls
+      server: 223.5.5.5
   rules:
-    - server: dns-direct
-      outbound: any
     - action: reject
       rule_set:
         - geosite-category-ads-all
+    - server: dns-remote
+      rule_set:
+        geosite-geolocation-!cn
+      strategy: prefer_ipv6
     - server: dns-direct
       rule_set:
         - geosite-cn
+      strategy: ipv4_only
   final: dns-remote
   strategy: ipv4_only
-  independent_cache: true
 inbounds:
   - tag: tun-in
     type: tun
     address:
-      - 172.19.0.1/28
+      - 172.18.0.1/30
       - fdfe:dcba:9876::1/126
+    route_exclude_address:
+      - 192.168.0.0/16
+      - fc00::/7
+    loopback_address:
+      - 10.7.0.1
     mtu: 9000
     auto_route: true
     strict_route: true
@@ -49,7 +52,6 @@ outbounds:
     type: urltest
     outbounds:
       - _PROXY_TAGS_
-    url: https://www.googleapis.com/generate_204
   - _PROXY_NODES_
 route:
   rules:
@@ -61,6 +63,9 @@ route:
     - action: reject
       rule_set:
         - geosite-category-ads-all
+    - outbound: proxy
+      rule_set:
+        - geosite-geolocation-!cn
     - outbound: direct
       rule_set:
         - geosite-cn
@@ -70,6 +75,10 @@ route:
       type: remote
       format: binary
       url: https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs
+    - tag: geosite-geolocation-!cn
+      type: remote
+      format: binary
+      url: https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs
     - tag: geosite-cn
       type: remote
       format: binary
@@ -80,6 +89,7 @@ route:
       url: https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs
   final: proxy
   auto_detect_interface: true
+  default_domain_resolver: dns-direct
 experimental:
   cache_file:
     enabled: true

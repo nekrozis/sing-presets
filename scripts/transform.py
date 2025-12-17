@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from parsers import protocol_parsers
 import requests
 import re
-from .utils import *
+from utils import *
 
 SUPPORTED_PROTOCOLS = ["ss", "vmess"]
 

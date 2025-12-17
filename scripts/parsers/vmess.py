@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional
 import uuid
-from ..utils import *
+from utils import *
 import json
 
 
@@ -55,24 +55,20 @@ class VMess:
             elif self.net == "kcp":
                 raise NotImplementedError("kcp transport is not supported yet.")
             config["transport"] = transport
-        
+
         if self.tls and self.tls.lower() == "tls":
             tls_config = {"enabled": True}
             tls_config["server_name"] = self.sni
             if self.alpn:
                 tls_config["alpn"] = self.alpn.split(",")
             if self.fp:
-                tls_config["utls"] = {
-                    "enabled": True,
-                    "fingerprint": self.fp
-                }
+                tls_config["utls"] = {"enabled": True, "fingerprint": self.fp}
             config["tls"] = tls_config
 
         return config
 
 
 def parse_vmess(link: str) -> Optional[VMess]:
-
     decoded = try_decode_base64(link)
     if not decoded:
         return None
