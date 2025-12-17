@@ -46,3 +46,12 @@ if __name__ == "__main__":
     print(cfg)
     with open("../config.json", "w", encoding="utf-8") as f:
         json.dump(cfg, f, ensure_ascii=False, indent=2)
+
+    with open("../features/clash_api.yaml") as f:
+        clash_yml = yaml.safe_load(f)
+
+    cfg_with_api = replace_macros(base_yml)
+    cfg_with_api["experimental"]["clash_api"] = clash_yml["experimental"]["clash_api"]
+
+    with open("../config-api.json", "w", encoding="utf-8") as f:
+        json.dump(cfg_with_api, f, ensure_ascii=False, indent=2)
