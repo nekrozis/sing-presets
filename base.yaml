@@ -16,7 +16,7 @@ dns:
         - geosite-category-ads-all
     - server: dns-remote
       rule_set:
-        geosite-geolocation-!cn
+        - geosite-geolocation-!cn
       strategy: prefer_ipv6
     - server: dns-direct
       rule_set:
