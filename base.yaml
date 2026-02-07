@@ -5,7 +5,7 @@ dns:
   servers:
     - tag: dns-remote
       type: tls
-      server: 149.112.112.10
+      server: 9.9.9.11
       detour: proxy
     - tag: dns-direct
       type: tls
