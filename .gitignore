@@ -1,2 +1,4 @@
 subscription.txt
 __pycache__/
+*.json
+.venv/

@@ -1,0 +1,11 @@
+[project]
+name = "sing-presets"
+version = "0.1.0"
+description = "Sing-box config templates and generators."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "PyYAML>=6.0",
+  "requests>=2.0",
+]
+
