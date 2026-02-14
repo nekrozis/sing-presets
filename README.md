@@ -1,56 +1,74 @@
-# Sing-box 配置模板仓库
+# Sing-box Configuration Preset Repository
 
-这是一个模块化的 [sing-box](https://sing-box.sagernet.org/) 配置项目，支持从订阅生成配置，按需启用模块，并使用 GitHub Actions 自动构建和发布。
+A small Python project that generates sing-box configuration files from subscription URLs using a base YAML template.
 
-## 🚀 使用说明
+## Quick Start
 
 ```bash
-# 1. Fork 本仓库（建议设置为私有）
-# 2. 克隆你的仓库
-git clone git@github.com:<your-username>/singbox-configs.git
-cd singbox-configs
+# 1. Clone this repository
+git clone git@github.com:<your-username>/sing-presets.git
+cd sing-presets
 
-# 3. 切换到对应分支（v12 或 v11）
-git checkout v12    # 或者 git checkout v11
-
-# 4. 编辑订阅地址和模块启用标记
+# 2. Create subscription.txt in the repository root
 nano subscription.txt
 
-# 5. 提交更改
-git add .
-git commit -m "update config"
-git push
-````
-
-## 📋 编辑 subscription.txt
-
-在 `subscription.txt` 中：
-
-* 每行写一个订阅链接，不要以 `#` 开头，脚本会自动识别这些行作为订阅地址。
-* 你可以通过添加如下格式的注释来启用对应模块（可选）：
-
-```
-# enable: fake-ip
-# enable: clash-api
+# 3. Run the configuration generator from the scripts directory
+cd scripts
+python main.py
 ```
 
-* 支持的模块名即为 `features/` 目录中 `.yaml` 文件的文件名（去掉 `.yaml`）。
+After running the script, these files are created in the repository root:
 
-脚本会根据这些 `enable` 标记自动保留对应的模块配置，实现按需启用。
+- `config.json`
+- `config-api.json`
 
-## 📦 分支说明
+## Subscription File
 
-* `main`：主文档分支（不包含配置）
-* `v12`：适用于 sing-box 1.12 的配置模板（推荐）
-* `v11`：适用于 sing-box 1.11 的配置模板
+Create a `subscription.txt` file in the repository root with subscription URLs, one per line:
 
-## ⚙️ 自动构建说明
+```
+https://example.com/subscription1
+https://example.com/subscription2
+```
 
-配置好订阅和模块后，GitHub Actions 将会：
+Each non-empty line must be a URL. Comments are not supported. The script will:
 
-1. 下载订阅并生成 `outbounds.yaml`
-2. 合并基础配置与模块，生成 `build/final.json`
-3. 可选：上传最终配置到你的私有 Gist
+1. Fetch content from each subscription URL
+2. Decode base64-encoded content when possible
+3. Extract proxy links that start with `ss://` or `vmess://` (case-insensitive)
+4. Parse the proxies into sing-box outbound entries
 
-可在 GitHub → Actions 页面中手动触发构建或等待自动运行。
+## Base Template
+
+The `base.yaml` file contains the default sing-box configuration template, including:
+
+- Logging settings
+- DNS servers and rules
+- TUN inbound configuration
+- Selector and urltest outbounds
+- Routing rules with GeoSite and GeoIP rule sets
+
+Generated proxies are inserted into the template using `_PROXY_NODES_` and `_PROXY_TAGS_` placeholders.
+
+## Feature Modules
+
+Feature fragments are located in the `features/` directory:
+
+- `clash_api.yaml`: Clash API settings used by `scripts/main.py` to build `config-api.json`
+- `clash_api_allow_private.yaml`: Alternative Clash API settings that allow private network access; not used by default
+
+## Project Structure
+
+- `base.yaml`: Base configuration template
+- `features/`: Feature fragments
+- `scripts/`: Configuration generation scripts
+  - `main.py`: Entry point for configuration generation
+  - `transform.py`: Subscription fetching and proxy extraction
+  - `parsers/`: Protocol-specific parsers for Shadowsocks and VMess
+
+## Requirements
+
+- Python 3.9 or higher
+- PyYAML
+- requests
 
