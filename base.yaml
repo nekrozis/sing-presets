@@ -55,10 +55,10 @@ outbounds:
 route:
   rules:
     - action: sniff
-    - outbound: direct
-      ip_is_private: true
     - action: hijack-dns
       protocol: dns
+    - outbound: direct
+      ip_is_private: true
     - action: reject
       rule_set:
         - geosite-category-ads-all
@@ -70,22 +70,7 @@ route:
         - geosite-cn
         - geoip-cn
   rule_set:
-    - tag: geosite-category-ads-all
-      type: remote
-      format: binary
-      url: https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs
-    - tag: geosite-geolocation-!cn
-      type: remote
-      format: binary
-      url: https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs
-    - tag: geosite-cn
-      type: remote
-      format: binary
-      url: https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs
-    - tag: geoip-cn
-      type: remote
-      format: binary
-      url: https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs
+    - _REMOTE_RULESETS_
   final: proxy
   auto_detect_interface: true
   default_domain_resolver: dns-direct
