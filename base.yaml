@@ -18,9 +18,6 @@ dns:
     - action: reject
       rule_set:
         - geosite-category-ads-all
-    - server: dns-remote
-      rule_set:
-        - geosite-geolocation-!cn
     - server: dns-direct
       rule_set:
         - geosite-cn
@@ -62,9 +59,6 @@ route:
     - action: reject
       rule_set:
         - geosite-category-ads-all
-    - outbound: proxy
-      rule_set:
-        - geosite-geolocation-!cn
     - outbound: direct
       rule_set:
         - geosite-cn
