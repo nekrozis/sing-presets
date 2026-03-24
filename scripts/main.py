@@ -1,6 +1,7 @@
 from transform import *
 import json
 import yaml
+import config
 
 if __name__ == "__main__":
     # 1. Generate configs
@@ -16,6 +17,7 @@ if __name__ == "__main__":
     macros = {
         "_PROXY_NODES_": proxy_nodes,
         "_PROXY_TAGS_": proxy_tags,
+        "_REMOTE_RULESETS_": [config.rule_set_to_dict(rs) for rs in config.REMOTE_RULESETS],
     }
 
     def replace_macros(node):

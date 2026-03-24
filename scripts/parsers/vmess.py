@@ -3,6 +3,7 @@ from typing import Optional
 import uuid
 from utils import *
 import json
+import config
 
 
 @dataclass
@@ -40,12 +41,14 @@ class VMess:
             transport = {}
             if self.net == "tcp" or self.net == "h2":
                 transport["type"] = "http"
-                # if self.host:
-                #     transport["host"] = self.host.split(",")
-                # if self.path:
-                #     transport["path"] = self.path
-                transport["host"] = ["dldir1v6.qq.com"]
-                transport["path"] = "/"
+                if config.MODIFY_VMESS_TRANSPORT:
+                    transport["host"] = [config.VMESS_HOST]
+                    transport["path"] = "/"
+                else:
+                    if self.host:
+                        transport["host"] = self.host.split(",")
+                    if self.path:
+                        transport["path"] = self.path
             elif self.net == "ws":
                 transport["type"] = "ws"
                 if self.path:
