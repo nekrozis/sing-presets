@@ -9,13 +9,13 @@ REMOTE_RULESETS = [
 
 # VMess transport settings
 MODIFY_VMESS_TRANSPORT = True
-VMESS_HOST = "dldir1v6.qq.com"
+VMESS_HOST = "mmbiz.qpic.cn"
 
 # Clash API and Connectivity settings
 GENERATE_CLASH_API = True
 ALLOW_LAN = True
 USE_ENV_FOR_SECRET = False
-CLASH_SECRET = "your_secret_here"
+CLASH_SECRET = "midnight-espresso"
 
 def get_clash_api_config():
     """Returns the clash_api dictionary based on current settings."""
@@ -25,9 +25,8 @@ def get_clash_api_config():
         "external_controller": "0.0.0.0:9090" if ALLOW_LAN else "127.0.0.1:9090",
         "external_ui": "dashboard",
         "external_ui_download_url": "https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip",
-        "external_ui_download_detour": "proxy",
+        "external_ui_download_detour": "direct",
         "secret": secret,
-        "access_control_allow_origin": ["http://127.0.0.1"],
         "access_control_allow_private_network": ALLOW_LAN
     }
 
