@@ -1,11 +1,9 @@
-log:
-  level: warn
 dns:
   servers:
     - tag: dns-remote
       type: tls
       server: dns11.quad9.net
-      domain_resolver: dns-local
+      domain_resolver: dns-direct
       detour: proxy
     - tag: dns-direct
       type: tls
