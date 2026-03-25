@@ -1,40 +1,34 @@
 log:
-  disabled: false
   level: info
 dns:
   servers:
     - tag: dns-remote
       type: tls
-      server: 9.9.9.11
+      server: dns11.quad9.net
+      domain_resolver: dns-direct
       detour: proxy
     - tag: dns-direct
       type: tls
-      server: 223.5.5.5
+      server: dot.pub
+      domain_resolver: dns-local
+    - tag: dns-local
+      type: udp
+      server: 119.29.29.29
   rules:
     - action: reject
       rule_set:
         - geosite-category-ads-all
-    - server: dns-remote
-      rule_set:
-        - geosite-geolocation-!cn
-      strategy: prefer_ipv6
     - server: dns-direct
       rule_set:
         - geosite-cn
-      strategy: ipv4_only
   final: dns-remote
-  strategy: ipv4_only
 inbounds:
   - tag: tun-in
     type: tun
+    interface_name: neko-tun
     address:
-      - 172.18.0.1/30
+      - 198.18.0.1/30
       - fdfe:dcba:9876::1/126
-    route_exclude_address:
-      - 192.168.0.0/16
-      - fc00::/7
-    loopback_address:
-      - 10.7.0.1
     mtu: 9000
     auto_route: true
     strict_route: true
@@ -42,11 +36,13 @@ inbounds:
 outbounds:
   - tag: direct
     type: direct
+    domain_resolver: dns-direct
   - tag: proxy
     type: selector
     outbounds:
       - auto
       - _PROXY_TAGS_
+      - direct
     default: auto
   - tag: auto
     type: urltest
@@ -63,30 +59,12 @@ route:
     - action: reject
       rule_set:
         - geosite-category-ads-all
-    - outbound: proxy
-      rule_set:
-        - geosite-geolocation-!cn
     - outbound: direct
       rule_set:
         - geosite-cn
         - geoip-cn
   rule_set:
-    - tag: geosite-category-ads-all
-      type: remote
-      format: binary
-      url: https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs
-    - tag: geosite-geolocation-!cn
-      type: remote
-      format: binary
-      url: https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs
-    - tag: geosite-cn
-      type: remote
-      format: binary
-      url: https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs
-    - tag: geoip-cn
-      type: remote
-      format: binary
-      url: https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs
+    - _REMOTE_RULESETS_
   final: proxy
   auto_detect_interface: true
   default_domain_resolver: dns-direct
