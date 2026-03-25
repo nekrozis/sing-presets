@@ -1,3 +1,5 @@
+import os
+
 # Configuration for remote rulesets expansion
 REMOTE_RULESETS = [
     "geosite-cn",
@@ -8,6 +10,26 @@ REMOTE_RULESETS = [
 # VMess transport settings
 MODIFY_VMESS_TRANSPORT = True
 VMESS_HOST = "dldir1v6.qq.com"
+
+# Clash API and Connectivity settings
+GENERATE_CLASH_API = True
+ALLOW_LAN = True
+USE_ENV_FOR_SECRET = False
+CLASH_SECRET = "your_secret_here"
+
+def get_clash_api_config():
+    """Returns the clash_api dictionary based on current settings."""
+    secret = os.environ.get(CLASH_SECRET, "") if USE_ENV_FOR_SECRET else CLASH_SECRET
+    
+    return {
+        "external_controller": "0.0.0.0:9090" if ALLOW_LAN else "127.0.0.1:9090",
+        "external_ui": "dashboard",
+        "external_ui_download_url": "https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip",
+        "external_ui_download_detour": "proxy",
+        "secret": secret,
+        "access_control_allow_origin": ["http://127.0.0.1"],
+        "access_control_allow_private_network": ALLOW_LAN
+    }
 
 def rule_set_to_dict(tag: str):
     # Split the tag into two parts at the first '-'

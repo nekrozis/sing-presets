@@ -2,6 +2,7 @@ from transform import *
 import json
 import yaml
 import config
+import os
 
 if __name__ == "__main__":
     # 1. Generate configs
@@ -44,15 +45,19 @@ if __name__ == "__main__":
             return node
 
     cfg = replace_macros(base_yml)
-    print(cfg)
+    print("Generating config.json...")
     with open("../config.json", "w", encoding="utf-8") as f:
         json.dump(cfg, f, ensure_ascii=False, indent=2)
 
-    with open("../features/clash_api.yaml") as f:
-        clash_yml = yaml.safe_load(f)
+    if config.GENERATE_CLASH_API:
+        print("Generating config-web_ui.json with Web UI...")
+        clash_api_config = config.get_clash_api_config()
 
-    cfg_with_api = replace_macros(base_yml)
-    cfg_with_api["experimental"]["clash_api"] = clash_yml["experimental"]["clash_api"]
+        # Create a copy and add the experimental/clash_api key
+        cfg_with_api = cfg.copy()
+        experimental = cfg_with_api.get("experimental", {}).copy()
+        experimental["clash_api"] = clash_api_config
+        cfg_with_api["experimental"] = experimental
 
-    with open("../config-api.json", "w", encoding="utf-8") as f:
-        json.dump(cfg_with_api, f, ensure_ascii=False, indent=2)
+        with open("../config-web_ui.json", "w", encoding="utf-8") as f:
+            json.dump(cfg_with_api, f, ensure_ascii=False, indent=2)
