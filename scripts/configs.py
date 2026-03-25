@@ -25,7 +25,7 @@ def get_clash_api_config():
         "external_controller": "0.0.0.0:9090" if ALLOW_LAN else "127.0.0.1:9090",
         "external_ui": "dashboard",
         "external_ui_download_url": "https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip",
-        "external_ui_download_detour": "direct",
+        "external_ui_download_detour": "auto",
         "secret": secret,
         "access_control_allow_private_network": ALLOW_LAN
     }
@@ -47,5 +47,5 @@ def rule_set_to_dict(tag: str):
         "tag": tag,
         "format": "binary",
         "url": url,
-        "download_detour": "direct"
+        "download_detour": "auto"
     }
