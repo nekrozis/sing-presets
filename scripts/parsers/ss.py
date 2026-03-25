@@ -16,7 +16,7 @@ class Shadowsocks:
     plugin_opts: Optional[str] = None
 
     def to_singbox_config(self) -> dict:
-        config = {
+        cfg = {
             "type": "shadowsocks",
             "tag": self.tag,
             "server": self.server,
@@ -26,11 +26,11 @@ class Shadowsocks:
         }
 
         if self.plugin:
-            config["plugin"] = self.plugin
+            cfg["plugin"] = self.plugin
             if self.plugin_opts:
-                config["plugin_opts"] = self.plugin_opts
+                cfg["plugin_opts"] = self.plugin_opts
 
-        return config
+        return cfg
 
 
 def parse_ss(link: str) -> Optional[Shadowsocks]:

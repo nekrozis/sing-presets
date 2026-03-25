@@ -3,7 +3,7 @@ from typing import Optional
 import uuid
 from utils import *
 import json
-import config
+import configs
 
 
 @dataclass
@@ -25,7 +25,7 @@ class VMess:
 
     def to_singbox_config(self) -> dict:
         """转换为 sing-box 节点配置"""
-        config = {
+        cfg = {
             "type": "vmess",
             "tag": self.ps,
             "server": self.add,
@@ -41,8 +41,8 @@ class VMess:
             transport = {}
             if self.net == "tcp" or self.net == "h2":
                 transport["type"] = "http"
-                if config.MODIFY_VMESS_TRANSPORT:
-                    transport["host"] = [config.VMESS_HOST]
+                if configs.MODIFY_VMESS_TRANSPORT:
+                    transport["host"] = [configs.VMESS_HOST]
                     transport["path"] = "/"
                 else:
                     if self.host:
@@ -57,7 +57,7 @@ class VMess:
                 transport["type"] = "quic"
             elif self.net == "kcp":
                 raise NotImplementedError("kcp transport is not supported yet.")
-            config["transport"] = transport
+            cfg["transport"] = transport
 
         if self.tls and self.tls.lower() == "tls":
             tls_config = {"enabled": True}
@@ -66,9 +66,9 @@ class VMess:
                 tls_config["alpn"] = self.alpn.split(",")
             if self.fp:
                 tls_config["utls"] = {"enabled": True, "fingerprint": self.fp}
-            config["tls"] = tls_config
+            cfg["tls"] = tls_config
 
-        return config
+        return cfg
 
 
 def parse_vmess(link: str) -> Optional[VMess]:

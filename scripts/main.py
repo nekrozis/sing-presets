@@ -1,8 +1,7 @@
 from transform import *
 import json
 import yaml
-import config
-import os
+import configs
 
 if __name__ == "__main__":
     # 1. Generate configs
@@ -18,7 +17,7 @@ if __name__ == "__main__":
     macros = {
         "_PROXY_NODES_": proxy_nodes,
         "_PROXY_TAGS_": proxy_tags,
-        "_REMOTE_RULESETS_": [config.rule_set_to_dict(rs) for rs in config.REMOTE_RULESETS],
+        "_REMOTE_RULESETS_": [configs.rule_set_to_dict(rs) for rs in configs.REMOTE_RULESETS],
     }
 
     def replace_macros(node):
@@ -49,9 +48,9 @@ if __name__ == "__main__":
     with open("../config.json", "w", encoding="utf-8") as f:
         json.dump(cfg, f, ensure_ascii=False, indent=2)
 
-    if config.GENERATE_CLASH_API:
+    if configs.GENERATE_CLASH_API:
         print("Generating config-web_ui.json with Web UI...")
-        clash_api_config = config.get_clash_api_config()
+        clash_api_config = configs.get_clash_api_config()
 
         # Create a copy and add the experimental/clash_api key
         cfg_with_api = cfg.copy()

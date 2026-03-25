@@ -13,7 +13,7 @@ VMESS_HOST = "mmbiz.qpic.cn"
 
 # Clash API and Connectivity settings
 GENERATE_CLASH_API = True
-ALLOW_LAN = True
+ALLOW_LAN = False
 USE_ENV_FOR_SECRET = False
 CLASH_SECRET = "midnight-espresso"
 
