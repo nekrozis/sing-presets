@@ -12,22 +12,27 @@ dns:
       server: dot.pub
       domain_resolver: dns-local
     - tag: dns-local
-      type: udp
-      server: 223.5.5.5
+      type: tcp
+      server: 119.29.29.29
   rules:
     - action: reject
-      rule_set:
-        - geosite-category-ads-all
+      rule_set: geosite-category-ads-all
+    - server: dns-remote
+      clash_mode: global
     - server: dns-direct
-      rule_set:
-        - geosite-cn
+      clash_mode: direct
+    - server: dns-direct
+      rule_set: geosite-cn
   final: dns-remote
+ntp:
+  enabled: true
+  server: cn.pool.ntp.org
 inbounds:
   - tag: tun-in
     type: tun
     interface_name: neko-tun
     address:
-      - 198.18.0.1/30
+      - 172.19.0.1/30
       - fdfe:dcba:9876::1/126
     mtu: 9000
     auto_route: true
@@ -42,7 +47,6 @@ outbounds:
     outbounds:
       - auto
       - _PROXY_TAGS_
-      - direct
     default: auto
   - tag: auto
     type: urltest
@@ -57,12 +61,15 @@ route:
     - outbound: direct
       ip_is_private: true
     - action: reject
-      rule_set:
-        - geosite-category-ads-all
+      rule_set: geosite-category-ads-all
+    - outbound: proxy
+      clash_mode: global
     - outbound: direct
-      rule_set:
-        - geosite-cn
-        - geoip-cn
+      clash_mode: direct
+    - outbound: direct
+      rule_set: geosite-cn
+    - outbound: direct
+      rule_set: geoip-cn
   rule_set:
     - _REMOTE_RULESETS_
   final: proxy
