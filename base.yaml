@@ -13,7 +13,7 @@ dns:
       domain_resolver: dns-local
     - tag: dns-local
       type: tcp
-      server: 119.29.29.29
+      server: 223.5.5.5
   rules:
     - action: reject
       rule_set: geosite-category-ads-all
