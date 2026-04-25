@@ -24,9 +24,6 @@ dns:
     - server: dns-direct
       rule_set: geosite-cn
   final: dns-remote
-ntp:
-  enabled: true
-  server: cn.pool.ntp.org
 inbounds:
   - tag: tun-in
     type: tun
