@@ -12,8 +12,8 @@ dns:
       server: dot.pub
       domain_resolver: dns-local
     - tag: dns-local
-      type: tcp
-      server: 223.5.5.5
+      type: udp
+      server: 101.226.4.6
   rules:
     - action: reject
       rule_set: geosite-category-ads-all
