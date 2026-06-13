@@ -12,7 +12,7 @@ dns:
       server: dot.pub
       domain_resolver: dns-local
     - tag: dns-local
-      type: udp
+      type: tcp
       server: 101.226.4.6
   rules:
     - action: reject
