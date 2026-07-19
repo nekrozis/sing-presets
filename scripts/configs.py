@@ -15,7 +15,7 @@ VMESS_HOST = "mmbiz.qpic.cn"
 GENERATE_CLASH_API = True
 ALLOW_LAN = False
 USE_ENV_FOR_SECRET = False
-CLASH_SECRET = "midnight-espresso"
+CLASH_SECRET = "twilight-sparkle"
 
 def get_clash_api_config():
     """Returns the clash_api dictionary based on current settings."""
