@@ -49,7 +49,7 @@ if __name__ == "__main__":
         json.dump(cfg, f, ensure_ascii=False, indent=2)
 
     if configs.GENERATE_CLASH_API:
-        print("Generating config-web_ui.json with Web UI...")
+        print("Generating config_with_api.json with Web UI...")
         clash_api_config = configs.get_clash_api_config()
 
         # Create a copy and add the experimental/clash_api key
@@ -58,5 +58,5 @@ if __name__ == "__main__":
         experimental["clash_api"] = clash_api_config
         cfg_with_api["experimental"] = experimental
 
-        with open("../config-web_ui.json", "w", encoding="utf-8") as f:
+        with open("../config_with_api.json", "w", encoding="utf-8") as f:
             json.dump(cfg_with_api, f, ensure_ascii=False, indent=2)
