@@ -46,5 +46,7 @@ def rule_set_to_dict(tag: str):
         "tag": tag,
         "format": "binary",
         "url": url,
-        "download_detour": "direct"
+        "http_client": {
+            "detour": "direct"
+        }
     }
