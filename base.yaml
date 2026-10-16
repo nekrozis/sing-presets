@@ -14,7 +14,7 @@ dns:
       domain_resolver: dns-local
     - tag: dns-local
       type: tcp
-      server: 101.226.4.6
+      server: 180.184.1.1
   rules:
     - action: reject
       rule_set: geosite-category-ads-all
@@ -34,6 +34,7 @@ inbounds:
     mtu: 9000
     auto_route: true
     strict_route: true
+    stack: gvisor
 outbounds:
   - tag: direct
     type: direct
