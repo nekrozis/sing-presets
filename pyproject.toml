@@ -9,10 +9,14 @@ dependencies = [
   "requests>=2.0",
 ]
 
+[project.scripts]
+sing-presets = "sing_presets.cli:main"
+
 [dependency-groups]
 dev = [
     "pyrefly>=1.4.0",
     "pytest>=8.4.2",
+    "types-pyyaml>=6.0.12.20260906",
 ]
 
 [tool.pytest.ini_options]

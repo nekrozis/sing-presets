@@ -1,0 +1,49 @@
+# The file to edit. It describes devices, not configurations.
+#
+# A preset is facts plus a capability list. Facts are what the environment looks like; the
+# capabilities decide what that means for the output. Adding a device is a few lines here,
+# adding a feature is a module in sing_presets/capabilities/.
+#
+# Build:  sing-presets build --nodes nodes.json
+# List:   sing-presets list
+
+version: 1
+
+defaults:
+  facts:
+    log.level: info
+  capabilities:
+    - logging
+    - tun-inbound
+    - dns-split
+    - outbound-groups
+    - route-baseline
+    - china-split
+    - block-ads
+    - clash-api
+    - cache-file
+
+presets:
+  desktop:
+    description: Dual stack, control panel bound to loopback.
+    facts:
+      device.tun_address:
+        - 172.18.0.1/30
+        - fc00::172:18:0:1/126
+      device.mtu: 9000
+      network.allow_lan: false
+
+  desktop-no-v6:
+    description: Same machine on a network without public IPv6.
+    extends: desktop
+    capabilities_add:
+      - ipv4-only
+
+  router:
+    description: Always-on box, control panel reachable from the LAN.
+    extends: desktop
+    facts:
+      device.tun_address:
+        - 10.10.0.1/30
+        - fc00::10:10:0:1/126
+      network.allow_lan: true

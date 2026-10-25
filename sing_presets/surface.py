@@ -36,6 +36,19 @@ SETTABLE_KINDS = SCALAR_KINDS | {"object_or_scalar"}
 
 _TAG_PLACEHOLDER = re.compile(r"\{[^{}]*\}")
 
+#: Where a tag of each reference kind must be defined. Derived from the `x-tag-reference`
+#: markers tools/gen_surface.py records, so a reference kind that sing-box adds shows up
+#: as "unmapped" instead of silently going unchecked.
+REFERENCE_COLLECTIONS = {
+    "outbound": ("outbounds", "endpoints"),
+    "inbound": ("inbounds",),
+    "dns_server": ("dns.servers",),
+    "rule_set": ("route.rule_set",),
+    "network_namespace": ("network_namespaces",),
+    "certificate_provider": ("certificate_providers",),
+    "http_client": ("http_clients",),
+}
+
 
 class SurfaceError(Exception):
     """A path was used in a way the field surface does not allow."""
@@ -143,10 +156,68 @@ class Surface:
         walk(config, "", 0)
         return sorted(set(unknown))
 
+    def check_references(self, config: object) -> list[str]:
+        """Report references to tags that the configuration never defines.
+
+        Every field sing-box marks `reference:"..."` points at a tag defined elsewhere, so
+        a dangling one is a configuration that only fails at startup: an empty
+        subscription leaving a selector with nothing to point at, a rule naming a rule set
+        the preset forgot to include, a resolver detour to an outbound that is not there.
+
+        Values that are objects rather than strings define their target inline and are
+        left alone.
+        """
+        defined: dict[str, set[str]] = {}
+
+        def tags_at(path: str) -> set[str]:
+            if path in defined:
+                return defined[path]
+            node: object = config
+            for segment in path.split("."):
+                node = node.get(segment) if isinstance(node, dict) else None
+            tags = {
+                item["tag"]
+                for item in (node if isinstance(node, list) else [])
+                if isinstance(item, dict) and isinstance(item.get("tag"), str)
+            }
+            defined[path] = tags
+            return tags
+
+        dangling: list[str] = []
+
+        def walk(node: object, path: str, depth: int) -> None:
+            if depth > 32:
+                return
+            slot = self.get(path) if path else None
+            if isinstance(node, dict):
+                for key, value in node.items():
+                    walk(value, f"{path}.{key}" if path else key, depth + 1)
+                return
+            if isinstance(node, list):
+                suffix = "{tag}" if slot is not None and slot.kind in TAGGED_KINDS else "[]"
+                for item in node:
+                    walk(item, f"{path}{suffix}", depth + 1)
+                return
+            if slot is None or slot.reference is None or not isinstance(node, str):
+                return
+            collections = REFERENCE_COLLECTIONS.get(slot.reference)
+            if collections is None:
+                dangling.append(f"{path}: reference kind {slot.reference!r} is not mapped")
+                return
+            known: set[str] = set()
+            for collection in collections:
+                known |= tags_at(collection)
+            if node not in known and node != "":
+                dangling.append(
+                    f"{path}: {node!r} is not defined in {' or '.join(collections)}"
+                )
+
+        walk(config, "", 0)
+        return sorted(set(dangling))
+
     @property
     def binary_version(self) -> str | None:
         return self.source.get("binary_version")
-
     @property
     def schema_file(self) -> str | None:
         return self.source.get("schema_file")
