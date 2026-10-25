@@ -27,7 +27,9 @@ Items in the same band keep insertion order, so results are deterministic.
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
+from collections import Counter
 from typing import Any, Iterable, Mapping
 
 from .surface import MAP_KINDS, ORDERED_KINDS, SETTABLE_KINDS, Surface
@@ -199,6 +201,79 @@ def flatten(config: Mapping[str, Any], prefix: str = "") -> dict[str, Any]:
         else:
             leaves[path] = value
     return leaves
+
+
+def leaf_multiset(config: Mapping[str, Any]) -> dict[str, Counter[str]]:
+    """Collect leaves by path without positional identity, for comparing two builds.
+
+    `flatten` numbers list items by index, which is right for reading a config but wrong
+    for comparing two of them: dropping one rule shifts every later index, so every
+    neighbour looks modified. Ordered lists here have no identity of their own (that is
+    the whole reason `Seq[anchor]` exists), so their members are collected as a multiset
+    of values under the list's path. Tagged members are keyed by tag, since they do carry
+    an identity.
+
+    The result is path -> Counter of serialised values, so a path that holds two equal
+    rules still compares correctly.
+    """
+    collected: dict[str, Counter[str]] = {}
+    _collect(config, "", collected)
+    return collected
+
+
+def _collect(node: Any, path: str, collected: dict[str, Counter[str]]) -> None:
+    if isinstance(node, dict):
+        for key, value in node.items():
+            _collect(value, f"{path}.{key}" if path else key, collected)
+    elif isinstance(node, list):
+        for item in node:
+            if isinstance(item, dict) and "tag" in item:
+                _collect(item, f"{path}{{{item['tag']}}}", collected)
+            elif isinstance(item, dict):
+                _collect(item, f"{path}[]", collected)
+            else:
+                _add(path, item, collected)
+    else:
+        _add(path, node, collected)
+
+
+def _add(path: str, value: Any, collected: dict[str, Counter[str]]) -> None:
+    collected.setdefault(path, Counter())[json.dumps(value, sort_keys=True)] += 1
+
+
+def tokens_of(contribution: Contribution) -> dict[str, Counter[str]]:
+    """The leaves a single contribution writes, encoded the same way as leaf_multiset.
+
+    Used to tell "this owner took its own field away" from "disabling it changed someone
+    else's field", which a whole-config diff cannot distinguish.
+    """
+    collected: dict[str, Counter[str]] = {}
+    if isinstance(contribution, Member):
+        body = dict(contribution.body)
+        body["tag"] = contribution.tag
+        _collect(body, contribution.path, collected)
+    elif isinstance(contribution, Entry):
+        if isinstance(contribution.value, dict):
+            _collect(contribution.value, f"{contribution.path}[]", collected)
+        else:
+            _add(contribution.path, contribution.value, collected)
+    elif isinstance(contribution, Setting):
+        _add(contribution.path, contribution.value, collected)
+    return collected
+
+
+def _merge_tokens(
+    parts: Iterable[Mapping[str, Counter[str]]],
+) -> dict[str, Counter[str]]:
+    merged: dict[str, Counter[str]] = {}
+    for part in parts:
+        for path, counts in part.items():
+            merged.setdefault(path, Counter()).update(counts)
+    return merged
+
+
+def _describe(counts: Counter[str]) -> str:
+    return ", ".join(f"{count}x{value}" for value, count in sorted(counts.items()))
 
 
 class Builder:
@@ -416,7 +491,7 @@ class Builder:
         }
         everything = list(contributions)
         owners = sorted({item.owner for item in everything if item.owner})
-        full = flatten(compile_config(self.surface, everything)[0])
+        full = leaf_multiset(compile_config(self.surface, everything)[0])
         problems: list[str] = []
 
         for owner in owners:
@@ -425,7 +500,7 @@ class Builder:
             )
             without = [item for item in everything if item.owner != owner]
             try:
-                reduced = flatten(compile_config(self.surface, without)[0])
+                reduced = leaf_multiset(compile_config(self.surface, without)[0])
             except IRError as error:
                 if dependents:
                     continue  # declared dependency, not hidden coupling
@@ -433,14 +508,29 @@ class Builder:
                     f"{owner}: rebuild fails once disabled, so others depend on it ({error})"
                 )
                 continue
-            appeared = sorted(set(reduced) - set(full))
-            changed = sorted(
-                path for path in set(full) & set(reduced) if full[path] != reduced[path]
+
+            own = _merge_tokens(
+                tokens_of(item) for item in everything if item.owner == owner
             )
+            appeared: list[str] = []
+            for path in sorted(set(reduced) - set(full)):
+                appeared.append(path)
+            rogue: list[str] = []
+            for path in sorted(set(full) & set(reduced)):
+                added = reduced[path] - full[path]
+                if added:
+                    appeared.append(f"{path} ({_describe(added)})")
+                removed = full[path] - reduced[path]
+                unexplained = removed - own.get(path, Counter())
+                if unexplained:
+                    rogue.append(f"{path} ({_describe(unexplained)})")
+
             if appeared:
                 problems.append(f"{owner}: leaves appear once disabled: {appeared}")
-            if changed:
-                problems.append(f"{owner}: leaves change value once disabled: {changed}")
+            if rogue:
+                problems.append(
+                    f"{owner}: disabling it also removes values it never contributed: {rogue}"
+                )
         return problems
 
 

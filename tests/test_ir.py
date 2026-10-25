@@ -248,13 +248,48 @@ def test_isolation_detects_a_dependency(surface: Surface) -> None:
 
 
 def test_isolation_detects_shadowing(surface: Surface) -> None:
-    """A low-priority contributor is silently shadowed until the high one is disabled."""
+    """A low-priority contributor is silently shadowed until the high one is disabled.
+
+    Disabling the strong one makes the weak one's value surface, which is exactly the
+    residue this check is looking for: the value was in the build, but not because anyone
+    could see it.
+    """
     contributions = [
         Setting("route.final", "proxy", priority=30, owner="strong"),
         Setting("route.final", "direct", priority=10, owner="weak"),
     ]
     problems = Builder(surface).verify_isolation(contributions)
-    assert any("change value" in problem for problem in problems)
+    assert any("strong" in problem and "leaves appear" in problem for problem in problems)
+
+
+def test_isolation_does_not_flag_a_capability_removing_its_own_rules(surface: Surface) -> None:
+    """Ordered lists have no identity, so a removal must not look like a modification.
+
+    Removing one item shifts every later index. Comparing builds by index would report
+    every neighbour as changed, which would make the check useless on the real library.
+    """
+    contributions = [
+        Entry("route.rules", {"action": "sniff"}, Position.at(0), owner="baseline"),
+        Entry("route.rules", {"action": "reject"}, Position.at(100), owner="ads"),
+        Entry("route.rules", {"outbound": "direct"}, Position.at(300), owner="china"),
+    ]
+    assert Builder(surface).verify_isolation(contributions) == []
+
+
+def test_isolation_flags_a_capability_that_removes_someone_elses_value(
+    surface: Surface,
+) -> None:
+    """Disabling the high-priority contributor does not remove the lower one's value.
+
+    The removal is only legitimate when the owner contributed that value itself; anything
+    else means the two are entangled.
+    """
+    contributions = [
+        Setting("route.final", "proxy", priority=10, owner="first"),
+        Setting("route.final", "proxy", priority=10, owner="second"),
+    ]
+    # Both contribute the same value, so removing either leaves it in place: no residue.
+    assert Builder(surface).verify_isolation(contributions) == []
 
 
 # ------------------------------------------------------------------ capabilities
