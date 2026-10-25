@@ -17,12 +17,14 @@ from pathlib import Path
 from typing import Sequence
 
 from . import compile as comp
+from . import nodes as node_lib
 from . import presets as preset_lib
 from .surface import Surface
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_PRESETS = REPO_ROOT / "presets.yaml"
 DEFAULT_OUT = REPO_ROOT / "build"
+DEFAULT_NODES = REPO_ROOT / "nodes.json"
 
 #: Places to look for the binary that validates output. `sing-box` from PATH is the
 #: normal case in CI; the explicit path keeps a local Windows setup working.
@@ -49,6 +51,21 @@ def read_nodes(path: Path) -> list[dict]:
     if not isinstance(nodes, list):
         raise SystemExit(f"{path} does not hold a list of nodes")
     return nodes
+
+
+def read_sources(path: Path) -> list[str]:
+    """Read a file listing subscription sources, one per line.
+
+    This is the format the previous pipeline used (`subscription.txt`), so an existing list
+    keeps working. Blank lines and comments are ignored so the file stays readable.
+    """
+    if not path.exists():
+        raise SystemExit(f"no source list at {path}")
+    return [
+        line.strip()
+        for line in path.read_text(encoding="utf-8").splitlines()
+        if line.strip() and not line.strip().startswith("#")
+    ]
 
 
 def write_build(build: comp.Build, out_dir: Path) -> Path:
@@ -129,6 +146,28 @@ def cmd_build(args: argparse.Namespace) -> int:
     return 1 if failures else 0
 
 
+def cmd_fetch(args: argparse.Namespace) -> int:
+    sources = list(args.url or [])
+    if args.urls:
+        sources.extend(read_sources(args.urls))
+    if not sources:
+        raise SystemExit("nothing to fetch: pass --url or --urls")
+
+    feed = node_lib.fetch(sources, timeout=args.timeout)
+    for failure in feed.failures:
+        print(f"source unreadable: {failure}", file=sys.stderr)
+
+    if not feed.nodes:
+        print("no nodes were found, so nothing was written", file=sys.stderr)
+        return 1
+
+    target = node_lib.write(feed, args.out)
+    print(f"{feed.summary()} from {len(feed.sources)} sources -> {target}")
+    for reason, count in feed.skipped.most_common():
+        print(f"  skipped {count}x: {reason}", file=sys.stderr)
+    return 1 if args.strict and feed.failures else 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="sing-presets",
@@ -139,6 +178,29 @@ def build_parser() -> argparse.ArgumentParser:
     listing = sub.add_parser("list", help="list the presets in a document")
     listing.add_argument("--presets", type=Path, default=DEFAULT_PRESETS)
     listing.set_defaults(handler=cmd_list)
+
+    fetching = sub.add_parser("fetch", help="turn subscriptions into a node list")
+    fetching.add_argument(
+        "--url",
+        action="append",
+        metavar="SOURCE",
+        help="subscription URL or local file; repeat for more than one",
+    )
+    fetching.add_argument(
+        "--urls",
+        type=Path,
+        help="file listing one subscription source per line",
+    )
+    fetching.add_argument("--out", type=Path, default=DEFAULT_NODES)
+    fetching.add_argument(
+        "--timeout", type=float, default=10.0, help="per-source timeout in seconds"
+    )
+    fetching.add_argument(
+        "--strict",
+        action="store_true",
+        help="fail when a source cannot be read, instead of losing its nodes quietly",
+    )
+    fetching.set_defaults(handler=cmd_fetch)
 
     building = sub.add_parser("build", help="compile presets to JSON")
     building.add_argument("--presets", type=Path, default=DEFAULT_PRESETS)

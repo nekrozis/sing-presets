@@ -11,13 +11,16 @@ capability module. Neither requires touching the other.
 ## Quick start
 
 ```bash
-# 1. List the presets this repository defines
+# 1. Turn the subscription into a node list
+uv run sing-presets fetch --urls subscription.txt
+
+# 2. List the presets this repository defines
 uv run sing-presets list
 
-# 2. Build them, verifying each output with the sing-box binary
+# 3. Build them, verifying each output with the sing-box binary
 uv run sing-presets build --nodes nodes.json
 
-# 3. Inspect the result
+# 4. Inspect the result
 ls build/
 ```
 
@@ -119,20 +122,39 @@ leaves a collection empty.
 sing-box has no node provider mechanism, so nodes must be inline and the configuration has
 to be regenerated when the subscription changes. That is why this belongs in CI.
 
-`--nodes` takes a JSON list of sing-box outbound objects, each with a `tag`:
+There are two steps. `fetch` reads subscriptions and writes a node list:
 
-```json
-[{"tag": "jp-tokyo", "type": "shadowsocks", "server": "198.51.100.10",
-  "server_port": 8388, "method": "aes-128-gcm", "password": "..."}]
+```bash
+uv run sing-presets fetch --url https://example.net/api/v1/client/subscribe?token=...
+uv run sing-presets fetch --urls subscription.txt   # one source per line
 ```
 
-Duplicate tags are rejected here rather than at startup, because a subscription is free to
-contain two entries with the same display name and sing-box refuses to start on a
-duplicate.
+A source may be a URL or a local file, and its body may be a plain list of links or the same
+list in base64 - panels hand out both and the URL does not say which. `nodes.json` holds the
+outbound bodies; `build --nodes nodes.json` consumes them.
 
-The subscription parser has not been migrated to this pipeline yet: `scripts/` still does
-that job end to end. Producing `nodes.json` from a subscription is the next step, and until
-then the file has to come from elsewhere.
+`fetch` reports what it lost instead of silently returning fewer nodes:
+
+```
+3 nodes, 1 duplicates dropped, 2 links skipped from 1 sources -> nodes.json
+  skipped 1x: vmess transport 'kcp' is not supported by sing-box
+  skipped 1x: no parser for scheme 'trojan'; known: ss, vmess
+```
+
+- **Duplicates** are links for the same protocol, host and port. Credentials are not part of
+  the key: a subscription that lists one server twice with different passwords still offers
+  one server.
+- **Skipped links** are counted with the reason. One unusable link never costs the others.
+- **Tags** come from the link's display name. A duplicate name gains a suffix, because
+  sing-box refuses a configuration with two outbounds sharing a tag; a name that collides
+  with a tag the compiler writes itself (`direct`, `auto`, `proxy`) is renamed the same way.
+- A source that cannot be read is reported and skipped. Pass `--strict` to fail instead,
+  which is what CI should do: otherwise a dead subscription quietly halves the node list.
+
+`nodes.json` contains credentials. It is ignored by git, and it should stay that way.
+
+Supported link schemes live in `sing_presets/protocols/`, one module per scheme. Adding one
+is adding a file: it registers itself, and nothing else has to be told about it.
 
 ## Verifying
 
@@ -159,6 +181,9 @@ sing_presets/
   ir.py                      contributions and the merge algebra
   capability.py              base class, automatic registration
   capabilities/              the library, one intent per module
+  protocol.py                share-link base class, registration, node identity
+  protocols/                 one module per link scheme
+  nodes.py                   subscriptions -> nodes.json, with deduplication
   presets.py                 preset document loading and validation
   compile.py                 preset + nodes -> checked configuration
   cli.py                     command line entry point
@@ -186,12 +211,14 @@ removes a reference kind, so the classification cannot drift silently.
 
 `scripts/` and `base.yaml` are the previous generator: a base YAML template plus
 `_PROXY_NODES_` and `_PROXY_TAGS_` placeholders, run from inside `scripts/` as
-`python main.py`. It still produces the configuration this repository used before, and is
-kept until the capability library covers the same ground.
+`python main.py`.
 
-It is excluded from type checking and is not developed further.
+`fetch` and the capability library now cover what it did - subscription to configuration,
+verified - so it is kept only until the two are compared on real subscriptions and the
+output can be switched over. It needs `requests`, which the new pipeline does not use, and it
+is excluded from type checking.
 
 ## Requirements
 
 - Python 3.10 or higher
-- PyYAML, requests
+- PyYAML
