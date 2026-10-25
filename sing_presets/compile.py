@@ -76,13 +76,16 @@ def _check_empty_lists(config: Mapping[str, Any]) -> list[str]:
 
     An empty list is almost always a capability that expected something else to fill it:
     an `urltest` group with no members is rejected by sing-box outright, and the same
-    mistake elsewhere fails quietly. A path is reported rather than a count, so the
-    message points at the capability that declared it.
+    mistake elsewhere fails quietly. The path includes the tag when there is one, so the
+    message names the member rather than its collection.
     """
     empty: list[str] = []
 
     def walk(node: Any, path: str) -> None:
         if isinstance(node, dict):
+            tag = node.get("tag")
+            if isinstance(tag, str) and path:
+                path = f"{path}{{{tag}}}"
             for key, value in node.items():
                 walk(value, f"{path}.{key}" if path else key)
         elif isinstance(node, list):

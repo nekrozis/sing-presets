@@ -92,11 +92,11 @@ def cmd_build(args: argparse.Namespace) -> int:
         selected = list(args.only)
 
     nodes = read_nodes(args.nodes) if args.nodes else []
-    if not nodes and not args.allow_empty:
-        raise SystemExit(
-            "a node list is required: pass --nodes, or --allow-empty to build without "
-            "subscription nodes (useful only for inspecting the skeleton)"
-        )
+    if not nodes:
+        # Building without nodes cannot produce a usable file: sing-box refuses an urltest
+        # group with no members, so the compiler would reject it a moment later. Saying so
+        # here explains the missing step instead of reporting an empty collection.
+        raise SystemExit("a node list is required: pass --nodes")
 
     try:
         builds = comp.compile_all(
@@ -148,11 +148,6 @@ def build_parser() -> argparse.ArgumentParser:
     building.add_argument("--out", type=Path, default=DEFAULT_OUT)
     building.add_argument(
         "--only", nargs="+", metavar="NAME", help="build only these presets"
-    )
-    building.add_argument(
-        "--allow-empty",
-        action="store_true",
-        help="build without nodes, for inspecting the skeleton only",
     )
     building.add_argument(
         "--sing-box", help="path to the binary used for verification; defaults to PATH"
