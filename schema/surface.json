@@ -283,7 +283,8 @@
       ]
     },
     "certificate_providers{tag}.http_client.headers": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "certificate_providers{tag}.http_client.idle_timeout": {
       "kind": "scalar"
@@ -716,7 +717,8 @@
       "kind": "scalar"
     },
     "dns.rules{tag}.interface_address": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "dns.rules{tag}.invert": {
       "kind": "scalar"
@@ -774,7 +776,8 @@
       ]
     },
     "dns.rules{tag}.network_interface_address": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "dns.rules{tag}.network_is_constrained": {
       "kind": "scalar"
@@ -1117,7 +1120,8 @@
       "reference": "inbound"
     },
     "dns.rules{tag}.rules[].interface_address": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "dns.rules{tag}.rules[].invert": {
       "kind": "scalar"
@@ -1156,7 +1160,8 @@
       ]
     },
     "dns.rules{tag}.rules[].network_interface_address": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "dns.rules{tag}.rules[].network_is_constrained": {
       "kind": "scalar"
@@ -1484,7 +1489,8 @@
       ]
     },
     "dns.servers{tag}.headers": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "dns.servers{tag}.inet4_bind_address": {
       "kind": "scalar"
@@ -1550,7 +1556,8 @@
       "kind": "scalar"
     },
     "dns.servers{tag}.predefined": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "dns.servers{tag}.prefer_go": {
       "kind": "scalar"
@@ -3062,7 +3069,8 @@
       ]
     },
     "http_clients{tag}.headers": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "http_clients{tag}.idle_timeout": {
       "kind": "scalar"
@@ -3703,7 +3711,8 @@
       "kind": "scalar"
     },
     "inbounds{tag}.fallback_for_alpn": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "inbounds{tag}.grace_period": {
       "kind": "scalar"
@@ -3852,7 +3861,8 @@
       "kind": "scalar"
     },
     "inbounds{tag}.handshake_for_server_name": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "inbounds{tag}.heartbeat": {
       "kind": "scalar"
@@ -3944,7 +3954,8 @@
       "kind": "scalar"
     },
     "inbounds{tag}.masquerade.headers": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "inbounds{tag}.masquerade.rewrite_host": {
       "kind": "scalar"
@@ -4212,7 +4223,8 @@
       ]
     },
     "inbounds{tag}.realm.http_client.headers": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "inbounds{tag}.realm.http_client.idle_timeout": {
       "kind": "scalar"
@@ -4733,7 +4745,8 @@
       ]
     },
     "inbounds{tag}.tls.certificate_provider.http_client.headers": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "inbounds{tag}.tls.certificate_provider.http_client.idle_timeout": {
       "kind": "scalar"
@@ -5103,7 +5116,8 @@
       "kind": "scalar"
     },
     "inbounds{tag}.transport.headers": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "inbounds{tag}.transport.host": {
       "kind": "scalar_list"
@@ -5720,7 +5734,8 @@
       "kind": "scalar"
     },
     "outbounds{tag}.extra_headers": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "outbounds{tag}.fallback_delay": {
       "kind": "scalar"
@@ -5750,7 +5765,8 @@
       "kind": "scalar"
     },
     "outbounds{tag}.headers": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "outbounds{tag}.heartbeat": {
       "kind": "scalar"
@@ -6126,7 +6142,8 @@
       ]
     },
     "outbounds{tag}.realm.http_client.headers": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "outbounds{tag}.realm.http_client.idle_timeout": {
       "kind": "scalar"
@@ -6615,7 +6632,8 @@
       "kind": "scalar"
     },
     "outbounds{tag}.torrc": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "outbounds{tag}.transport": {
       "kind": "object",
@@ -6631,7 +6649,8 @@
       "kind": "scalar"
     },
     "outbounds{tag}.transport.headers": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "outbounds{tag}.transport.host": {
       "kind": "scalar_list"
@@ -6949,7 +6968,8 @@
       ]
     },
     "route.rule_set{tag}.http_client.headers": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "route.rule_set{tag}.http_client.idle_timeout": {
       "kind": "scalar"
@@ -7206,7 +7226,8 @@
       ]
     },
     "route.rule_set{tag}.rules[].network_interface_address": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "route.rule_set{tag}.rules[].network_is_constrained": {
       "kind": "scalar"
@@ -7369,7 +7390,8 @@
       "kind": "scalar"
     },
     "route.rules[].interface_address": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "route.rules[].invert": {
       "kind": "scalar"
@@ -7423,7 +7445,8 @@
       ]
     },
     "route.rules[].network_interface_address": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "route.rules[].network_is_constrained": {
       "kind": "scalar"
@@ -7600,7 +7623,8 @@
       "reference": "inbound"
     },
     "route.rules[].rules[].interface_address": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "route.rules[].rules[].invert": {
       "kind": "scalar"
@@ -7634,7 +7658,8 @@
       ]
     },
     "route.rules[].rules[].network_interface_address": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "route.rules[].rules[].network_is_constrained": {
       "kind": "scalar"
@@ -8029,7 +8054,8 @@
       ]
     },
     "services{tag}.dashboard.http_client.headers": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "services{tag}.dashboard.http_client.idle_timeout": {
       "kind": "scalar"
@@ -8320,7 +8346,8 @@
       ]
     },
     "services{tag}.headers": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "services{tag}.home": {
       "kind": "scalar"
@@ -8684,7 +8711,8 @@
       "kind": "scalar"
     },
     "services{tag}.servers": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "services{tag}.stream_receive_window": {
       "kind": "scalar"
@@ -8934,7 +8962,8 @@
       ]
     },
     "services{tag}.tls.certificate_provider.http_client.headers": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "services{tag}.tls.certificate_provider.http_client.idle_timeout": {
       "kind": "scalar"
@@ -9414,7 +9443,8 @@
       ]
     },
     "services{tag}.verify_client_url[].headers": {
-      "kind": "object"
+      "kind": "object",
+      "open": true
     },
     "services{tag}.verify_client_url[].idle_timeout": {
       "kind": "scalar"

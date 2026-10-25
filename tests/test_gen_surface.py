@@ -72,6 +72,34 @@ def test_properties_of_every_variant_are_kept() -> None:
     assert "boxes[].client.detour" in slots
 
 
+def test_an_object_with_free_form_keys_is_marked_open() -> None:
+    """An HTTP header map's keys are data, not fields, so the build cannot reject them."""
+    schema = {
+        "type": "object",
+        "properties": {
+            "headers": {"type": "object", "additionalProperties": {"type": "string"}},
+            "closed": {
+                "type": "object",
+                "properties": {"known": {"type": "string"}},
+                "additionalProperties": False,
+            },
+        },
+    }
+    slots = build(schema)
+    assert slots["headers"]["open"] is True
+    assert "open" not in slots["closed"]
+
+
+def test_free_form_keys_are_accepted_by_the_build_but_invented_fields_are_not() -> None:
+    surface = Surface.load()
+    accepted = {"outbounds": [{"tag": "n", "type": "shadowsocks", "transport": {
+        "type": "ws", "headers": {"Host": "example.net"}}}]}
+    assert surface.check_config(accepted) == []
+
+    invented = {"outbounds": [{"tag": "n", "type": "shadowsocks", "trnsport": {}}]}
+    assert surface.check_config(invented) == ["outbounds{tag}.trnsport"]
+
+
 def test_the_shipped_surface_lets_a_transport_declare_several_hosts() -> None:
     """Regression guard on the artefact itself, since that is what the build reads."""
     assert Surface.load().kind_of("outbounds{tag}.transport.host") == "scalar_list"

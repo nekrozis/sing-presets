@@ -212,6 +212,7 @@ class SurfaceBuilder:
         enum: list | None = None,
         deprecated: bool = False,
         variants: list[str] | None = None,
+        open: bool = False,
     ) -> None:
         existing = self.slots.get(path)
         if existing is None:
@@ -222,12 +223,16 @@ class SurfaceBuilder:
                 entry["deprecated"] = True
             if variants:
                 entry["variants"] = list(variants)
+            if open:
+                entry["open"] = True
             self.slots[path] = entry
             return
 
         # Only the kind is merged. An enum describes the values of one variant, so taking
         # the union of two variants' enums would claim values that neither accepts.
         existing["kind"] = merge_kind(path, existing["kind"], kind, self.kind_conflicts)
+        if open:
+            existing["open"] = True
 
     def walk(self, node: object, path: str, depth: int, stack: tuple[str, ...]) -> None:
         if depth > MAX_DEPTH or len(self.slots) > MAX_PATHS:
@@ -304,7 +309,14 @@ class SurfaceBuilder:
             return
 
         if node_type == "object" or "properties" in node or "oneOf" in node:
-            self.record(path, "object", variants=self.variant_types(node) or None)
+            # `additionalProperties` holding a schema means the object's keys are data
+            # (HTTP header names, SNI values) rather than fields, so they cannot be listed.
+            self.record(
+                path,
+                "object",
+                variants=self.variant_types(node) or None,
+                open=node.get("additionalProperties") not in (None, False),
+            )
             for prop, child in self.collect_props(node, stack).items():
                 child_path = f"{path}.{prop}" if path else prop
                 self.record_reference(child_path, child)

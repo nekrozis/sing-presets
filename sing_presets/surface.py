@@ -62,6 +62,9 @@ class Slot:
     reference: str | None = None
     variants: tuple = ()
     deprecated: bool = False
+    #: the object accepts properties the schema does not name, e.g. an HTTP header map.
+    #: Without this the build would reject `headers.Host`, which is a legitimate field.
+    open: bool = False
 
     @property
     def is_map(self) -> bool:
@@ -103,6 +106,7 @@ class Surface:
                 reference=entry.get("reference"),
                 variants=tuple(entry.get("variants") or ()),
                 deprecated=bool(entry.get("deprecated")),
+                open=bool(entry.get("open")),
             )
         return cls(slots, raw.get("source") or {})
 
@@ -133,6 +137,9 @@ class Surface:
 
         This catches misspelled or invented field names, which would otherwise produce a
         configuration that only fails inside sing-box. Run it in CI after every build.
+
+        An open object is exempt: it accepts properties the schema does not name, because
+        its keys are data - HTTP header names, SNI values to fall back for - and not fields.
         """
         unknown: list[str] = []
 
@@ -144,8 +151,12 @@ class Surface:
                 unknown.append(path)
                 return
             if isinstance(node, dict):
+                free_form = slot is not None and slot.open
                 for key, value in node.items():
-                    walk(value, f"{path}.{key}" if path else key, depth + 1)
+                    child = f"{path}.{key}" if path else key
+                    if free_form and self.get(child) is None:
+                        continue
+                    walk(value, child, depth + 1)
             elif isinstance(node, list):
                 # Element notation follows the collection's slot kind, matching what
                 # tools/gen_surface.py emits: tagged collections use {tag}, others use [].

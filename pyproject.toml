@@ -6,6 +6,8 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
   "PyYAML>=6.0",
+  # Only the legacy pipeline in scripts/ uses this; the compiled pipeline fetches with the
+  # standard library. It goes away with scripts/.
   "requests>=2.0",
 ]
 
@@ -38,6 +40,9 @@ testpaths = ["tests"]
 # demanding an annotation on every container, which `strict` would.
 preset = "default"
 project-includes = ["sing_presets/**/*.py", "tools/**/*.py", "tests/**/*.py"]
+# tools/ holds a script rather than a package, so its directory has to be searchable for
+# the test that imports it by module name.
+search-path = ["tools"]
 # Off limits: refs/ holds third party checkouts, and scripts/ is the legacy pipeline that
 # sing_presets replaces. Run `pyrefly check scripts` by hand to see its findings.
 project-excludes = ["refs/**", "scripts/**", ".venv/**"]
