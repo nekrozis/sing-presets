@@ -10,6 +10,7 @@ no binary is available, so the unit suite still runs on a bare machine.
 
 from __future__ import annotations
 
+import base64
 import json
 import subprocess
 from pathlib import Path
@@ -17,6 +18,7 @@ from pathlib import Path
 import pytest
 
 from sing_presets import compile as comp
+from sing_presets import nodes as node_lib
 from sing_presets import presets as preset_lib
 from sing_presets.cli import find_sing_box
 from sing_presets.surface import Surface
@@ -123,3 +125,63 @@ def test_every_capability_can_be_switched_off_cleanly() -> None:
     surface = Surface.load()
     for build in all_builds():
         assert comp.audit(surface, build) == []
+
+
+def vmess_link(**overrides: object) -> str:
+    """Build a v2ray-format link. Only the protocol fields matter here, not the link syntax,
+    which `tests/test_protocols.py` pins down."""
+    payload: dict[str, object] = {
+        "v": "2",
+        "ps": "vmess-node",
+        "add": "203.0.113.30",
+        "port": "443",
+        "id": "b831381d-6324-4d53-ad4f-8cda48b30811",
+        "aid": "0",
+        "scy": "auto",
+    }
+    payload.update(overrides)
+    return "vmess://" + base64.b64encode(json.dumps(payload).encode()).decode()
+
+
+@requires_sing_box
+def test_nodes_parsed_from_links_survive_the_binary(tmp_path: Path) -> None:
+    """The last link in the chain: a subscription becomes a configuration sing-box accepts.
+
+    The field surface can only say that a path exists. Whether the *values* a parser writes
+    for a transport, a TLS block or a cipher are the ones sing-box wants is something only
+    the binary can answer.
+    """
+    surface = Surface.load()
+    document = preset_lib.load(PRESET_FILE)
+    # Each node needs its own port: the deduplication key is protocol, host and port, so
+    # four links to one endpoint would collapse into one node and test nothing.
+    text = "\n".join(
+        [
+            "ss://YWVzLTEyOC1nY206ZXhhbXBsZQ@198.51.100.10:8388#Tokyo",
+            vmess_link(net="ws", host="cdn.example.net", path="/ray", tls="tls"),
+            vmess_link(
+                port="8443", net="tcp", type="http", host="a.example.net,b.example.net"
+            ),
+            vmess_link(
+                port="9443", net="grpc", path="service", tls="tls", sni="grpc.example.net"
+            ),
+            vmess_link(port="10443", net="kcp"),  # not implemented: must be skipped
+        ]
+    )
+
+    feed = node_lib.collect([text])
+    assert len(feed.nodes) == 4
+    assert sum(feed.skipped.values()) == 1
+
+    build = comp.compile_preset(
+        surface, document.presets["desktop"], [item.as_dict() for item in feed.nodes]
+    )
+    target = tmp_path / "from-links.json"
+    target.write_text(json.dumps(build.config, indent=2), encoding="utf-8")
+    result = subprocess.run(
+        sing_box_command("check", "-c", str(target)),
+        capture_output=True,
+        text=True,
+        timeout=120,
+    )
+    assert result.returncode == 0, f"sing-box check failed:\n{result.stdout}\n{result.stderr}"
