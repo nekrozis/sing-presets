@@ -55,6 +55,27 @@ TAG_NAMESPACE: dict[str, str] = {
     "http_clients": "http_client",
 }
 
+#: How two classifications of the same path combine. A field declared by several variants
+#: of a polymorphic object is only as narrow as the widest of them: if one variant accepts
+#: a list, the field accepts a list.
+KIND_MERGE: dict[frozenset[str], str] = {
+    frozenset({"scalar", "scalar_list"}): "scalar_list",
+    frozenset({"scalar", "object"}): "object_or_scalar",
+    frozenset({"scalar", "object_or_scalar"}): "object_or_scalar",
+    frozenset({"object", "object_or_scalar"}): "object_or_scalar",
+}
+
+
+def merge_kind(path: str, left: str, right: str, conflicts: list[str]) -> str:
+    """Combine two slot kinds, recording the pairs that have no common shape."""
+    if left == right:
+        return left
+    merged = KIND_MERGE.get(frozenset({left, right}))
+    if merged is None:
+        conflicts.append(f"{path}: {left} and {right} have no common shape; kept {left}")
+        return left
+    return merged
+
 
 def reference_kinds(schema: dict) -> set[str]:
     """Collect every x-tag-reference value in the whole document."""
@@ -94,6 +115,7 @@ class SurfaceBuilder:
         self.references: dict[str, str] = {}
         self.known_reference_kinds: set[str] = reference_kinds(schema)
         self.tagged_collections: list[str] = []
+        self.kind_conflicts: list[str] = []
 
     def deref(self, node: object) -> dict:
         """Follow a $ref chain (loop-safe)."""
@@ -107,7 +129,11 @@ class SurfaceBuilder:
         return node if isinstance(node, dict) else {}
 
     def collect_props(self, node: object, stack: tuple[str, ...]) -> dict[str, dict]:
-        """Merge the properties of every branch of a polymorphic node."""
+        """Merge the properties of every branch of a polymorphic node.
+
+        A property name may be declared differently by different variants, so the shapes
+        are combined rather than overwritten. See `_shapes`.
+        """
         node = self.deref(node)
         props: dict[str, dict] = {}
         for branch_key in ("oneOf", "allOf", "anyOf"):
@@ -116,13 +142,42 @@ class SurfaceBuilder:
                 if name is not None:
                     if name in stack:
                         continue
-                    props.update(self.collect_props(branch, stack + (name,)))
+                    self._merge_props(props, self.collect_props(branch, stack + (name,)))
                 elif isinstance(branch, dict):
-                    props.update(self.collect_props(branch, stack))
+                    self._merge_props(props, self.collect_props(branch, stack))
         own = node.get("properties")
         if isinstance(own, dict):
-            props.update(own)
+            self._merge_props(props, own)
         return props
+
+    def _merge_props(self, target: dict[str, dict], incoming: dict[str, dict]) -> None:
+        for name, child in incoming.items():
+            if name not in target:
+                target[name] = child
+                continue
+            shapes = self._shapes(target[name])
+            for shape in self._shapes(child):
+                if shape not in shapes:
+                    shapes.append(shape)
+            target[name] = shapes[0] if len(shapes) == 1 else {"anyOf": shapes}
+
+    def _shapes(self, node: object) -> list[dict]:
+        """The alternatives a node accepts, with one level of anyOf flattened.
+
+        A name declared twice in a polymorphic node is not necessarily declared the same
+        way: `transport.host` is `string | array` in the http variant and plain `string` in
+        httpupgrade. Keeping whichever came last loses the array form, and the surface then
+        claims a value sing-box accepts is out of bounds.
+        """
+        node = self.deref(node)
+        if "anyOf" in node and "type" not in node:
+            found: list[dict] = []
+            for branch in node["anyOf"] or []:
+                for shape in self._shapes(branch):
+                    if shape not in found:
+                        found.append(shape)
+            return found
+        return [node]
 
     def variant_types(self, node: object) -> list[str]:
         """Discriminator values (const / enum of the `type` field) of a polymorphic node."""
@@ -158,16 +213,21 @@ class SurfaceBuilder:
         deprecated: bool = False,
         variants: list[str] | None = None,
     ) -> None:
-        if path in self.slots:
+        existing = self.slots.get(path)
+        if existing is None:
+            entry: dict = {"kind": kind}
+            if enum:
+                entry["enum"] = list(enum)
+            if deprecated:
+                entry["deprecated"] = True
+            if variants:
+                entry["variants"] = list(variants)
+            self.slots[path] = entry
             return
-        entry: dict = {"kind": kind}
-        if enum:
-            entry["enum"] = enum
-        if deprecated:
-            entry["deprecated"] = True
-        if variants:
-            entry["variants"] = variants
-        self.slots[path] = entry
+
+        # Only the kind is merged. An enum describes the values of one variant, so taking
+        # the union of two variants' enums would claim values that neither accepts.
+        existing["kind"] = merge_kind(path, existing["kind"], kind, self.kind_conflicts)
 
     def walk(self, node: object, path: str, depth: int, stack: tuple[str, ...]) -> None:
         if depth > MAX_DEPTH or len(self.slots) > MAX_PATHS:
@@ -184,29 +244,50 @@ class SurfaceBuilder:
         # Field that accepts several shapes. The array form is the common Listable case;
         # the object form matters because a contribution may want to write into it, e.g.
         # http_client is either a tag string or inline options with a detour.
+        #
+        # Every branch is walked, not just the first: a field declared by two variants keeps
+        # the properties of both, otherwise the surface would lose half of them.
         if "anyOf" in node and "type" not in node:
-            branches = [b for b in (node["anyOf"] or []) if isinstance(b, dict)]
+            branches = [self.deref(b) for b in (node["anyOf"] or []) if isinstance(b, dict)]
 
-            def branch_type(branch: dict) -> str | None:
-                resolved = self.deref(branch)
-                kind = resolved.get("type")
-                return kind if isinstance(kind, str) else None
+            def shape_of(branch: dict) -> str:
+                kind = branch.get("type")
+                if isinstance(kind, str):
+                    return kind
+                return "object" if ("properties" in branch or "oneOf" in branch) else "scalar"
 
-            array_branch = next((b for b in branches if branch_type(b) == "array"), None)
-            object_branch = next((b for b in branches if branch_type(b) == "object"), None)
-            scalar_branch = next(
-                (b for b in branches if branch_type(b) not in ("array", "object")), None
-            )
-            if array_branch is not None:
-                self.record(path, "scalar_list", enum=self.enum_of(scalar_branch) or None)
-                self.walk(array_branch.get("items"), path + "[]", depth + 1, stack)
+            arrays = [b for b in branches if shape_of(b) == "array"]
+            objects = [b for b in branches if shape_of(b) == "object"]
+            scalars = [b for b in branches if b not in arrays and b not in objects]
+            enum = next((self.enum_of(b) for b in scalars if self.enum_of(b)), None)
+            if arrays:
+                # Listable: one element or a list of them. An object alternative is one
+                # element of the list, not a different shape of the container, so its
+                # properties belong where the element's do.
+                self.record(path, "scalar_list", enum=enum)
+                for branch in arrays:
+                    self.walk(branch.get("items"), path + "[]", depth + 1, stack)
+                for branch in objects:
+                    self.walk(branch, path + "[]", depth + 1, stack)
                 return
-            if object_branch is not None:
-                self.record(path, "object_or_scalar", enum=self.enum_of(scalar_branch) or None)
-                self.walk(object_branch, path, depth + 1, stack)
+            if objects:
+                # The branches are alternative shapes of the same path, so they do not
+                # consume depth: otherwise a nested Listable one level down would fall off
+                # the end of MAX_DEPTH and vanish.
+                variants = [
+                    name for branch in objects for name in self.variant_types(branch)
+                ]
+                self.record(
+                    path,
+                    "object_or_scalar",
+                    enum=enum,
+                    variants=list(dict.fromkeys(variants)) or None,
+                )
+                for branch in objects:
+                    self.walk(branch, path, depth, stack)
                 return
-            if scalar_branch is not None:
-                self.record(path, "scalar", enum=self.enum_of(scalar_branch) or None)
+            if scalars:
+                self.record(path, "scalar", enum=enum)
                 return
 
         node_type = node.get("type")
@@ -233,9 +314,24 @@ class SurfaceBuilder:
         self.record(path, "scalar", enum=self.enum_of(node) or None)
 
     def record_reference(self, path: str, node: object) -> None:
-        ref = self.deref(node).get("x-tag-reference")
-        if isinstance(ref, str) and ref:
-            self.references.setdefault(path, ref)
+        """Mark a tag reference, looking through the shapes a merged node may hold.
+
+        Variants that share a field name may point at different namespaces - `detour` is an
+        outbound on most endpoints and an inbound on services - so a disagreement is
+        recorded rather than silently resolved.
+        """
+        for shape in self._shapes(node):
+            ref = shape.get("x-tag-reference")
+            if not isinstance(ref, str) or not ref:
+                continue
+            known = self.references.get(path)
+            if known is None:
+                self.references[path] = ref
+            elif known != ref:
+                self.kind_conflicts.append(
+                    f"{path}: reference {known} and {ref} disagree; kept {known}"
+                )
+            return
 
     @staticmethod
     def enum_of(node: object) -> list:
@@ -279,6 +375,8 @@ class SurfaceBuilder:
         for path in sorted(self.tagged_collections):
             if path not in TAG_NAMESPACE:
                 notes.append(f"{path} — tagged but no reference namespace, classified seq_tagged")
+        for conflict in self.kind_conflicts:
+            notes.append(f"{conflict} — the surface is lossy here")
         return errors, notes
 
 
