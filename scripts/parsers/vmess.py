@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional
+from typing import Any, Optional
 import uuid
 from utils import *
 import json
@@ -25,7 +25,9 @@ class VMess:
 
     def to_singbox_config(self) -> dict:
         """转换为 sing-box 节点配置"""
-        cfg = {
+        # Annotated so the heterogeneous values below (nested mappings, lists, booleans)
+        # are not narrowed to the type of the literal, which is what they would infer.
+        cfg: dict[str, Any] = {
             "type": "vmess",
             "tag": self.ps,
             "server": self.add,
@@ -38,7 +40,7 @@ class VMess:
         }
 
         if self.net:
-            transport = {}
+            transport: dict[str, Any] = {}
             if self.net == "tcp" or self.net == "h2":
                 transport["type"] = "http"
                 if configs.MODIFY_VMESS_TRANSPORT:
@@ -60,7 +62,7 @@ class VMess:
             cfg["transport"] = transport
 
         if self.tls and self.tls.lower() == "tls":
-            tls_config = {"enabled": True}
+            tls_config: dict[str, Any] = {"enabled": True}
             tls_config["server_name"] = self.sni
             if self.alpn:
                 tls_config["alpn"] = self.alpn.split(",")
