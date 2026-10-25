@@ -52,17 +52,28 @@ def parse_ss(link: str) -> Optional[Shadowsocks]:
     # ss://base64(method:password)@host:port?plugin=xxx
     # ss://method:password@host:port?plugin=xxx
     u = urlparse(f"ss://{link}")
+
+    # urlparse returns None for any component the link does not carry. A malformed link
+    # has to be rejected here, otherwise the node is built with empty credentials and
+    # only fails much later, inside sing-box.
+    username = u.username or ""
     method = ""
     password = ""
-
-    if (decoded := try_decode_base64(u.username)) is not None:
+    if (decoded := try_decode_base64(username)) is not None:
+        if ":" not in decoded:
+            raise ValueError(f"ss credentials are not in method:password form: {decoded!r}")
         method, password = decoded.split(":", 1)
     else:
-        method = u.username
-        password = u.password
+        method = username
+        password = u.password or ""
 
-    server = u.hostname
+    server = u.hostname or ""
     port = u.port
+
+    if not server or port is None:
+        raise ValueError(f"ss link has no usable server or port: {link!r}")
+    if not method or not password:
+        raise ValueError(f"ss link has no usable method or password: {link!r}")
 
     plugin = None
     plugin_opts = None
