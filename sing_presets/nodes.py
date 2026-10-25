@@ -72,6 +72,11 @@ def extract_links(text: str) -> list[str]:
     return [line.strip() for line in text.splitlines() if LINK.match(line.strip())]
 
 
+def is_url(source: str) -> bool:
+    """Whether a source is fetched over HTTP rather than read from disk or taken literally."""
+    return source.startswith(("http://", "https://"))
+
+
 def read_source(source: str, timeout: float = 10.0) -> str:
     """Read one source, unwrapping a base64-encoded body.
 
@@ -79,7 +84,7 @@ def read_source(source: str, timeout: float = 10.0) -> str:
     base64, and the choice is not visible from the URL, so both are accepted. A local path
     is read as a file, which is how a hand-made list and the tests work.
     """
-    if source.startswith(("http://", "https://")):
+    if is_url(source):
         request = Request(source, headers={"User-Agent": USER_AGENT})
         with urlopen(request, timeout=timeout) as response:
             text = response.read().decode("utf-8", errors="replace")
@@ -146,10 +151,18 @@ def fetch(sources: Sequence[str], timeout: float = 10.0) -> Feed:
     A source that cannot be read is recorded and skipped rather than raised: one dead
     subscription of several should not cost the others, and the caller decides whether the
     loss is acceptable.
+
+    A source may also be a share link itself. A file of links and a file of subscription URLs
+    look the same on disk, so passing one where the other is expected is an ordinary mistake,
+    and reading `ss://...` as a relative path fails with an `Invalid argument` that names
+    nothing. Links are recognised instead of read, which makes the mixed case work too.
     """
     feed = Feed(sources=list(sources))
     texts: list[str] = []
     for source in sources:
+        if LINK.match(source.strip()) and not is_url(source):
+            texts.append(source.strip())
+            continue
         try:
             texts.append(read_source(source, timeout=timeout))
         except OSError as error:

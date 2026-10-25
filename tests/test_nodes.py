@@ -96,6 +96,24 @@ def test_a_source_may_be_a_file_and_may_be_base64(tmp_path: Path) -> None:
     assert node_lib.extract_links(node_lib.read_source(str(wrapped))) == [link("B")]
 
 
+def test_a_source_may_be_a_link_itself() -> None:
+    """A file of links passed where a list of sources is expected is an ordinary mistake.
+
+    Reading `ss://...` as a relative path fails with `Invalid argument`, which names nothing
+    and reads as if the link were at fault.
+    """
+    feed = node_lib.fetch([link("Tokyo")])
+    assert [item.tag for item in feed.nodes] == ["Tokyo"]
+    assert feed.failures == []
+
+
+def test_a_source_that_is_neither_readable_nor_a_link_is_reported() -> None:
+    feed = node_lib.fetch(["does-not-exist.txt", link("Tokyo")])
+    assert [item.tag for item in feed.nodes] == ["Tokyo"]
+    assert len(feed.failures) == 1
+    assert feed.failures[0].startswith("does-not-exist.txt")
+
+
 def test_the_payload_is_what_the_build_reads(tmp_path: Path) -> None:
     """`build --nodes` reads `{"nodes": [...]}`, each entry an outbound with a tag."""
     feed = node_lib.collect([link("Tokyo")])
