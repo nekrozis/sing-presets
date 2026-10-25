@@ -1,0 +1,7401 @@
+{
+  "source": {
+    "schema_file": "sing-box-1.14.4.json",
+    "binary_version": "1.14.4",
+    "top_level": [
+      "$schema",
+      "certificate",
+      "certificate_providers",
+      "dns",
+      "endpoints",
+      "experimental",
+      "http_clients",
+      "inbounds",
+      "log",
+      "network_namespaces",
+      "ntp",
+      "outbounds",
+      "route",
+      "services"
+    ]
+  },
+  "counts": {
+    "map_tag": 8,
+    "object": 124,
+    "object_or_scalar": 31,
+    "scalar": 1450,
+    "scalar_list": 321,
+    "seq": 25,
+    "seq_tagged": 2
+  },
+  "tag_namespace": {
+    "certificate_providers": "certificate_provider",
+    "dns.servers": "dns_server",
+    "endpoints": "outbound",
+    "http_clients": "http_client",
+    "inbounds": "inbound",
+    "network_namespaces": "network_namespace",
+    "outbounds": "outbound",
+    "route.rule_set": "rule_set"
+  },
+  "reference_kinds": [
+    "certificate_provider",
+    "dns_server",
+    "http_client",
+    "inbound",
+    "network_namespace",
+    "outbound",
+    "rule_set"
+  ],
+  "slots": {
+    "$schema": {
+      "kind": "scalar"
+    },
+    "certificate": {
+      "kind": "object"
+    },
+    "certificate.certificate": {
+      "kind": "scalar_list"
+    },
+    "certificate.certificate[]": {
+      "kind": "scalar"
+    },
+    "certificate.certificate_directory_path": {
+      "kind": "scalar_list"
+    },
+    "certificate.certificate_directory_path[]": {
+      "kind": "scalar"
+    },
+    "certificate.certificate_path": {
+      "kind": "scalar_list"
+    },
+    "certificate.certificate_path[]": {
+      "kind": "scalar"
+    },
+    "certificate.store": {
+      "kind": "scalar",
+      "enum": [
+        "system",
+        "mozilla",
+        "chrome",
+        "none"
+      ]
+    },
+    "certificate_providers": {
+      "kind": "map_tag"
+    },
+    "certificate_providers{tag}": {
+      "kind": "object",
+      "variants": [
+        "acme",
+        "cloudflare-origin-ca",
+        "tailscale"
+      ]
+    },
+    "certificate_providers{tag}.account_key": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.alternative_http_port": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.alternative_tls_port": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.api_token": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.data_directory": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.default_server_name": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.disable_http_challenge": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.disable_tls_alpn_challenge": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.dns01_challenge": {
+      "kind": "object"
+    },
+    "certificate_providers{tag}.dns01_challenge.access_key_id": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.dns01_challenge.access_key_secret": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.dns01_challenge.api_token": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.dns01_challenge.override_domain": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.dns01_challenge.password": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.dns01_challenge.propagation_delay": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.dns01_challenge.propagation_timeout": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.dns01_challenge.provider": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.dns01_challenge.region_id": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.dns01_challenge.resolvers": {
+      "kind": "scalar_list"
+    },
+    "certificate_providers{tag}.dns01_challenge.resolvers[]": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.dns01_challenge.security_token": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.dns01_challenge.server_url": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.dns01_challenge.subdomain": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.dns01_challenge.ttl": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.dns01_challenge.username": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.dns01_challenge.zone_token": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.domain": {
+      "kind": "scalar_list"
+    },
+    "certificate_providers{tag}.domain[]": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.email": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.endpoint": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.external_account": {
+      "kind": "object"
+    },
+    "certificate_providers{tag}.external_account.key_id": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.external_account.mac_key": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client": {
+      "kind": "object_or_scalar"
+    },
+    "certificate_providers{tag}.http_client.bind_address_no_port": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.bind_interface": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.connect_timeout": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.connection_receive_window": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.detour": {
+      "kind": "scalar",
+      "reference": "outbound"
+    },
+    "certificate_providers{tag}.http_client.disable_path_mtu_discovery": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.disable_tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.disable_version_fallback": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.domain_resolver": {
+      "kind": "object_or_scalar"
+    },
+    "certificate_providers{tag}.http_client.domain_resolver.server": {
+      "kind": "scalar",
+      "reference": "dns_server"
+    },
+    "certificate_providers{tag}.http_client.engine": {
+      "kind": "scalar",
+      "enum": [
+        "go",
+        "apple"
+      ]
+    },
+    "certificate_providers{tag}.http_client.fallback_delay": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.fallback_network_type": {
+      "kind": "scalar_list"
+    },
+    "certificate_providers{tag}.http_client.fallback_network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "certificate_providers{tag}.http_client.headers": {
+      "kind": "object"
+    },
+    "certificate_providers{tag}.http_client.idle_timeout": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.inet4_bind_address": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.inet6_bind_address": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.initial_packet_size": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.keep_alive_period": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.max_concurrent_streams": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.netns": {
+      "kind": "scalar",
+      "reference": "network_namespace"
+    },
+    "certificate_providers{tag}.http_client.network_strategy": {
+      "kind": "scalar",
+      "enum": [
+        "default",
+        "fallback",
+        "hybrid"
+      ]
+    },
+    "certificate_providers{tag}.http_client.network_type": {
+      "kind": "scalar_list"
+    },
+    "certificate_providers{tag}.http_client.network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "certificate_providers{tag}.http_client.protect_path": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.reuse_addr": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.routing_mark": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.stream_receive_window": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.tcp_fast_open": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.tcp_keep_alive_interval": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.tcp_multi_path": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.tls": {
+      "kind": "object"
+    },
+    "certificate_providers{tag}.http_client.tls.alpn": {
+      "kind": "scalar_list"
+    },
+    "certificate_providers{tag}.http_client.tls.certificate": {
+      "kind": "scalar_list"
+    },
+    "certificate_providers{tag}.http_client.tls.certificate_path": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.tls.certificate_public_key_sha256": {
+      "kind": "scalar_list"
+    },
+    "certificate_providers{tag}.http_client.tls.cipher_suites": {
+      "kind": "scalar_list"
+    },
+    "certificate_providers{tag}.http_client.tls.client_certificate": {
+      "kind": "scalar_list"
+    },
+    "certificate_providers{tag}.http_client.tls.client_certificate_path": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.tls.client_key": {
+      "kind": "scalar_list"
+    },
+    "certificate_providers{tag}.http_client.tls.client_key_path": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.tls.curve_preferences": {
+      "kind": "scalar_list",
+      "enum": [
+        "P256",
+        "P384",
+        "P521",
+        "X25519",
+        "X25519MLKEM768"
+      ]
+    },
+    "certificate_providers{tag}.http_client.tls.disable_sni": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.tls.ech": {
+      "kind": "object"
+    },
+    "certificate_providers{tag}.http_client.tls.enabled": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.tls.engine": {
+      "kind": "scalar",
+      "enum": [
+        "go",
+        "apple",
+        "windows"
+      ]
+    },
+    "certificate_providers{tag}.http_client.tls.fragment": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.tls.fragment_fallback_delay": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.tls.handshake_timeout": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.tls.insecure": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.tls.kernel_rx": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.tls.kernel_tx": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.tls.max_version": {
+      "kind": "scalar",
+      "enum": [
+        "1.0",
+        "1.1",
+        "1.2",
+        "1.3"
+      ]
+    },
+    "certificate_providers{tag}.http_client.tls.min_version": {
+      "kind": "scalar",
+      "enum": [
+        "1.0",
+        "1.1",
+        "1.2",
+        "1.3"
+      ]
+    },
+    "certificate_providers{tag}.http_client.tls.reality": {
+      "kind": "object"
+    },
+    "certificate_providers{tag}.http_client.tls.record_fragment": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.tls.server_name": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.tls.spoof": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.tls.spoof_method": {
+      "kind": "scalar",
+      "enum": [
+        "wrong-sequence",
+        "wrong-checksum",
+        "wrong-ack",
+        "wrong-md5",
+        "wrong-timestamp"
+      ]
+    },
+    "certificate_providers{tag}.http_client.tls.utls": {
+      "kind": "object"
+    },
+    "certificate_providers{tag}.http_client.udp_fragment": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.http_client.version": {
+      "kind": "scalar",
+      "enum": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "certificate_providers{tag}.key_type": {
+      "kind": "scalar",
+      "enum": [
+        "ed25519",
+        "p256",
+        "p384",
+        "rsa2048",
+        "rsa4096"
+      ]
+    },
+    "certificate_providers{tag}.origin_ca_key": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.profile": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.provider": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.request_type": {
+      "kind": "scalar",
+      "enum": [
+        "origin-rsa",
+        "origin-ecc"
+      ]
+    },
+    "certificate_providers{tag}.requested_validity": {
+      "kind": "scalar",
+      "enum": [
+        0,
+        7,
+        30,
+        90,
+        365,
+        730,
+        1095,
+        5475
+      ]
+    },
+    "certificate_providers{tag}.tag": {
+      "kind": "scalar"
+    },
+    "certificate_providers{tag}.type": {
+      "kind": "scalar"
+    },
+    "dns": {
+      "kind": "object"
+    },
+    "dns.cache_capacity": {
+      "kind": "scalar"
+    },
+    "dns.client_subnet": {
+      "kind": "scalar"
+    },
+    "dns.disable_cache": {
+      "kind": "scalar"
+    },
+    "dns.disable_expire": {
+      "kind": "scalar"
+    },
+    "dns.final": {
+      "kind": "scalar",
+      "reference": "dns_server"
+    },
+    "dns.optimistic": {
+      "kind": "object_or_scalar"
+    },
+    "dns.optimistic.enabled": {
+      "kind": "scalar"
+    },
+    "dns.optimistic.timeout": {
+      "kind": "scalar"
+    },
+    "dns.reverse_mapping": {
+      "kind": "scalar"
+    },
+    "dns.rules": {
+      "kind": "seq_tagged"
+    },
+    "dns.rules{tag}": {
+      "kind": "object",
+      "variants": [
+        "default",
+        "logical"
+      ]
+    },
+    "dns.rules{tag}.action": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.answer": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.answer[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.auth_user": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.auth_user[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.clash_mode": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.client_subnet": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.default_interface_address": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.default_interface_address[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.disable_cache": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.disable_optimistic_cache": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.domain": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.domain[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.domain_keyword": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.domain_keyword[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.domain_regex": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.domain_regex[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.domain_suffix": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.domain_suffix[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.extra": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.extra[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.inbound": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.inbound[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.interface_address": {
+      "kind": "object"
+    },
+    "dns.rules{tag}.invert": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.ip_accept_any": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.ip_cidr": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.ip_cidr[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.ip_is_private": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.ip_version": {
+      "kind": "scalar",
+      "enum": [
+        4,
+        6
+      ]
+    },
+    "dns.rules{tag}.match_response": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.method": {
+      "kind": "scalar",
+      "enum": [
+        "",
+        "default",
+        "drop",
+        "reply"
+      ]
+    },
+    "dns.rules{tag}.mode": {
+      "kind": "scalar",
+      "enum": [
+        "and",
+        "or"
+      ]
+    },
+    "dns.rules{tag}.network": {
+      "kind": "scalar_list",
+      "enum": [
+        "tcp",
+        "udp"
+      ]
+    },
+    "dns.rules{tag}.network[]": {
+      "kind": "scalar",
+      "enum": [
+        "tcp",
+        "udp"
+      ]
+    },
+    "dns.rules{tag}.network_interface_address": {
+      "kind": "object"
+    },
+    "dns.rules{tag}.network_is_constrained": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.network_is_expensive": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.network_type": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "dns.rules{tag}.no_drop": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.ns": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.ns[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.package_name": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.package_name[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.package_name_regex": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.package_name_regex[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.port": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.port[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.port_range": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.port_range[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.preferred_by": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.preferred_by[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.process_name": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.process_name[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.process_path": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.process_path[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.process_path_regex": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.process_path_regex[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.protocol": {
+      "kind": "scalar_list",
+      "enum": [
+        "tls",
+        "http",
+        "quic",
+        "dns",
+        "stun",
+        "bittorrent",
+        "dtls",
+        "ssh",
+        "rdp",
+        "ntp"
+      ]
+    },
+    "dns.rules{tag}.protocol[]": {
+      "kind": "scalar",
+      "enum": [
+        "tls",
+        "http",
+        "quic",
+        "dns",
+        "stun",
+        "bittorrent",
+        "dtls",
+        "ssh",
+        "rdp",
+        "ntp"
+      ]
+    },
+    "dns.rules{tag}.query_client_subnet": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.query_client_subnet[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.query_dnssec": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.query_type": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.query_type[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.race": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.rcode": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.remove_client_subnet": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.response_answer": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.response_answer[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.response_extra": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.response_extra[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.response_ns": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.response_ns[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.response_rcode": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.rewrite_ttl": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.rule_set": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rule_set[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.rule_set_ip_cidr_match_source": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.rules": {
+      "kind": "seq"
+    },
+    "dns.rules{tag}.rules[]": {
+      "kind": "object",
+      "variants": [
+        "default",
+        "logical"
+      ]
+    },
+    "dns.rules{tag}.rules[].auth_user": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].clash_mode": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.rules[].default_interface_address": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].domain": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].domain_keyword": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].domain_regex": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].domain_suffix": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].inbound": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].interface_address": {
+      "kind": "object"
+    },
+    "dns.rules{tag}.rules[].invert": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.rules[].ip_accept_any": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.rules[].ip_cidr": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].ip_is_private": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.rules[].ip_version": {
+      "kind": "scalar",
+      "enum": [
+        4,
+        6
+      ]
+    },
+    "dns.rules{tag}.rules[].match_response": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.rules[].mode": {
+      "kind": "scalar",
+      "enum": [
+        "and",
+        "or"
+      ]
+    },
+    "dns.rules{tag}.rules[].network": {
+      "kind": "scalar_list",
+      "enum": [
+        "tcp",
+        "udp"
+      ]
+    },
+    "dns.rules{tag}.rules[].network_interface_address": {
+      "kind": "object"
+    },
+    "dns.rules{tag}.rules[].network_is_constrained": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.rules[].network_is_expensive": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.rules[].network_type": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].package_name": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].package_name_regex": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].port": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].port_range": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].preferred_by": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].process_name": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].process_path": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].process_path_regex": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].protocol": {
+      "kind": "scalar_list",
+      "enum": [
+        "tls",
+        "http",
+        "quic",
+        "dns",
+        "stun",
+        "bittorrent",
+        "dtls",
+        "ssh",
+        "rdp",
+        "ntp"
+      ]
+    },
+    "dns.rules{tag}.rules[].query_client_subnet": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].query_dnssec": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.rules[].query_type": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].response_answer": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].response_extra": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].response_ns": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].response_rcode": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.rules[].rule_set": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].rule_set_ip_cidr_match_source": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.rules[].rules": {
+      "kind": "seq"
+    },
+    "dns.rules{tag}.rules[].source_hostname": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].source_ip_cidr": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].source_ip_is_private": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.rules[].source_mac_address": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].source_port": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].source_port_range": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].type": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.rules[].user": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].user_id": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].wifi_bssid": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.rules[].wifi_ssid": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.server": {
+      "kind": "scalar",
+      "reference": "dns_server"
+    },
+    "dns.rules{tag}.source_hostname": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.source_hostname[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.source_ip_cidr": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.source_ip_cidr[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.source_ip_is_private": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.source_mac_address": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.source_mac_address[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.source_port": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.source_port[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.source_port_range": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.source_port_range[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.speculative": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.tag": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.timeout": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.type": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.user": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.user[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.user_id": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.user_id[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.wifi_bssid": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.wifi_bssid[]": {
+      "kind": "scalar"
+    },
+    "dns.rules{tag}.wifi_ssid": {
+      "kind": "scalar_list"
+    },
+    "dns.rules{tag}.wifi_ssid[]": {
+      "kind": "scalar"
+    },
+    "dns.servers": {
+      "kind": "map_tag"
+    },
+    "dns.servers{tag}": {
+      "kind": "object",
+      "variants": [
+        "dhcp",
+        "fakeip",
+        "h3",
+        "hosts",
+        "https",
+        "local",
+        "mdns",
+        "openconnect",
+        "openvpn",
+        "quic",
+        "resolved",
+        "tailscale",
+        "tcp",
+        "tls",
+        "udp"
+      ]
+    },
+    "dns.servers{tag}.accept_default_resolvers": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.accept_search_domain": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.bind_address_no_port": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.bind_interface": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.connect_timeout": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.detour": {
+      "kind": "scalar",
+      "reference": "outbound"
+    },
+    "dns.servers{tag}.disable_tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.domain_resolver": {
+      "kind": "object_or_scalar"
+    },
+    "dns.servers{tag}.domain_resolver.client_subnet": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.domain_resolver.disable_cache": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.domain_resolver.disable_optimistic_cache": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.domain_resolver.rewrite_ttl": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.domain_resolver.server": {
+      "kind": "scalar",
+      "reference": "dns_server"
+    },
+    "dns.servers{tag}.domain_resolver.strategy": {
+      "kind": "scalar",
+      "enum": [
+        "",
+        "as_is",
+        "prefer_ipv4",
+        "prefer_ipv6",
+        "ipv4_only",
+        "ipv6_only"
+      ]
+    },
+    "dns.servers{tag}.domain_resolver.timeout": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.endpoint": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.fallback_delay": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.fallback_network_type": {
+      "kind": "scalar_list"
+    },
+    "dns.servers{tag}.fallback_network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "dns.servers{tag}.headers": {
+      "kind": "object"
+    },
+    "dns.servers{tag}.inet4_bind_address": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.inet4_range": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.inet6_bind_address": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.inet6_range": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.interface": {
+      "kind": "scalar_list"
+    },
+    "dns.servers{tag}.interface[]": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.method": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.neighbor_domain": {
+      "kind": "scalar_list"
+    },
+    "dns.servers{tag}.neighbor_domain[]": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.netns": {
+      "kind": "scalar",
+      "reference": "network_namespace"
+    },
+    "dns.servers{tag}.network_strategy": {
+      "kind": "scalar",
+      "enum": [
+        "default",
+        "fallback",
+        "hybrid"
+      ]
+    },
+    "dns.servers{tag}.network_type": {
+      "kind": "scalar_list"
+    },
+    "dns.servers{tag}.network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "dns.servers{tag}.path": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.predefined": {
+      "kind": "object"
+    },
+    "dns.servers{tag}.prefer_go": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.protect_path": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.reuse_addr": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.routing_mark": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.server": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.server_port": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.service": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tag": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tcp_fast_open": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tcp_keep_alive_interval": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tcp_multi_path": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls": {
+      "kind": "object"
+    },
+    "dns.servers{tag}.tls.alpn": {
+      "kind": "scalar_list"
+    },
+    "dns.servers{tag}.tls.alpn[]": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.certificate": {
+      "kind": "scalar_list"
+    },
+    "dns.servers{tag}.tls.certificate[]": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.certificate_path": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.certificate_public_key_sha256": {
+      "kind": "scalar_list"
+    },
+    "dns.servers{tag}.tls.certificate_public_key_sha256[]": {
+      "kind": "scalar_list"
+    },
+    "dns.servers{tag}.tls.cipher_suites": {
+      "kind": "scalar_list"
+    },
+    "dns.servers{tag}.tls.cipher_suites[]": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.client_certificate": {
+      "kind": "scalar_list"
+    },
+    "dns.servers{tag}.tls.client_certificate[]": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.client_certificate_path": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.client_key": {
+      "kind": "scalar_list"
+    },
+    "dns.servers{tag}.tls.client_key[]": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.client_key_path": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.curve_preferences": {
+      "kind": "scalar_list",
+      "enum": [
+        "P256",
+        "P384",
+        "P521",
+        "X25519",
+        "X25519MLKEM768"
+      ]
+    },
+    "dns.servers{tag}.tls.curve_preferences[]": {
+      "kind": "scalar",
+      "enum": [
+        "P256",
+        "P384",
+        "P521",
+        "X25519",
+        "X25519MLKEM768"
+      ]
+    },
+    "dns.servers{tag}.tls.disable_sni": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.ech": {
+      "kind": "object"
+    },
+    "dns.servers{tag}.tls.ech.config": {
+      "kind": "scalar_list"
+    },
+    "dns.servers{tag}.tls.ech.config_path": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.ech.enabled": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.ech.query_server_name": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.enabled": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.engine": {
+      "kind": "scalar",
+      "enum": [
+        "go",
+        "apple",
+        "windows"
+      ]
+    },
+    "dns.servers{tag}.tls.fragment": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.fragment_fallback_delay": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.handshake_timeout": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.insecure": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.kernel_rx": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.kernel_tx": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.max_version": {
+      "kind": "scalar",
+      "enum": [
+        "1.0",
+        "1.1",
+        "1.2",
+        "1.3"
+      ]
+    },
+    "dns.servers{tag}.tls.min_version": {
+      "kind": "scalar",
+      "enum": [
+        "1.0",
+        "1.1",
+        "1.2",
+        "1.3"
+      ]
+    },
+    "dns.servers{tag}.tls.reality": {
+      "kind": "object"
+    },
+    "dns.servers{tag}.tls.reality.enabled": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.reality.public_key": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.reality.short_id": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.record_fragment": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.server_name": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.spoof": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.spoof_method": {
+      "kind": "scalar",
+      "enum": [
+        "wrong-sequence",
+        "wrong-checksum",
+        "wrong-ack",
+        "wrong-md5",
+        "wrong-timestamp"
+      ]
+    },
+    "dns.servers{tag}.tls.utls": {
+      "kind": "object"
+    },
+    "dns.servers{tag}.tls.utls.enabled": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.tls.utls.fingerprint": {
+      "kind": "scalar",
+      "enum": [
+        "chrome_psk",
+        "chrome_psk_shuffle",
+        "chrome_padding_psk_shuffle",
+        "chrome_pq",
+        "chrome_pq_psk",
+        "chrome",
+        "firefox",
+        "edge",
+        "safari",
+        "360",
+        "qq",
+        "ios",
+        "android",
+        "random",
+        "randomized"
+      ]
+    },
+    "dns.servers{tag}.type": {
+      "kind": "scalar"
+    },
+    "dns.servers{tag}.udp_fragment": {
+      "kind": "scalar"
+    },
+    "dns.strategy": {
+      "kind": "scalar",
+      "enum": [
+        "",
+        "as_is",
+        "prefer_ipv4",
+        "prefer_ipv6",
+        "ipv4_only",
+        "ipv6_only"
+      ]
+    },
+    "dns.timeout": {
+      "kind": "scalar"
+    },
+    "endpoints": {
+      "kind": "map_tag"
+    },
+    "endpoints{tag}": {
+      "kind": "object",
+      "variants": [
+        "openconnect",
+        "openvpn-client",
+        "openvpn-server",
+        "tailscale",
+        "wireguard"
+      ]
+    },
+    "endpoints{tag}.accept_routes": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.address": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.address[]": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.advertise_exit_node": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.advertise_routes": {
+      "kind": "seq"
+    },
+    "endpoints{tag}.advertise_routes[]": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.advertise_tags": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.advertise_tags[]": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.allow_compression": {
+      "kind": "scalar",
+      "enum": [
+        "no",
+        "asym",
+        "yes"
+      ]
+    },
+    "endpoints{tag}.allow_insecure_crypto": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.auth": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.auth_group": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.auth_key": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.auth_retry": {
+      "kind": "scalar",
+      "enum": [
+        "none",
+        "nointeract",
+        "interact"
+      ]
+    },
+    "endpoints{tag}.base_mtu": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.bind_address_no_port": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.bind_interface": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.block_ipv6": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.cipher": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.compression": {
+      "kind": "scalar",
+      "enum": [
+        "none",
+        "no",
+        "lz4",
+        "lz4-v2",
+        "stub",
+        "stub-v2",
+        "disabled",
+        "off"
+      ]
+    },
+    "endpoints{tag}.compression_disabled": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.compression_lzo": {
+      "kind": "scalar",
+      "enum": [
+        "none",
+        "no",
+        "yes",
+        "adaptive",
+        "asym",
+        "disabled",
+        "off"
+      ]
+    },
+    "endpoints{tag}.compression_mode": {
+      "kind": "scalar",
+      "enum": [
+        "stateless",
+        "all"
+      ]
+    },
+    "endpoints{tag}.connect_timeout": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.control_url": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.cookie": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.csd": {
+      "kind": "object"
+    },
+    "endpoints{tag}.csd.wrapper_path": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.data_ciphers": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.data_ciphers[]": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.data_ciphers_fallback": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.detour": {
+      "kind": "scalar",
+      "reference": "outbound"
+    },
+    "endpoints{tag}.disable_tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.domain_resolver": {
+      "kind": "object_or_scalar"
+    },
+    "endpoints{tag}.domain_resolver.client_subnet": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.domain_resolver.disable_cache": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.domain_resolver.disable_optimistic_cache": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.domain_resolver.rewrite_ttl": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.domain_resolver.server": {
+      "kind": "scalar",
+      "reference": "dns_server"
+    },
+    "endpoints{tag}.domain_resolver.strategy": {
+      "kind": "scalar",
+      "enum": [
+        "",
+        "as_is",
+        "prefer_ipv4",
+        "prefer_ipv6",
+        "ipv4_only",
+        "ipv6_only"
+      ]
+    },
+    "endpoints{tag}.domain_resolver.timeout": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.dpd_interval": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.dtls_local_port": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.duplicate_cn": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.ephemeral": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.exit_node": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.exit_node_allow_lan_access": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.explicit_exit_notify": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.external_auth_disabled": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.fallback_delay": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.fallback_network_type": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.fallback_network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "endpoints{tag}.flavor": {
+      "kind": "scalar",
+      "enum": [
+        "anyconnect",
+        "gp",
+        "fortinet",
+        "f5",
+        "pulse",
+        "nc"
+      ]
+    },
+    "endpoints{tag}.form_entries": {
+      "kind": "seq"
+    },
+    "endpoints{tag}.form_entries[]": {
+      "kind": "object"
+    },
+    "endpoints{tag}.form_entries[].form_id": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.form_entries[].name": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.form_entries[].promote": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.form_entries[].submission_key": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.form_entries[].value": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.fortinet_host_check": {
+      "kind": "object"
+    },
+    "endpoints{tag}.fortinet_host_check.check_virtual_desktop": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.fortinet_host_check.hostcheck": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.fragment": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.handshake_window": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.hip": {
+      "kind": "object"
+    },
+    "endpoints{tag}.hip.wrapper_path": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.hostname": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.http_keepalive_disabled": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.inet4_bind_address": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.inet6_bind_address": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.ipv6_disabled": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.key_direction": {
+      "kind": "scalar",
+      "enum": [
+        "server",
+        "client"
+      ]
+    },
+    "endpoints{tag}.listen": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.listen_port": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.local_hostname": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.max_clients": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.mobile": {
+      "kind": "object"
+    },
+    "endpoints{tag}.mobile.device_type": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.mobile.device_unique_id": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.mobile.platform_version": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.mode": {
+      "kind": "scalar",
+      "enum": [
+        "tls",
+        "static_key"
+      ]
+    },
+    "endpoints{tag}.mss_fix": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.mss_fix_disabled": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.mss_fix_mode": {
+      "kind": "scalar",
+      "enum": [
+        "mtu",
+        "fixed"
+      ]
+    },
+    "endpoints{tag}.mtu": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.name": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.netns": {
+      "kind": "scalar",
+      "reference": "network_namespace"
+    },
+    "endpoints{tag}.network": {
+      "kind": "scalar",
+      "enum": [
+        "tcp",
+        "udp"
+      ]
+    },
+    "endpoints{tag}.network_strategy": {
+      "kind": "scalar",
+      "enum": [
+        "default",
+        "fallback",
+        "hybrid"
+      ]
+    },
+    "endpoints{tag}.network_type": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "endpoints{tag}.no_udp": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.password": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.password_authentication_disabled": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.peer_address": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.peer_address_ipv6": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.peers": {
+      "kind": "seq"
+    },
+    "endpoints{tag}.peers[]": {
+      "kind": "object"
+    },
+    "endpoints{tag}.peers[].address": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.peers[].allowed_ips": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.peers[].allowed_ips[]": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.peers[].persistent_keepalive_interval": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.peers[].port": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.peers[].pre_shared_key": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.peers[].public_key": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.peers[].reserved": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.peers[].reserved[]": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.pfs": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.ping_interval": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.ping_restart": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.ping_restart_disabled": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.private_key": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.protect_path": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.pull_filters": {
+      "kind": "seq"
+    },
+    "endpoints{tag}.pull_filters[]": {
+      "kind": "object"
+    },
+    "endpoints{tag}.pull_filters[].action": {
+      "kind": "scalar",
+      "enum": [
+        "accept",
+        "ignore",
+        "reject"
+      ]
+    },
+    "endpoints{tag}.pull_filters[].text": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.push": {
+      "kind": "object"
+    },
+    "endpoints{tag}.push.block_outside_dns": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.push.dhcp_options": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.push.dhcp_options[]": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.push.dns": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.push.dns[]": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.push.dns_servers": {
+      "kind": "seq"
+    },
+    "endpoints{tag}.push.dns_servers[]": {
+      "kind": "object"
+    },
+    "endpoints{tag}.push.dns_servers[].addresses": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.push.dns_servers[].dnssec": {
+      "kind": "scalar",
+      "enum": [
+        "yes",
+        "optional",
+        "no"
+      ]
+    },
+    "endpoints{tag}.push.dns_servers[].priority": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.push.dns_servers[].resolve_domains": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.push.dns_servers[].sni": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.push.dns_servers[].transport": {
+      "kind": "scalar",
+      "enum": [
+        "plain",
+        "dot",
+        "doh"
+      ]
+    },
+    "endpoints{tag}.push.ping_interval": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.push.ping_restart": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.push.redirect_gateway": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.push.redirect_gateway_flags": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.push.redirect_gateway_flags[]": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.push.routes": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.push.routes[]": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.push.search_domains": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.push.search_domains[]": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.queue_length": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.reconnect_timeout": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.redirect_gateway": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.redirect_gateway_flags": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.redirect_gateway_flags[]": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.redirect_private": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.relay_server_port": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.relay_server_static_endpoints": {
+      "kind": "seq"
+    },
+    "endpoints{tag}.relay_server_static_endpoints[]": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.remote": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.remote_port": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.remote_random": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.renegotiate_bytes": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.renegotiate_disabled": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.renegotiate_interval": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.renegotiate_packets": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.replay_window": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.replay_window_time": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.reported_os": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.reuse_addr": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.route_gateway": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.route_metric": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.route_no_pull": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.routes": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.routes[]": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.routing_mark": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.server": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.server_port": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.servers": {
+      "kind": "seq"
+    },
+    "endpoints{tag}.servers[]": {
+      "kind": "object"
+    },
+    "endpoints{tag}.servers[].network": {
+      "kind": "scalar",
+      "enum": [
+        "udp",
+        "udp4",
+        "udp6",
+        "tcp",
+        "tcp4",
+        "tcp6"
+      ]
+    },
+    "endpoints{tag}.servers[].server": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.servers[].server_port": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.ssh_server": {
+      "kind": "object_or_scalar"
+    },
+    "endpoints{tag}.ssh_server.disable_forwarding": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.ssh_server.disable_pty": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.ssh_server.disable_sftp": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.ssh_server.enabled": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.state_directory": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.static_challenge": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.static_challenge_echo": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.static_key": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.static_key[]": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.static_key_path": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.system": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.system_interface": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.system_interface_mtu": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.system_interface_name": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tag": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.taildrop_directory": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tcp_fast_open": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tcp_keep_alive_enabled": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tcp_keep_alive_interval": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tcp_multi_path": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tls": {
+      "kind": "object"
+    },
+    "endpoints{tag}.tls.certificate": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.tls.certificate[]": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tls.certificate_path": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tls.certificate_profile": {
+      "kind": "scalar",
+      "enum": [
+        "legacy",
+        "preferred",
+        "insecure",
+        "suiteb"
+      ]
+    },
+    "endpoints{tag}.tls.cipher": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tls.client_certificate": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.tls.client_certificate[]": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tls.client_certificate_path": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tls.client_name": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tls.client_name_type": {
+      "kind": "scalar",
+      "enum": [
+        "subject",
+        "name",
+        "name-prefix"
+      ]
+    },
+    "endpoints{tag}.tls.control_wrap": {
+      "kind": "object"
+    },
+    "endpoints{tag}.tls.control_wrap.direction": {
+      "kind": "scalar",
+      "enum": [
+        "server",
+        "client"
+      ]
+    },
+    "endpoints{tag}.tls.control_wrap.force_cookie": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tls.control_wrap.key": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.tls.control_wrap.key[]": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tls.control_wrap.key_path": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tls.control_wrap.type": {
+      "kind": "scalar",
+      "enum": [
+        "tls_auth",
+        "tls_crypt",
+        "tls_crypt_v2"
+      ]
+    },
+    "endpoints{tag}.tls.crl_path": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tls.groups": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tls.key": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.tls.key[]": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tls.key_path": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tls.ns_certificate_type": {
+      "kind": "scalar",
+      "enum": [
+        "server",
+        "client"
+      ]
+    },
+    "endpoints{tag}.tls.peer_fingerprint": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.tls.peer_fingerprint[]": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tls.remote_certificate_eku": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tls.remote_certificate_ku": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.tls.remote_certificate_ku[]": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tls.remote_certificate_tls": {
+      "kind": "scalar",
+      "enum": [
+        "server",
+        "client",
+        "none"
+      ]
+    },
+    "endpoints{tag}.tls.verify_client_certificate": {
+      "kind": "scalar",
+      "enum": [
+        "require",
+        "optional",
+        "none"
+      ]
+    },
+    "endpoints{tag}.tls.version_max": {
+      "kind": "scalar",
+      "enum": [
+        "1.0",
+        "1.1",
+        "1.2",
+        "1.3"
+      ]
+    },
+    "endpoints{tag}.tls.version_min": {
+      "kind": "scalar",
+      "enum": [
+        "1.0",
+        "1.1",
+        "1.2",
+        "1.3"
+      ]
+    },
+    "endpoints{tag}.tls_timeout": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tncc": {
+      "kind": "object"
+    },
+    "endpoints{tag}.tncc.certificates": {
+      "kind": "seq"
+    },
+    "endpoints{tag}.tncc.certificates[]": {
+      "kind": "object"
+    },
+    "endpoints{tag}.tncc.certificates[].certificate": {
+      "kind": "scalar_list"
+    },
+    "endpoints{tag}.tncc.certificates[].certificate_path": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tncc.device_id": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tncc.machine_identification_enabled": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tncc.user_agent": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.tncc.wrapper_path": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.token": {
+      "kind": "object"
+    },
+    "endpoints{tag}.token.counter": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.token.device_id": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.token.mode": {
+      "kind": "scalar",
+      "enum": [
+        "totp",
+        "hotp",
+        "stoken",
+        "oidc"
+      ]
+    },
+    "endpoints{tag}.token.password": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.token.pin": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.token.secret": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.token.secret_path": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.topology": {
+      "kind": "scalar",
+      "enum": [
+        "net30",
+        "p2p",
+        "subnet"
+      ]
+    },
+    "endpoints{tag}.trojan_interval": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.type": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.udp_filtering": {
+      "kind": "scalar",
+      "enum": [
+        "",
+        "endpoint_independent",
+        "address_dependent",
+        "address_and_port_dependent"
+      ]
+    },
+    "endpoints{tag}.udp_fragment": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.udp_mapping": {
+      "kind": "scalar",
+      "enum": [
+        "",
+        "endpoint_independent",
+        "address_dependent",
+        "address_and_port_dependent"
+      ]
+    },
+    "endpoints{tag}.udp_nat_max": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.udp_timeout": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.user_agent": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.username": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.users": {
+      "kind": "seq"
+    },
+    "endpoints{tag}.users[]": {
+      "kind": "object"
+    },
+    "endpoints{tag}.users[].password": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.users[].username": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.version": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.workers": {
+      "kind": "scalar"
+    },
+    "endpoints{tag}.xml_post_disabled": {
+      "kind": "scalar"
+    },
+    "experimental": {
+      "kind": "object"
+    },
+    "experimental.cache_file": {
+      "kind": "object"
+    },
+    "experimental.cache_file.cache_id": {
+      "kind": "scalar"
+    },
+    "experimental.cache_file.enabled": {
+      "kind": "scalar"
+    },
+    "experimental.cache_file.path": {
+      "kind": "scalar"
+    },
+    "experimental.cache_file.rdrc_timeout": {
+      "kind": "scalar"
+    },
+    "experimental.cache_file.store_dns": {
+      "kind": "scalar"
+    },
+    "experimental.cache_file.store_fakeip": {
+      "kind": "scalar"
+    },
+    "experimental.clash_api": {
+      "kind": "object"
+    },
+    "experimental.clash_api.access_control_allow_origin": {
+      "kind": "scalar_list"
+    },
+    "experimental.clash_api.access_control_allow_origin[]": {
+      "kind": "scalar"
+    },
+    "experimental.clash_api.access_control_allow_private_network": {
+      "kind": "scalar"
+    },
+    "experimental.clash_api.default_mode": {
+      "kind": "scalar"
+    },
+    "experimental.clash_api.external_controller": {
+      "kind": "scalar"
+    },
+    "experimental.clash_api.external_ui": {
+      "kind": "scalar"
+    },
+    "experimental.clash_api.external_ui_download_detour": {
+      "kind": "scalar",
+      "reference": "outbound"
+    },
+    "experimental.clash_api.external_ui_download_url": {
+      "kind": "scalar"
+    },
+    "experimental.clash_api.secret": {
+      "kind": "scalar"
+    },
+    "experimental.debug": {
+      "kind": "object"
+    },
+    "experimental.debug.gc_percent": {
+      "kind": "scalar"
+    },
+    "experimental.debug.listen": {
+      "kind": "scalar"
+    },
+    "experimental.debug.max_stack": {
+      "kind": "scalar"
+    },
+    "experimental.debug.max_threads": {
+      "kind": "scalar"
+    },
+    "experimental.debug.memory_limit": {
+      "kind": "scalar"
+    },
+    "experimental.debug.oom_killer": {
+      "kind": "scalar"
+    },
+    "experimental.debug.panic_on_fault": {
+      "kind": "scalar"
+    },
+    "experimental.debug.trace_back": {
+      "kind": "scalar"
+    },
+    "experimental.v2ray_api": {
+      "kind": "object"
+    },
+    "experimental.v2ray_api.listen": {
+      "kind": "scalar"
+    },
+    "experimental.v2ray_api.stats": {
+      "kind": "object"
+    },
+    "experimental.v2ray_api.stats.enabled": {
+      "kind": "scalar"
+    },
+    "experimental.v2ray_api.stats.inbounds": {
+      "kind": "seq"
+    },
+    "experimental.v2ray_api.stats.inbounds[]": {
+      "kind": "scalar"
+    },
+    "experimental.v2ray_api.stats.outbounds": {
+      "kind": "seq"
+    },
+    "experimental.v2ray_api.stats.outbounds[]": {
+      "kind": "scalar"
+    },
+    "experimental.v2ray_api.stats.users": {
+      "kind": "seq"
+    },
+    "experimental.v2ray_api.stats.users[]": {
+      "kind": "scalar"
+    },
+    "http_clients": {
+      "kind": "map_tag"
+    },
+    "http_clients{tag}": {
+      "kind": "object"
+    },
+    "http_clients{tag}.bind_address_no_port": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.bind_interface": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.connect_timeout": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.connection_receive_window": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.detour": {
+      "kind": "scalar",
+      "reference": "outbound"
+    },
+    "http_clients{tag}.disable_path_mtu_discovery": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.disable_tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.disable_version_fallback": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.domain_resolver": {
+      "kind": "object_or_scalar"
+    },
+    "http_clients{tag}.domain_resolver.client_subnet": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.domain_resolver.disable_cache": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.domain_resolver.disable_optimistic_cache": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.domain_resolver.rewrite_ttl": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.domain_resolver.server": {
+      "kind": "scalar",
+      "reference": "dns_server"
+    },
+    "http_clients{tag}.domain_resolver.strategy": {
+      "kind": "scalar",
+      "enum": [
+        "",
+        "as_is",
+        "prefer_ipv4",
+        "prefer_ipv6",
+        "ipv4_only",
+        "ipv6_only"
+      ]
+    },
+    "http_clients{tag}.domain_resolver.timeout": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.engine": {
+      "kind": "scalar",
+      "enum": [
+        "go",
+        "apple"
+      ]
+    },
+    "http_clients{tag}.fallback_delay": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.fallback_network_type": {
+      "kind": "scalar_list"
+    },
+    "http_clients{tag}.fallback_network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "http_clients{tag}.headers": {
+      "kind": "object"
+    },
+    "http_clients{tag}.idle_timeout": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.inet4_bind_address": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.inet6_bind_address": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.initial_packet_size": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.keep_alive_period": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.max_concurrent_streams": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.netns": {
+      "kind": "scalar",
+      "reference": "network_namespace"
+    },
+    "http_clients{tag}.network_strategy": {
+      "kind": "scalar",
+      "enum": [
+        "default",
+        "fallback",
+        "hybrid"
+      ]
+    },
+    "http_clients{tag}.network_type": {
+      "kind": "scalar_list"
+    },
+    "http_clients{tag}.network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "http_clients{tag}.protect_path": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.reuse_addr": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.routing_mark": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.stream_receive_window": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tag": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tcp_fast_open": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tcp_keep_alive_interval": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tcp_multi_path": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls": {
+      "kind": "object"
+    },
+    "http_clients{tag}.tls.alpn": {
+      "kind": "scalar_list"
+    },
+    "http_clients{tag}.tls.alpn[]": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.certificate": {
+      "kind": "scalar_list"
+    },
+    "http_clients{tag}.tls.certificate[]": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.certificate_path": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.certificate_public_key_sha256": {
+      "kind": "scalar_list"
+    },
+    "http_clients{tag}.tls.certificate_public_key_sha256[]": {
+      "kind": "scalar_list"
+    },
+    "http_clients{tag}.tls.certificate_public_key_sha256[][]": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.cipher_suites": {
+      "kind": "scalar_list"
+    },
+    "http_clients{tag}.tls.cipher_suites[]": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.client_certificate": {
+      "kind": "scalar_list"
+    },
+    "http_clients{tag}.tls.client_certificate[]": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.client_certificate_path": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.client_key": {
+      "kind": "scalar_list"
+    },
+    "http_clients{tag}.tls.client_key[]": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.client_key_path": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.curve_preferences": {
+      "kind": "scalar_list",
+      "enum": [
+        "P256",
+        "P384",
+        "P521",
+        "X25519",
+        "X25519MLKEM768"
+      ]
+    },
+    "http_clients{tag}.tls.curve_preferences[]": {
+      "kind": "scalar",
+      "enum": [
+        "P256",
+        "P384",
+        "P521",
+        "X25519",
+        "X25519MLKEM768"
+      ]
+    },
+    "http_clients{tag}.tls.disable_sni": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.ech": {
+      "kind": "object"
+    },
+    "http_clients{tag}.tls.ech.config": {
+      "kind": "scalar_list"
+    },
+    "http_clients{tag}.tls.ech.config[]": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.ech.config_path": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.ech.enabled": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.ech.query_server_name": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.enabled": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.engine": {
+      "kind": "scalar",
+      "enum": [
+        "go",
+        "apple",
+        "windows"
+      ]
+    },
+    "http_clients{tag}.tls.fragment": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.fragment_fallback_delay": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.handshake_timeout": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.insecure": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.kernel_rx": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.kernel_tx": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.max_version": {
+      "kind": "scalar",
+      "enum": [
+        "1.0",
+        "1.1",
+        "1.2",
+        "1.3"
+      ]
+    },
+    "http_clients{tag}.tls.min_version": {
+      "kind": "scalar",
+      "enum": [
+        "1.0",
+        "1.1",
+        "1.2",
+        "1.3"
+      ]
+    },
+    "http_clients{tag}.tls.reality": {
+      "kind": "object"
+    },
+    "http_clients{tag}.tls.reality.enabled": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.reality.public_key": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.reality.short_id": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.record_fragment": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.server_name": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.spoof": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.spoof_method": {
+      "kind": "scalar",
+      "enum": [
+        "wrong-sequence",
+        "wrong-checksum",
+        "wrong-ack",
+        "wrong-md5",
+        "wrong-timestamp"
+      ]
+    },
+    "http_clients{tag}.tls.utls": {
+      "kind": "object"
+    },
+    "http_clients{tag}.tls.utls.enabled": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.tls.utls.fingerprint": {
+      "kind": "scalar",
+      "enum": [
+        "chrome_psk",
+        "chrome_psk_shuffle",
+        "chrome_padding_psk_shuffle",
+        "chrome_pq",
+        "chrome_pq_psk",
+        "chrome",
+        "firefox",
+        "edge",
+        "safari",
+        "360",
+        "qq",
+        "ios",
+        "android",
+        "random",
+        "randomized"
+      ]
+    },
+    "http_clients{tag}.udp_fragment": {
+      "kind": "scalar"
+    },
+    "http_clients{tag}.version": {
+      "kind": "scalar",
+      "enum": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "inbounds": {
+      "kind": "map_tag"
+    },
+    "inbounds{tag}": {
+      "kind": "object",
+      "variants": [
+        "anytls",
+        "cloudflared",
+        "direct",
+        "http",
+        "hysteria",
+        "hysteria2",
+        "mixed",
+        "naive",
+        "redirect",
+        "shadowsocks",
+        "shadowtls",
+        "snell",
+        "socks",
+        "tproxy",
+        "trojan",
+        "tuic",
+        "tun",
+        "vless",
+        "vmess"
+      ]
+    },
+    "inbounds{tag}.address": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.address[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.auth_timeout": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.auto_redirect": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.auto_redirect_input_mark": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.auto_redirect_iproute2_fallback_rule_index": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.auto_redirect_nfqueue": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.auto_redirect_output_mark": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.auto_redirect_reset_mark": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.auto_route": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.bbr_profile": {
+      "kind": "scalar",
+      "enum": [
+        "standard",
+        "conservative",
+        "aggressive"
+      ]
+    },
+    "inbounds{tag}.bind_interface": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.brutal_debug": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.congestion_control": {
+      "kind": "scalar",
+      "enum": [
+        "cubic",
+        "new_reno",
+        "bbr"
+      ]
+    },
+    "inbounds{tag}.connection_receive_window": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.control_dialer": {
+      "kind": "object"
+    },
+    "inbounds{tag}.control_dialer.bind_address_no_port": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.control_dialer.bind_interface": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.control_dialer.connect_timeout": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.control_dialer.detour": {
+      "kind": "scalar",
+      "reference": "outbound"
+    },
+    "inbounds{tag}.control_dialer.disable_tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.control_dialer.domain_resolver": {
+      "kind": "object_or_scalar"
+    },
+    "inbounds{tag}.control_dialer.domain_resolver.client_subnet": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.control_dialer.domain_resolver.disable_cache": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.control_dialer.domain_resolver.disable_optimistic_cache": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.control_dialer.domain_resolver.rewrite_ttl": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.control_dialer.domain_resolver.server": {
+      "kind": "scalar",
+      "reference": "dns_server"
+    },
+    "inbounds{tag}.control_dialer.domain_resolver.strategy": {
+      "kind": "scalar",
+      "enum": [
+        "",
+        "as_is",
+        "prefer_ipv4",
+        "prefer_ipv6",
+        "ipv4_only",
+        "ipv6_only"
+      ]
+    },
+    "inbounds{tag}.control_dialer.domain_resolver.timeout": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.control_dialer.fallback_delay": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.control_dialer.fallback_network_type": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.control_dialer.fallback_network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "inbounds{tag}.control_dialer.inet4_bind_address": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.control_dialer.inet6_bind_address": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.control_dialer.netns": {
+      "kind": "scalar",
+      "reference": "network_namespace"
+    },
+    "inbounds{tag}.control_dialer.network_strategy": {
+      "kind": "scalar",
+      "enum": [
+        "default",
+        "fallback",
+        "hybrid"
+      ]
+    },
+    "inbounds{tag}.control_dialer.network_type": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.control_dialer.network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "inbounds{tag}.control_dialer.protect_path": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.control_dialer.reuse_addr": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.control_dialer.routing_mark": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.control_dialer.tcp_fast_open": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.control_dialer.tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.control_dialer.tcp_keep_alive_interval": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.control_dialer.tcp_multi_path": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.control_dialer.udp_fragment": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.datagram_version": {
+      "kind": "scalar",
+      "enum": [
+        "v2",
+        "v3"
+      ]
+    },
+    "inbounds{tag}.destinations": {
+      "kind": "seq"
+    },
+    "inbounds{tag}.destinations[]": {
+      "kind": "object"
+    },
+    "inbounds{tag}.destinations[].name": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.destinations[].password": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.destinations[].server": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.destinations[].server_port": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.detour": {
+      "kind": "scalar",
+      "reference": "inbound"
+    },
+    "inbounds{tag}.disable_path_mtu_discovery": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.disable_tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.dns_address": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.dns_address[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.dns_mode": {
+      "kind": "scalar",
+      "enum": [
+        "disabled",
+        "native",
+        "hijack"
+      ]
+    },
+    "inbounds{tag}.domain_resolver": {
+      "kind": "object_or_scalar"
+    },
+    "inbounds{tag}.domain_resolver.client_subnet": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.domain_resolver.disable_cache": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.domain_resolver.disable_optimistic_cache": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.domain_resolver.rewrite_ttl": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.domain_resolver.server": {
+      "kind": "scalar",
+      "reference": "dns_server"
+    },
+    "inbounds{tag}.domain_resolver.strategy": {
+      "kind": "scalar",
+      "enum": [
+        "",
+        "as_is",
+        "prefer_ipv4",
+        "prefer_ipv6",
+        "ipv4_only",
+        "ipv6_only"
+      ]
+    },
+    "inbounds{tag}.domain_resolver.timeout": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.down": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.down_mbps": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.edge_ip_version": {
+      "kind": "scalar",
+      "enum": [
+        0,
+        4,
+        6
+      ]
+    },
+    "inbounds{tag}.exclude_interface": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.exclude_interface[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.exclude_mac_address": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.exclude_mac_address[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.exclude_mptcp": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.exclude_package": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.exclude_package[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.exclude_uid": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.exclude_uid[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.exclude_uid_range": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.exclude_uid_range[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.fallback": {
+      "kind": "object"
+    },
+    "inbounds{tag}.fallback.server": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.fallback.server_port": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.fallback_for_alpn": {
+      "kind": "object"
+    },
+    "inbounds{tag}.grace_period": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.ha_connections": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake": {
+      "kind": "object"
+    },
+    "inbounds{tag}.handshake.bind_address_no_port": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake.bind_interface": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake.connect_timeout": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake.detour": {
+      "kind": "scalar",
+      "reference": "outbound"
+    },
+    "inbounds{tag}.handshake.disable_tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake.domain_resolver": {
+      "kind": "object_or_scalar"
+    },
+    "inbounds{tag}.handshake.domain_resolver.client_subnet": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake.domain_resolver.disable_cache": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake.domain_resolver.disable_optimistic_cache": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake.domain_resolver.rewrite_ttl": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake.domain_resolver.server": {
+      "kind": "scalar",
+      "reference": "dns_server"
+    },
+    "inbounds{tag}.handshake.domain_resolver.strategy": {
+      "kind": "scalar",
+      "enum": [
+        "",
+        "as_is",
+        "prefer_ipv4",
+        "prefer_ipv6",
+        "ipv4_only",
+        "ipv6_only"
+      ]
+    },
+    "inbounds{tag}.handshake.domain_resolver.timeout": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake.fallback_delay": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake.fallback_network_type": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.handshake.fallback_network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "inbounds{tag}.handshake.inet4_bind_address": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake.inet6_bind_address": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake.netns": {
+      "kind": "scalar",
+      "reference": "network_namespace"
+    },
+    "inbounds{tag}.handshake.network_strategy": {
+      "kind": "scalar",
+      "enum": [
+        "default",
+        "fallback",
+        "hybrid"
+      ]
+    },
+    "inbounds{tag}.handshake.network_type": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.handshake.network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "inbounds{tag}.handshake.protect_path": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake.reuse_addr": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake.routing_mark": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake.server": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake.server_port": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake.tcp_fast_open": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake.tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake.tcp_keep_alive_interval": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake.tcp_multi_path": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake.udp_fragment": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.handshake_for_server_name": {
+      "kind": "object"
+    },
+    "inbounds{tag}.heartbeat": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.idle_timeout": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.ignore_client_bandwidth": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.include_android_user": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.include_android_user[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.include_interface": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.include_interface[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.include_mac_address": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.include_mac_address[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.include_package": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.include_package[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.include_uid": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.include_uid[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.include_uid_range": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.include_uid_range[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.initial_packet_size": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.interface_name": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.iproute2_rule_index": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.iproute2_table_index": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.keep_alive_period": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.listen": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.listen_port": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.loopback_address": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.loopback_address[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.managed": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.masquerade": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.max_concurrent_streams": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.method": {
+      "kind": "scalar",
+      "enum": [
+        "none",
+        "aes-128-gcm",
+        "aes-192-gcm",
+        "aes-256-gcm",
+        "chacha20-ietf-poly1305",
+        "xchacha20-ietf-poly1305",
+        "2022-blake3-aes-128-gcm",
+        "2022-blake3-aes-256-gcm",
+        "2022-blake3-chacha20-poly1305"
+      ]
+    },
+    "inbounds{tag}.mode": {
+      "kind": "scalar",
+      "enum": [
+        "default",
+        "unshaped",
+        "unsafe-raw"
+      ]
+    },
+    "inbounds{tag}.mtu": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.multiplex": {
+      "kind": "object"
+    },
+    "inbounds{tag}.multiplex.brutal": {
+      "kind": "object"
+    },
+    "inbounds{tag}.multiplex.brutal.down_mbps": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.multiplex.brutal.enabled": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.multiplex.brutal.up_mbps": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.multiplex.enabled": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.multiplex.padding": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.netns": {
+      "kind": "scalar",
+      "reference": "network_namespace"
+    },
+    "inbounds{tag}.network": {
+      "kind": "scalar_list",
+      "enum": [
+        "tcp",
+        "udp"
+      ]
+    },
+    "inbounds{tag}.network[]": {
+      "kind": "scalar",
+      "enum": [
+        "tcp",
+        "udp"
+      ]
+    },
+    "inbounds{tag}.obfs": {
+      "kind": "object",
+      "variants": [
+        "salamander",
+        "gecko"
+      ]
+    },
+    "inbounds{tag}.obfs.max_packet_size": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.obfs.min_packet_size": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.obfs.password": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.obfs.type": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.obfs_mode": {
+      "kind": "scalar",
+      "enum": [
+        "none",
+        "http",
+        "tls"
+      ]
+    },
+    "inbounds{tag}.override_address": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.override_port": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.padding_scheme": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.padding_scheme[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.password": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.platform": {
+      "kind": "object"
+    },
+    "inbounds{tag}.platform.http_proxy": {
+      "kind": "object"
+    },
+    "inbounds{tag}.platform.http_proxy.bypass_domain": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.platform.http_proxy.bypass_domain[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.platform.http_proxy.enabled": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.platform.http_proxy.match_domain": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.platform.http_proxy.match_domain[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.platform.http_proxy.server": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.platform.http_proxy.server_port": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.post_quantum": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.protocol": {
+      "kind": "scalar",
+      "enum": [
+        "auto",
+        "quic",
+        "http2",
+        "h2mux"
+      ]
+    },
+    "inbounds{tag}.psk": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.quic_congestion_control": {
+      "kind": "scalar",
+      "enum": [
+        "bbr",
+        "cubic",
+        "reno"
+      ]
+    },
+    "inbounds{tag}.realm": {
+      "kind": "object"
+    },
+    "inbounds{tag}.realm.http_client": {
+      "kind": "object_or_scalar"
+    },
+    "inbounds{tag}.realm.http_client.bind_address_no_port": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.bind_interface": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.connect_timeout": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.connection_receive_window": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.detour": {
+      "kind": "scalar",
+      "reference": "outbound"
+    },
+    "inbounds{tag}.realm.http_client.disable_path_mtu_discovery": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.disable_tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.disable_version_fallback": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.domain_resolver": {
+      "kind": "object_or_scalar"
+    },
+    "inbounds{tag}.realm.http_client.engine": {
+      "kind": "scalar",
+      "enum": [
+        "go",
+        "apple"
+      ]
+    },
+    "inbounds{tag}.realm.http_client.fallback_delay": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.fallback_network_type": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.realm.http_client.headers": {
+      "kind": "object"
+    },
+    "inbounds{tag}.realm.http_client.idle_timeout": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.inet4_bind_address": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.inet6_bind_address": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.initial_packet_size": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.keep_alive_period": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.max_concurrent_streams": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.netns": {
+      "kind": "scalar",
+      "reference": "network_namespace"
+    },
+    "inbounds{tag}.realm.http_client.network_strategy": {
+      "kind": "scalar",
+      "enum": [
+        "default",
+        "fallback",
+        "hybrid"
+      ]
+    },
+    "inbounds{tag}.realm.http_client.network_type": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.realm.http_client.protect_path": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.reuse_addr": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.routing_mark": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.stream_receive_window": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.tcp_fast_open": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.tcp_keep_alive_interval": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.tcp_multi_path": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.tls": {
+      "kind": "object"
+    },
+    "inbounds{tag}.realm.http_client.udp_fragment": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.http_client.version": {
+      "kind": "scalar",
+      "enum": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "inbounds{tag}.realm.ip_version": {
+      "kind": "scalar",
+      "enum": [
+        0,
+        4,
+        6
+      ]
+    },
+    "inbounds{tag}.realm.port_mapping": {
+      "kind": "object"
+    },
+    "inbounds{tag}.realm.port_mapping.enabled": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.port_mapping.lifetime": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.port_mapping.timeout": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.realm_id": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.server_url": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.stun_domain_resolver": {
+      "kind": "object_or_scalar"
+    },
+    "inbounds{tag}.realm.stun_domain_resolver.client_subnet": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.stun_domain_resolver.disable_cache": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.stun_domain_resolver.disable_optimistic_cache": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.stun_domain_resolver.rewrite_ttl": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.stun_domain_resolver.server": {
+      "kind": "scalar",
+      "reference": "dns_server"
+    },
+    "inbounds{tag}.realm.stun_domain_resolver.strategy": {
+      "kind": "scalar",
+      "enum": [
+        "",
+        "as_is",
+        "prefer_ipv4",
+        "prefer_ipv6",
+        "ipv4_only",
+        "ipv6_only"
+      ]
+    },
+    "inbounds{tag}.realm.stun_domain_resolver.timeout": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.stun_servers": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.realm.stun_servers[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.realm.token": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.region": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.reuse_addr": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.route_address": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.route_address[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.route_address_set": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.route_address_set[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.route_exclude_address": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.route_exclude_address[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.route_exclude_address_set": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.route_exclude_address_set[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.routing_mark": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.set_system_proxy": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.stack": {
+      "kind": "scalar",
+      "enum": [
+        "system",
+        "gvisor",
+        "mixed"
+      ]
+    },
+    "inbounds{tag}.stream_receive_window": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.strict_mode": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.strict_route": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tag": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tcp_fast_open": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tcp_keep_alive_interval": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tcp_multi_path": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls": {
+      "kind": "object"
+    },
+    "inbounds{tag}.tls.alpn": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.tls.alpn[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.certificate": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.tls.certificate[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.certificate_path": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.certificate_provider": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.cipher_suites": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.tls.cipher_suites[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.client_authentication": {
+      "kind": "scalar",
+      "enum": [
+        "no",
+        "request",
+        "require-any",
+        "verify-if-given",
+        "require-and-verify"
+      ]
+    },
+    "inbounds{tag}.tls.client_certificate": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.tls.client_certificate[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.client_certificate_path": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.tls.client_certificate_path[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.client_certificate_public_key_sha256": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.tls.client_certificate_public_key_sha256[]": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.tls.client_certificate_public_key_sha256[][]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.curve_preferences": {
+      "kind": "scalar_list",
+      "enum": [
+        "P256",
+        "P384",
+        "P521",
+        "X25519",
+        "X25519MLKEM768"
+      ]
+    },
+    "inbounds{tag}.tls.curve_preferences[]": {
+      "kind": "scalar",
+      "enum": [
+        "P256",
+        "P384",
+        "P521",
+        "X25519",
+        "X25519MLKEM768"
+      ]
+    },
+    "inbounds{tag}.tls.ech": {
+      "kind": "object"
+    },
+    "inbounds{tag}.tls.ech.enabled": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.ech.key": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.tls.ech.key[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.ech.key_path": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.enabled": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.handshake_timeout": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.insecure": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.kernel_rx": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.kernel_tx": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.key": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.tls.key[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.key_path": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.max_version": {
+      "kind": "scalar",
+      "enum": [
+        "1.0",
+        "1.1",
+        "1.2",
+        "1.3"
+      ]
+    },
+    "inbounds{tag}.tls.min_version": {
+      "kind": "scalar",
+      "enum": [
+        "1.0",
+        "1.1",
+        "1.2",
+        "1.3"
+      ]
+    },
+    "inbounds{tag}.tls.reality": {
+      "kind": "object"
+    },
+    "inbounds{tag}.tls.reality.enabled": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.reality.handshake": {
+      "kind": "object"
+    },
+    "inbounds{tag}.tls.reality.handshake.bind_address_no_port": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.reality.handshake.bind_interface": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.reality.handshake.connect_timeout": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.reality.handshake.detour": {
+      "kind": "scalar",
+      "reference": "outbound"
+    },
+    "inbounds{tag}.tls.reality.handshake.disable_tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.reality.handshake.domain_resolver": {
+      "kind": "object_or_scalar"
+    },
+    "inbounds{tag}.tls.reality.handshake.fallback_delay": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.reality.handshake.fallback_network_type": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.tls.reality.handshake.inet4_bind_address": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.reality.handshake.inet6_bind_address": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.reality.handshake.netns": {
+      "kind": "scalar",
+      "reference": "network_namespace"
+    },
+    "inbounds{tag}.tls.reality.handshake.network_strategy": {
+      "kind": "scalar",
+      "enum": [
+        "default",
+        "fallback",
+        "hybrid"
+      ]
+    },
+    "inbounds{tag}.tls.reality.handshake.network_type": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.tls.reality.handshake.protect_path": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.reality.handshake.reuse_addr": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.reality.handshake.routing_mark": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.reality.handshake.server": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.reality.handshake.server_port": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.reality.handshake.tcp_fast_open": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.reality.handshake.tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.reality.handshake.tcp_keep_alive_interval": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.reality.handshake.tcp_multi_path": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.reality.handshake.udp_fragment": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.reality.max_time_difference": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.reality.private_key": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.reality.short_id": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.tls.reality.short_id[]": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tls.server_name": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.token": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.transport": {
+      "kind": "object",
+      "variants": [
+        "http",
+        "ws",
+        "quic",
+        "grpc",
+        "httpupgrade"
+      ]
+    },
+    "inbounds{tag}.transport.early_data_header_name": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.transport.headers": {
+      "kind": "object"
+    },
+    "inbounds{tag}.transport.host": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.transport.idle_timeout": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.transport.max_early_data": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.transport.method": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.transport.path": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.transport.permit_without_stream": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.transport.ping_timeout": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.transport.service_name": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.transport.type": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tunnel_dialer": {
+      "kind": "object"
+    },
+    "inbounds{tag}.tunnel_dialer.bind_address_no_port": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tunnel_dialer.bind_interface": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tunnel_dialer.connect_timeout": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tunnel_dialer.detour": {
+      "kind": "scalar",
+      "reference": "outbound"
+    },
+    "inbounds{tag}.tunnel_dialer.disable_tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tunnel_dialer.domain_resolver": {
+      "kind": "object_or_scalar"
+    },
+    "inbounds{tag}.tunnel_dialer.domain_resolver.client_subnet": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tunnel_dialer.domain_resolver.disable_cache": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tunnel_dialer.domain_resolver.disable_optimistic_cache": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tunnel_dialer.domain_resolver.rewrite_ttl": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tunnel_dialer.domain_resolver.server": {
+      "kind": "scalar",
+      "reference": "dns_server"
+    },
+    "inbounds{tag}.tunnel_dialer.domain_resolver.strategy": {
+      "kind": "scalar",
+      "enum": [
+        "",
+        "as_is",
+        "prefer_ipv4",
+        "prefer_ipv6",
+        "ipv4_only",
+        "ipv6_only"
+      ]
+    },
+    "inbounds{tag}.tunnel_dialer.domain_resolver.timeout": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tunnel_dialer.fallback_delay": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tunnel_dialer.fallback_network_type": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.tunnel_dialer.fallback_network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "inbounds{tag}.tunnel_dialer.inet4_bind_address": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tunnel_dialer.inet6_bind_address": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tunnel_dialer.netns": {
+      "kind": "scalar",
+      "reference": "network_namespace"
+    },
+    "inbounds{tag}.tunnel_dialer.network_strategy": {
+      "kind": "scalar",
+      "enum": [
+        "default",
+        "fallback",
+        "hybrid"
+      ]
+    },
+    "inbounds{tag}.tunnel_dialer.network_type": {
+      "kind": "scalar_list"
+    },
+    "inbounds{tag}.tunnel_dialer.network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "inbounds{tag}.tunnel_dialer.protect_path": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tunnel_dialer.reuse_addr": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tunnel_dialer.routing_mark": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tunnel_dialer.tcp_fast_open": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tunnel_dialer.tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tunnel_dialer.tcp_keep_alive_interval": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tunnel_dialer.tcp_multi_path": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.tunnel_dialer.udp_fragment": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.type": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.udp_filtering": {
+      "kind": "scalar",
+      "enum": [
+        "",
+        "endpoint_independent",
+        "address_dependent",
+        "address_and_port_dependent"
+      ]
+    },
+    "inbounds{tag}.udp_fragment": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.udp_mapping": {
+      "kind": "scalar",
+      "enum": [
+        "",
+        "endpoint_independent",
+        "address_dependent",
+        "address_and_port_dependent"
+      ]
+    },
+    "inbounds{tag}.udp_nat_max": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.udp_timeout": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.up": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.up_mbps": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.users": {
+      "kind": "seq"
+    },
+    "inbounds{tag}.users[]": {
+      "kind": "object"
+    },
+    "inbounds{tag}.users[].alterId": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.users[].name": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.users[].uuid": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.version": {
+      "kind": "scalar"
+    },
+    "inbounds{tag}.wildcard_sni": {
+      "kind": "scalar",
+      "enum": [
+        "",
+        "off",
+        "authed",
+        "all"
+      ]
+    },
+    "inbounds{tag}.zero_rtt_handshake": {
+      "kind": "scalar"
+    },
+    "log": {
+      "kind": "object"
+    },
+    "log.disabled": {
+      "kind": "scalar"
+    },
+    "log.level": {
+      "kind": "scalar",
+      "enum": [
+        "trace",
+        "debug",
+        "info",
+        "warn",
+        "warning",
+        "error",
+        "fatal",
+        "panic"
+      ]
+    },
+    "log.output": {
+      "kind": "scalar"
+    },
+    "log.timestamp": {
+      "kind": "scalar"
+    },
+    "network_namespaces": {
+      "kind": "map_tag"
+    },
+    "network_namespaces{tag}": {
+      "kind": "object",
+      "variants": [
+        "default",
+        "unshare"
+      ]
+    },
+    "network_namespaces{tag}.path": {
+      "kind": "scalar"
+    },
+    "network_namespaces{tag}.pid_file": {
+      "kind": "scalar"
+    },
+    "network_namespaces{tag}.tag": {
+      "kind": "scalar"
+    },
+    "network_namespaces{tag}.type": {
+      "kind": "scalar"
+    },
+    "ntp": {
+      "kind": "object"
+    },
+    "ntp.bind_address_no_port": {
+      "kind": "scalar"
+    },
+    "ntp.bind_interface": {
+      "kind": "scalar"
+    },
+    "ntp.connect_timeout": {
+      "kind": "scalar"
+    },
+    "ntp.detour": {
+      "kind": "scalar",
+      "reference": "outbound"
+    },
+    "ntp.disable_tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "ntp.domain_resolver": {
+      "kind": "object_or_scalar"
+    },
+    "ntp.domain_resolver.client_subnet": {
+      "kind": "scalar"
+    },
+    "ntp.domain_resolver.disable_cache": {
+      "kind": "scalar"
+    },
+    "ntp.domain_resolver.disable_optimistic_cache": {
+      "kind": "scalar"
+    },
+    "ntp.domain_resolver.rewrite_ttl": {
+      "kind": "scalar"
+    },
+    "ntp.domain_resolver.server": {
+      "kind": "scalar",
+      "reference": "dns_server"
+    },
+    "ntp.domain_resolver.strategy": {
+      "kind": "scalar",
+      "enum": [
+        "",
+        "as_is",
+        "prefer_ipv4",
+        "prefer_ipv6",
+        "ipv4_only",
+        "ipv6_only"
+      ]
+    },
+    "ntp.domain_resolver.timeout": {
+      "kind": "scalar"
+    },
+    "ntp.enabled": {
+      "kind": "scalar"
+    },
+    "ntp.fallback_delay": {
+      "kind": "scalar"
+    },
+    "ntp.fallback_network_type": {
+      "kind": "scalar_list"
+    },
+    "ntp.fallback_network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "ntp.inet4_bind_address": {
+      "kind": "scalar"
+    },
+    "ntp.inet6_bind_address": {
+      "kind": "scalar"
+    },
+    "ntp.interval": {
+      "kind": "scalar"
+    },
+    "ntp.netns": {
+      "kind": "scalar",
+      "reference": "network_namespace"
+    },
+    "ntp.network_strategy": {
+      "kind": "scalar",
+      "enum": [
+        "default",
+        "fallback",
+        "hybrid"
+      ]
+    },
+    "ntp.network_type": {
+      "kind": "scalar_list"
+    },
+    "ntp.network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "ntp.protect_path": {
+      "kind": "scalar"
+    },
+    "ntp.reuse_addr": {
+      "kind": "scalar"
+    },
+    "ntp.routing_mark": {
+      "kind": "scalar"
+    },
+    "ntp.server": {
+      "kind": "scalar"
+    },
+    "ntp.server_port": {
+      "kind": "scalar"
+    },
+    "ntp.tcp_fast_open": {
+      "kind": "scalar"
+    },
+    "ntp.tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "ntp.tcp_keep_alive_interval": {
+      "kind": "scalar"
+    },
+    "ntp.tcp_multi_path": {
+      "kind": "scalar"
+    },
+    "ntp.udp_fragment": {
+      "kind": "scalar"
+    },
+    "ntp.write_to_system": {
+      "kind": "scalar"
+    },
+    "outbounds": {
+      "kind": "map_tag"
+    },
+    "outbounds{tag}": {
+      "kind": "object",
+      "variants": [
+        "anytls",
+        "block",
+        "bridge",
+        "direct",
+        "http",
+        "hysteria",
+        "hysteria2",
+        "naive",
+        "selector",
+        "shadowsocks",
+        "shadowtls",
+        "snell",
+        "socks",
+        "ssh",
+        "tor",
+        "trojan",
+        "tuic",
+        "urltest",
+        "vless",
+        "vmess"
+      ]
+    },
+    "outbounds{tag}.alter_id": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.auth": {
+      "kind": "scalar_list"
+    },
+    "outbounds{tag}.auth[]": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.auth_str": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.authenticated_length": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.bbr_profile": {
+      "kind": "scalar",
+      "enum": [
+        "standard",
+        "conservative",
+        "aggressive"
+      ]
+    },
+    "outbounds{tag}.bind_address_no_port": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.bind_interface": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.bridge_name": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.brutal_debug": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.cipher": {
+      "kind": "scalar_list"
+    },
+    "outbounds{tag}.cipher[]": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.client_metadata": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.client_version": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.congestion_control": {
+      "kind": "scalar",
+      "enum": [
+        "cubic",
+        "new_reno",
+        "bbr"
+      ]
+    },
+    "outbounds{tag}.connect_timeout": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.connection_receive_window": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.data_directory": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.default": {
+      "kind": "scalar",
+      "reference": "outbound"
+    },
+    "outbounds{tag}.detour": {
+      "kind": "scalar",
+      "reference": "outbound"
+    },
+    "outbounds{tag}.disable_chrome_parrot": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.disable_path_mtu_discovery": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.disable_tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.domain_resolver": {
+      "kind": "object_or_scalar"
+    },
+    "outbounds{tag}.domain_resolver.client_subnet": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.domain_resolver.disable_cache": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.domain_resolver.disable_optimistic_cache": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.domain_resolver.rewrite_ttl": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.domain_resolver.server": {
+      "kind": "scalar",
+      "reference": "dns_server"
+    },
+    "outbounds{tag}.domain_resolver.strategy": {
+      "kind": "scalar",
+      "enum": [
+        "",
+        "as_is",
+        "prefer_ipv4",
+        "prefer_ipv6",
+        "ipv4_only",
+        "ipv6_only"
+      ]
+    },
+    "outbounds{tag}.domain_resolver.timeout": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.down": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.down_mbps": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.executable_path": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.extra_args": {
+      "kind": "seq"
+    },
+    "outbounds{tag}.extra_args[]": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.extra_headers": {
+      "kind": "object"
+    },
+    "outbounds{tag}.fallback_delay": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.fallback_network_type": {
+      "kind": "scalar_list"
+    },
+    "outbounds{tag}.fallback_network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "outbounds{tag}.flow": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.global_padding": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.headers": {
+      "kind": "object"
+    },
+    "outbounds{tag}.heartbeat": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.hop_interval": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.hop_interval_max": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.host_key": {
+      "kind": "scalar_list"
+    },
+    "outbounds{tag}.host_key[]": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.host_key_algorithms": {
+      "kind": "scalar_list"
+    },
+    "outbounds{tag}.host_key_algorithms[]": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.idle_session_check_interval": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.idle_session_timeout": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.idle_timeout": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.inet4_bind_address": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.inet6_bind_address": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.initial_packet_size": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.insecure_concurrency": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.interface": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.interrupt_exist_connections": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.interval": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.iproute2_rule_index": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.iproute2_table_index": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.keep_alive_period": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.kex_algorithm": {
+      "kind": "scalar_list"
+    },
+    "outbounds{tag}.kex_algorithm[]": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.mac": {
+      "kind": "scalar_list"
+    },
+    "outbounds{tag}.mac[]": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.max_concurrent_streams": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.method": {
+      "kind": "scalar",
+      "enum": [
+        "none",
+        "aes-128-gcm",
+        "aes-192-gcm",
+        "aes-256-gcm",
+        "chacha20-ietf-poly1305",
+        "xchacha20-ietf-poly1305",
+        "2022-blake3-aes-128-gcm",
+        "2022-blake3-aes-256-gcm",
+        "2022-blake3-chacha20-poly1305",
+        "aes-128-ctr",
+        "aes-192-ctr",
+        "aes-256-ctr",
+        "aes-128-cfb",
+        "aes-192-cfb",
+        "aes-256-cfb",
+        "rc4-md5",
+        "chacha20-ietf",
+        "xchacha20"
+      ]
+    },
+    "outbounds{tag}.min_idle_session": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.mode": {
+      "kind": "scalar",
+      "enum": [
+        "default",
+        "unshaped",
+        "unsafe-raw"
+      ]
+    },
+    "outbounds{tag}.multiplex": {
+      "kind": "object"
+    },
+    "outbounds{tag}.multiplex.brutal": {
+      "kind": "object"
+    },
+    "outbounds{tag}.multiplex.brutal.down_mbps": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.multiplex.brutal.enabled": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.multiplex.brutal.up_mbps": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.multiplex.enabled": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.multiplex.max_connections": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.multiplex.max_streams": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.multiplex.min_streams": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.multiplex.padding": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.multiplex.protocol": {
+      "kind": "scalar",
+      "enum": [
+        "h2mux",
+        "smux",
+        "yamux"
+      ]
+    },
+    "outbounds{tag}.netns": {
+      "kind": "scalar",
+      "reference": "network_namespace"
+    },
+    "outbounds{tag}.network": {
+      "kind": "scalar_list",
+      "enum": [
+        "tcp",
+        "udp"
+      ]
+    },
+    "outbounds{tag}.network[]": {
+      "kind": "scalar",
+      "enum": [
+        "tcp",
+        "udp"
+      ]
+    },
+    "outbounds{tag}.network_strategy": {
+      "kind": "scalar",
+      "enum": [
+        "default",
+        "fallback",
+        "hybrid"
+      ]
+    },
+    "outbounds{tag}.network_type": {
+      "kind": "scalar_list"
+    },
+    "outbounds{tag}.network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "outbounds{tag}.obfs": {
+      "kind": "object",
+      "variants": [
+        "salamander",
+        "gecko"
+      ]
+    },
+    "outbounds{tag}.obfs.max_packet_size": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.obfs.min_packet_size": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.obfs.password": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.obfs.type": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.obfs_host": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.obfs_mode": {
+      "kind": "scalar",
+      "enum": [
+        "none",
+        "http",
+        "tls"
+      ]
+    },
+    "outbounds{tag}.outbounds": {
+      "kind": "seq"
+    },
+    "outbounds{tag}.outbounds[]": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.packet_encoding": {
+      "kind": "scalar",
+      "enum": [
+        "packetaddr",
+        "xudp"
+      ]
+    },
+    "outbounds{tag}.password": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.path": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.plugin": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.plugin_opts": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.private_key": {
+      "kind": "scalar_list"
+    },
+    "outbounds{tag}.private_key[]": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.private_key_passphrase": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.private_key_path": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.protect_path": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.psk": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.quic": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.quic_congestion_control": {
+      "kind": "scalar",
+      "enum": [
+        "bbr",
+        "bbr2",
+        "cubic",
+        "reno"
+      ]
+    },
+    "outbounds{tag}.quic_session_receive_window": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm": {
+      "kind": "object"
+    },
+    "outbounds{tag}.realm.http_client": {
+      "kind": "object_or_scalar"
+    },
+    "outbounds{tag}.realm.http_client.bind_address_no_port": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.bind_interface": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.connect_timeout": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.connection_receive_window": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.detour": {
+      "kind": "scalar",
+      "reference": "outbound"
+    },
+    "outbounds{tag}.realm.http_client.disable_path_mtu_discovery": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.disable_tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.disable_version_fallback": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.domain_resolver": {
+      "kind": "object_or_scalar"
+    },
+    "outbounds{tag}.realm.http_client.engine": {
+      "kind": "scalar",
+      "enum": [
+        "go",
+        "apple"
+      ]
+    },
+    "outbounds{tag}.realm.http_client.fallback_delay": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.fallback_network_type": {
+      "kind": "scalar_list"
+    },
+    "outbounds{tag}.realm.http_client.headers": {
+      "kind": "object"
+    },
+    "outbounds{tag}.realm.http_client.idle_timeout": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.inet4_bind_address": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.inet6_bind_address": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.initial_packet_size": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.keep_alive_period": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.max_concurrent_streams": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.netns": {
+      "kind": "scalar",
+      "reference": "network_namespace"
+    },
+    "outbounds{tag}.realm.http_client.network_strategy": {
+      "kind": "scalar",
+      "enum": [
+        "default",
+        "fallback",
+        "hybrid"
+      ]
+    },
+    "outbounds{tag}.realm.http_client.network_type": {
+      "kind": "scalar_list"
+    },
+    "outbounds{tag}.realm.http_client.protect_path": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.reuse_addr": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.routing_mark": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.stream_receive_window": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.tcp_fast_open": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.tcp_keep_alive_interval": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.tcp_multi_path": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.tls": {
+      "kind": "object"
+    },
+    "outbounds{tag}.realm.http_client.udp_fragment": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.http_client.version": {
+      "kind": "scalar",
+      "enum": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "outbounds{tag}.realm.ip_version": {
+      "kind": "scalar",
+      "enum": [
+        0,
+        4,
+        6
+      ]
+    },
+    "outbounds{tag}.realm.port_mapping": {
+      "kind": "object"
+    },
+    "outbounds{tag}.realm.port_mapping.enabled": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.port_mapping.lifetime": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.port_mapping.timeout": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.realm_id": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.server_url": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.stun_servers": {
+      "kind": "scalar_list"
+    },
+    "outbounds{tag}.realm.stun_servers[]": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.realm.token": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.reuse": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.reuse_addr": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.routing_mark": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.security": {
+      "kind": "scalar",
+      "enum": [
+        "auto",
+        "none",
+        "zero",
+        "aes-128-cfb",
+        "aes-128-gcm",
+        "chacha20-poly1305"
+      ]
+    },
+    "outbounds{tag}.server": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.server_port": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.server_ports": {
+      "kind": "scalar_list"
+    },
+    "outbounds{tag}.server_ports[]": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.stream_receive_window": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tag": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tcp_fast_open": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tcp_keep_alive_interval": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tcp_multi_path": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls": {
+      "kind": "object"
+    },
+    "outbounds{tag}.tls.alpn": {
+      "kind": "scalar_list"
+    },
+    "outbounds{tag}.tls.alpn[]": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.certificate": {
+      "kind": "scalar_list"
+    },
+    "outbounds{tag}.tls.certificate[]": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.certificate_path": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.certificate_public_key_sha256": {
+      "kind": "scalar_list"
+    },
+    "outbounds{tag}.tls.certificate_public_key_sha256[]": {
+      "kind": "scalar_list"
+    },
+    "outbounds{tag}.tls.certificate_public_key_sha256[][]": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.cipher_suites": {
+      "kind": "scalar_list"
+    },
+    "outbounds{tag}.tls.cipher_suites[]": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.client_certificate": {
+      "kind": "scalar_list"
+    },
+    "outbounds{tag}.tls.client_certificate[]": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.client_certificate_path": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.client_key": {
+      "kind": "scalar_list"
+    },
+    "outbounds{tag}.tls.client_key[]": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.client_key_path": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.curve_preferences": {
+      "kind": "scalar_list",
+      "enum": [
+        "P256",
+        "P384",
+        "P521",
+        "X25519",
+        "X25519MLKEM768"
+      ]
+    },
+    "outbounds{tag}.tls.curve_preferences[]": {
+      "kind": "scalar",
+      "enum": [
+        "P256",
+        "P384",
+        "P521",
+        "X25519",
+        "X25519MLKEM768"
+      ]
+    },
+    "outbounds{tag}.tls.disable_sni": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.ech": {
+      "kind": "object"
+    },
+    "outbounds{tag}.tls.ech.config": {
+      "kind": "scalar_list"
+    },
+    "outbounds{tag}.tls.ech.config[]": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.ech.config_path": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.ech.enabled": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.ech.query_server_name": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.enabled": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.engine": {
+      "kind": "scalar",
+      "enum": [
+        "go",
+        "apple",
+        "windows"
+      ]
+    },
+    "outbounds{tag}.tls.fragment": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.fragment_fallback_delay": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.handshake_timeout": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.insecure": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.kernel_rx": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.kernel_tx": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.max_version": {
+      "kind": "scalar",
+      "enum": [
+        "1.0",
+        "1.1",
+        "1.2",
+        "1.3"
+      ]
+    },
+    "outbounds{tag}.tls.min_version": {
+      "kind": "scalar",
+      "enum": [
+        "1.0",
+        "1.1",
+        "1.2",
+        "1.3"
+      ]
+    },
+    "outbounds{tag}.tls.reality": {
+      "kind": "object"
+    },
+    "outbounds{tag}.tls.reality.enabled": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.reality.public_key": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.reality.short_id": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.record_fragment": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.server_name": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.spoof": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.spoof_method": {
+      "kind": "scalar",
+      "enum": [
+        "wrong-sequence",
+        "wrong-checksum",
+        "wrong-ack",
+        "wrong-md5",
+        "wrong-timestamp"
+      ]
+    },
+    "outbounds{tag}.tls.utls": {
+      "kind": "object"
+    },
+    "outbounds{tag}.tls.utls.enabled": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.tls.utls.fingerprint": {
+      "kind": "scalar",
+      "enum": [
+        "chrome_psk",
+        "chrome_psk_shuffle",
+        "chrome_padding_psk_shuffle",
+        "chrome_pq",
+        "chrome_pq_psk",
+        "chrome",
+        "firefox",
+        "edge",
+        "safari",
+        "360",
+        "qq",
+        "ios",
+        "android",
+        "random",
+        "randomized"
+      ]
+    },
+    "outbounds{tag}.tolerance": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.torrc": {
+      "kind": "object"
+    },
+    "outbounds{tag}.transport": {
+      "kind": "object",
+      "variants": [
+        "http",
+        "ws",
+        "quic",
+        "grpc",
+        "httpupgrade"
+      ]
+    },
+    "outbounds{tag}.transport.early_data_header_name": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.transport.headers": {
+      "kind": "object"
+    },
+    "outbounds{tag}.transport.host": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.transport.idle_timeout": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.transport.max_early_data": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.transport.method": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.transport.path": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.transport.permit_without_stream": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.transport.ping_timeout": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.transport.service_name": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.transport.type": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.type": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.udp_fragment": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.udp_over_stream": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.udp_over_tcp": {
+      "kind": "object_or_scalar"
+    },
+    "outbounds{tag}.udp_over_tcp.enabled": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.udp_over_tcp.version": {
+      "kind": "scalar",
+      "enum": [
+        1,
+        2
+      ]
+    },
+    "outbounds{tag}.udp_relay_mode": {
+      "kind": "scalar",
+      "enum": [
+        "native",
+        "quic"
+      ]
+    },
+    "outbounds{tag}.up": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.up_mbps": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.url": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.user": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.userkey": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.username": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.uuid": {
+      "kind": "scalar"
+    },
+    "outbounds{tag}.version": {
+      "kind": "scalar",
+      "enum": [
+        "4",
+        "4a",
+        "5"
+      ]
+    },
+    "outbounds{tag}.zero_rtt_handshake": {
+      "kind": "scalar"
+    },
+    "route": {
+      "kind": "object"
+    },
+    "route.auto_detect_interface": {
+      "kind": "scalar"
+    },
+    "route.default_domain_resolver": {
+      "kind": "object_or_scalar"
+    },
+    "route.default_domain_resolver.client_subnet": {
+      "kind": "scalar"
+    },
+    "route.default_domain_resolver.disable_cache": {
+      "kind": "scalar"
+    },
+    "route.default_domain_resolver.disable_optimistic_cache": {
+      "kind": "scalar"
+    },
+    "route.default_domain_resolver.rewrite_ttl": {
+      "kind": "scalar"
+    },
+    "route.default_domain_resolver.server": {
+      "kind": "scalar",
+      "reference": "dns_server"
+    },
+    "route.default_domain_resolver.strategy": {
+      "kind": "scalar",
+      "enum": [
+        "",
+        "as_is",
+        "prefer_ipv4",
+        "prefer_ipv6",
+        "ipv4_only",
+        "ipv6_only"
+      ]
+    },
+    "route.default_domain_resolver.timeout": {
+      "kind": "scalar"
+    },
+    "route.default_fallback_delay": {
+      "kind": "scalar"
+    },
+    "route.default_fallback_network_type": {
+      "kind": "scalar_list"
+    },
+    "route.default_fallback_network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "route.default_http_client": {
+      "kind": "scalar"
+    },
+    "route.default_interface": {
+      "kind": "scalar"
+    },
+    "route.default_mark": {
+      "kind": "scalar"
+    },
+    "route.default_network_strategy": {
+      "kind": "scalar",
+      "enum": [
+        "default",
+        "fallback",
+        "hybrid"
+      ]
+    },
+    "route.default_network_type": {
+      "kind": "scalar_list"
+    },
+    "route.default_network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "route.dhcp_lease_files": {
+      "kind": "scalar_list"
+    },
+    "route.dhcp_lease_files[]": {
+      "kind": "scalar"
+    },
+    "route.final": {
+      "kind": "scalar",
+      "reference": "outbound"
+    },
+    "route.find_neighbor": {
+      "kind": "scalar"
+    },
+    "route.find_process": {
+      "kind": "scalar"
+    },
+    "route.override_android_vpn": {
+      "kind": "scalar"
+    },
+    "route.rule_set": {
+      "kind": "map_tag"
+    },
+    "route.rule_set{tag}": {
+      "kind": "object",
+      "variants": [
+        "inline",
+        "local",
+        "remote"
+      ]
+    },
+    "route.rule_set{tag}.format": {
+      "kind": "scalar",
+      "enum": [
+        "source",
+        "binary"
+      ]
+    },
+    "route.rule_set{tag}.http_client": {
+      "kind": "object_or_scalar"
+    },
+    "route.rule_set{tag}.http_client.bind_address_no_port": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.bind_interface": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.connect_timeout": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.connection_receive_window": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.detour": {
+      "kind": "scalar",
+      "reference": "outbound"
+    },
+    "route.rule_set{tag}.http_client.disable_path_mtu_discovery": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.disable_tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.disable_version_fallback": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.domain_resolver": {
+      "kind": "object_or_scalar"
+    },
+    "route.rule_set{tag}.http_client.engine": {
+      "kind": "scalar",
+      "enum": [
+        "go",
+        "apple"
+      ]
+    },
+    "route.rule_set{tag}.http_client.fallback_delay": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.fallback_network_type": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.http_client.headers": {
+      "kind": "object"
+    },
+    "route.rule_set{tag}.http_client.idle_timeout": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.inet4_bind_address": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.inet6_bind_address": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.initial_packet_size": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.keep_alive_period": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.max_concurrent_streams": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.netns": {
+      "kind": "scalar",
+      "reference": "network_namespace"
+    },
+    "route.rule_set{tag}.http_client.network_strategy": {
+      "kind": "scalar",
+      "enum": [
+        "default",
+        "fallback",
+        "hybrid"
+      ]
+    },
+    "route.rule_set{tag}.http_client.network_type": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.http_client.protect_path": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.reuse_addr": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.routing_mark": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.stream_receive_window": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.tcp_fast_open": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.tcp_keep_alive_interval": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.tcp_multi_path": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.tls": {
+      "kind": "object"
+    },
+    "route.rule_set{tag}.http_client.udp_fragment": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.http_client.version": {
+      "kind": "scalar",
+      "enum": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "route.rule_set{tag}.initial_path": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.path": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.rules": {
+      "kind": "seq"
+    },
+    "route.rule_set{tag}.rules[]": {
+      "kind": "object",
+      "variants": [
+        "default",
+        "logical"
+      ]
+    },
+    "route.rule_set{tag}.rules[].default_interface_address": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.rules[].domain": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.rules[].domain_keyword": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.rules[].domain_regex": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.rules[].domain_suffix": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.rules[].invert": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.rules[].ip_cidr": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.rules[].mode": {
+      "kind": "scalar",
+      "enum": [
+        "and",
+        "or"
+      ]
+    },
+    "route.rule_set{tag}.rules[].network": {
+      "kind": "scalar_list",
+      "enum": [
+        "tcp",
+        "udp",
+        "icmp"
+      ]
+    },
+    "route.rule_set{tag}.rules[].network_interface_address": {
+      "kind": "object"
+    },
+    "route.rule_set{tag}.rules[].network_is_constrained": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.rules[].network_is_expensive": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.rules[].network_type": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.rules[].package_name": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.rules[].package_name_regex": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.rules[].port": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.rules[].port_range": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.rules[].process_name": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.rules[].process_path": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.rules[].process_path_regex": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.rules[].query_type": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.rules[].rules": {
+      "kind": "seq"
+    },
+    "route.rule_set{tag}.rules[].source_ip_cidr": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.rules[].source_port": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.rules[].source_port_range": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.rules[].type": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.rules[].wifi_bssid": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.rules[].wifi_ssid": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.tag": {
+      "kind": "scalar_list"
+    },
+    "route.rule_set{tag}.tag[]": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.type": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.update_interval": {
+      "kind": "scalar"
+    },
+    "route.rule_set{tag}.url": {
+      "kind": "scalar"
+    },
+    "route.rules": {
+      "kind": "seq"
+    },
+    "route.rules[]": {
+      "kind": "object",
+      "variants": [
+        "default",
+        "logical"
+      ]
+    },
+    "route.rules[].action": {
+      "kind": "scalar"
+    },
+    "route.rules[].auth_user": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].auth_user[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].clash_mode": {
+      "kind": "scalar"
+    },
+    "route.rules[].client": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].client[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].client_subnet": {
+      "kind": "scalar"
+    },
+    "route.rules[].default_interface_address": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].default_interface_address[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].disable_cache": {
+      "kind": "scalar"
+    },
+    "route.rules[].disable_optimistic_cache": {
+      "kind": "scalar"
+    },
+    "route.rules[].domain": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].domain[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].domain_keyword": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].domain_keyword[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].domain_regex": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].domain_regex[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].domain_suffix": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].domain_suffix[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].fallback_delay": {
+      "kind": "scalar"
+    },
+    "route.rules[].inbound": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].inbound[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].interface_address": {
+      "kind": "object"
+    },
+    "route.rules[].invert": {
+      "kind": "scalar"
+    },
+    "route.rules[].ip_cidr": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].ip_cidr[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].ip_is_private": {
+      "kind": "scalar"
+    },
+    "route.rules[].ip_version": {
+      "kind": "scalar",
+      "enum": [
+        4,
+        6
+      ]
+    },
+    "route.rules[].method": {
+      "kind": "scalar",
+      "enum": [
+        "",
+        "default",
+        "drop",
+        "reply"
+      ]
+    },
+    "route.rules[].mode": {
+      "kind": "scalar",
+      "enum": [
+        "and",
+        "or"
+      ]
+    },
+    "route.rules[].network": {
+      "kind": "scalar_list",
+      "enum": [
+        "tcp",
+        "udp",
+        "icmp"
+      ]
+    },
+    "route.rules[].network[]": {
+      "kind": "scalar",
+      "enum": [
+        "tcp",
+        "udp",
+        "icmp"
+      ]
+    },
+    "route.rules[].network_interface_address": {
+      "kind": "object"
+    },
+    "route.rules[].network_is_constrained": {
+      "kind": "scalar"
+    },
+    "route.rules[].network_is_expensive": {
+      "kind": "scalar"
+    },
+    "route.rules[].network_strategy": {
+      "kind": "scalar",
+      "enum": [
+        "default",
+        "fallback",
+        "hybrid"
+      ]
+    },
+    "route.rules[].network_type": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "route.rules[].no_drop": {
+      "kind": "scalar"
+    },
+    "route.rules[].outbound": {
+      "kind": "scalar",
+      "reference": "outbound"
+    },
+    "route.rules[].override_address": {
+      "kind": "scalar"
+    },
+    "route.rules[].override_port": {
+      "kind": "scalar"
+    },
+    "route.rules[].package_name": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].package_name[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].package_name_regex": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].package_name_regex[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].port": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].port[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].port_range": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].port_range[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].preferred_by": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].preferred_by[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].process_name": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].process_name[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].process_path": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].process_path[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].process_path_regex": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].process_path_regex[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].protocol": {
+      "kind": "scalar_list",
+      "enum": [
+        "tls",
+        "http",
+        "quic",
+        "dns",
+        "stun",
+        "bittorrent",
+        "dtls",
+        "ssh",
+        "rdp",
+        "ntp"
+      ]
+    },
+    "route.rules[].protocol[]": {
+      "kind": "scalar",
+      "enum": [
+        "tls",
+        "http",
+        "quic",
+        "dns",
+        "stun",
+        "bittorrent",
+        "dtls",
+        "ssh",
+        "rdp",
+        "ntp"
+      ]
+    },
+    "route.rules[].rewrite_ttl": {
+      "kind": "scalar"
+    },
+    "route.rules[].rule_set": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rule_set[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].rule_set_ip_cidr_match_source": {
+      "kind": "scalar"
+    },
+    "route.rules[].rules": {
+      "kind": "seq"
+    },
+    "route.rules[].rules[]": {
+      "kind": "object",
+      "variants": [
+        "default",
+        "logical"
+      ]
+    },
+    "route.rules[].rules[].auth_user": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].clash_mode": {
+      "kind": "scalar"
+    },
+    "route.rules[].rules[].client": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].default_interface_address": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].domain": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].domain_keyword": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].domain_regex": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].domain_suffix": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].inbound": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].interface_address": {
+      "kind": "object"
+    },
+    "route.rules[].rules[].invert": {
+      "kind": "scalar"
+    },
+    "route.rules[].rules[].ip_cidr": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].ip_is_private": {
+      "kind": "scalar"
+    },
+    "route.rules[].rules[].ip_version": {
+      "kind": "scalar",
+      "enum": [
+        4,
+        6
+      ]
+    },
+    "route.rules[].rules[].mode": {
+      "kind": "scalar",
+      "enum": [
+        "and",
+        "or"
+      ]
+    },
+    "route.rules[].rules[].network": {
+      "kind": "scalar_list",
+      "enum": [
+        "tcp",
+        "udp",
+        "icmp"
+      ]
+    },
+    "route.rules[].rules[].network_interface_address": {
+      "kind": "object"
+    },
+    "route.rules[].rules[].network_is_constrained": {
+      "kind": "scalar"
+    },
+    "route.rules[].rules[].network_is_expensive": {
+      "kind": "scalar"
+    },
+    "route.rules[].rules[].network_type": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].package_name": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].package_name_regex": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].port": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].port_range": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].preferred_by": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].process_name": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].process_path": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].process_path_regex": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].protocol": {
+      "kind": "scalar_list",
+      "enum": [
+        "tls",
+        "http",
+        "quic",
+        "dns",
+        "stun",
+        "bittorrent",
+        "dtls",
+        "ssh",
+        "rdp",
+        "ntp"
+      ]
+    },
+    "route.rules[].rules[].rule_set": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].rule_set_ip_cidr_match_source": {
+      "kind": "scalar"
+    },
+    "route.rules[].rules[].rules": {
+      "kind": "seq"
+    },
+    "route.rules[].rules[].source_hostname": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].source_ip_cidr": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].source_ip_is_private": {
+      "kind": "scalar"
+    },
+    "route.rules[].rules[].source_mac_address": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].source_port": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].source_port_range": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].type": {
+      "kind": "scalar"
+    },
+    "route.rules[].rules[].user": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].user_id": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].wifi_bssid": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].rules[].wifi_ssid": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].server": {
+      "kind": "scalar",
+      "reference": "dns_server"
+    },
+    "route.rules[].sniffer": {
+      "kind": "scalar_list",
+      "enum": [
+        "tls",
+        "http",
+        "quic",
+        "dns",
+        "stun",
+        "bittorrent",
+        "dtls",
+        "ssh",
+        "rdp",
+        "ntp"
+      ]
+    },
+    "route.rules[].sniffer[]": {
+      "kind": "scalar",
+      "enum": [
+        "tls",
+        "http",
+        "quic",
+        "dns",
+        "stun",
+        "bittorrent",
+        "dtls",
+        "ssh",
+        "rdp",
+        "ntp"
+      ]
+    },
+    "route.rules[].source_hostname": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].source_hostname[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].source_ip_cidr": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].source_ip_cidr[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].source_ip_is_private": {
+      "kind": "scalar"
+    },
+    "route.rules[].source_mac_address": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].source_mac_address[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].source_port": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].source_port[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].source_port_range": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].source_port_range[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].strategy": {
+      "kind": "scalar",
+      "enum": [
+        "",
+        "as_is",
+        "prefer_ipv4",
+        "prefer_ipv6",
+        "ipv4_only",
+        "ipv6_only"
+      ]
+    },
+    "route.rules[].timeout": {
+      "kind": "scalar"
+    },
+    "route.rules[].tls_fragment": {
+      "kind": "scalar"
+    },
+    "route.rules[].tls_fragment_fallback_delay": {
+      "kind": "scalar"
+    },
+    "route.rules[].tls_record_fragment": {
+      "kind": "scalar"
+    },
+    "route.rules[].tls_spoof": {
+      "kind": "scalar"
+    },
+    "route.rules[].tls_spoof_method": {
+      "kind": "scalar",
+      "enum": [
+        "wrong-sequence",
+        "wrong-checksum",
+        "wrong-ack",
+        "wrong-md5",
+        "wrong-timestamp"
+      ]
+    },
+    "route.rules[].type": {
+      "kind": "scalar"
+    },
+    "route.rules[].udp_connect": {
+      "kind": "scalar"
+    },
+    "route.rules[].udp_disable_domain_unmapping": {
+      "kind": "scalar"
+    },
+    "route.rules[].udp_timeout": {
+      "kind": "scalar"
+    },
+    "route.rules[].user": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].user[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].user_id": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].user_id[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].wifi_bssid": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].wifi_bssid[]": {
+      "kind": "scalar"
+    },
+    "route.rules[].wifi_ssid": {
+      "kind": "scalar_list"
+    },
+    "route.rules[].wifi_ssid[]": {
+      "kind": "scalar"
+    },
+    "services": {
+      "kind": "seq_tagged"
+    },
+    "services{tag}": {
+      "kind": "object",
+      "variants": [
+        "api",
+        "ccm",
+        "derp",
+        "hysteria-realm",
+        "ocm",
+        "oom-killer",
+        "resolved",
+        "ssm-api",
+        "usbip-client",
+        "usbip-server"
+      ]
+    },
+    "services{tag}.access_control_allow_origin": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.access_control_allow_origin[]": {
+      "kind": "scalar"
+    },
+    "services{tag}.access_control_allow_private_network": {
+      "kind": "scalar"
+    },
+    "services{tag}.bind_address_no_port": {
+      "kind": "scalar"
+    },
+    "services{tag}.bind_interface": {
+      "kind": "scalar"
+    },
+    "services{tag}.cache_path": {
+      "kind": "scalar"
+    },
+    "services{tag}.config_path": {
+      "kind": "scalar"
+    },
+    "services{tag}.connect_timeout": {
+      "kind": "scalar"
+    },
+    "services{tag}.connection_receive_window": {
+      "kind": "scalar"
+    },
+    "services{tag}.credential_path": {
+      "kind": "scalar"
+    },
+    "services{tag}.dashboard": {
+      "kind": "object_or_scalar"
+    },
+    "services{tag}.dashboard.download_url": {
+      "kind": "scalar"
+    },
+    "services{tag}.dashboard.enabled": {
+      "kind": "scalar"
+    },
+    "services{tag}.dashboard.http_client": {
+      "kind": "object_or_scalar"
+    },
+    "services{tag}.dashboard.http_client.detour": {
+      "kind": "scalar",
+      "reference": "outbound"
+    },
+    "services{tag}.dashboard.http_client.netns": {
+      "kind": "scalar",
+      "reference": "network_namespace"
+    },
+    "services{tag}.dashboard.path": {
+      "kind": "scalar"
+    },
+    "services{tag}.dashboard.update_interval": {
+      "kind": "scalar"
+    },
+    "services{tag}.detour": {
+      "kind": "scalar",
+      "reference": "inbound"
+    },
+    "services{tag}.devices": {
+      "kind": "seq"
+    },
+    "services{tag}.devices[]": {
+      "kind": "object"
+    },
+    "services{tag}.devices[].bus_id": {
+      "kind": "scalar"
+    },
+    "services{tag}.devices[].product_id": {
+      "kind": "scalar"
+    },
+    "services{tag}.devices[].serial": {
+      "kind": "scalar"
+    },
+    "services{tag}.devices[].vendor_id": {
+      "kind": "scalar"
+    },
+    "services{tag}.disable_tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "services{tag}.domain_resolver": {
+      "kind": "object_or_scalar"
+    },
+    "services{tag}.domain_resolver.client_subnet": {
+      "kind": "scalar"
+    },
+    "services{tag}.domain_resolver.disable_cache": {
+      "kind": "scalar"
+    },
+    "services{tag}.domain_resolver.disable_optimistic_cache": {
+      "kind": "scalar"
+    },
+    "services{tag}.domain_resolver.rewrite_ttl": {
+      "kind": "scalar"
+    },
+    "services{tag}.domain_resolver.server": {
+      "kind": "scalar",
+      "reference": "dns_server"
+    },
+    "services{tag}.domain_resolver.strategy": {
+      "kind": "scalar",
+      "enum": [
+        "",
+        "as_is",
+        "prefer_ipv4",
+        "prefer_ipv6",
+        "ipv4_only",
+        "ipv6_only"
+      ]
+    },
+    "services{tag}.domain_resolver.timeout": {
+      "kind": "scalar"
+    },
+    "services{tag}.fallback_delay": {
+      "kind": "scalar"
+    },
+    "services{tag}.fallback_network_type": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.fallback_network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "services{tag}.headers": {
+      "kind": "object"
+    },
+    "services{tag}.home": {
+      "kind": "scalar"
+    },
+    "services{tag}.idle_timeout": {
+      "kind": "scalar"
+    },
+    "services{tag}.inet4_bind_address": {
+      "kind": "scalar"
+    },
+    "services{tag}.inet6_bind_address": {
+      "kind": "scalar"
+    },
+    "services{tag}.keep_alive_period": {
+      "kind": "scalar"
+    },
+    "services{tag}.listen": {
+      "kind": "scalar"
+    },
+    "services{tag}.listen_port": {
+      "kind": "scalar"
+    },
+    "services{tag}.max_concurrent_streams": {
+      "kind": "scalar"
+    },
+    "services{tag}.max_interval": {
+      "kind": "scalar"
+    },
+    "services{tag}.memory_limit": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_psk": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_psk_file": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.mesh_with[]": {
+      "kind": "object"
+    },
+    "services{tag}.mesh_with[].bind_address_no_port": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].bind_interface": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].connect_timeout": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].detour": {
+      "kind": "scalar",
+      "reference": "outbound"
+    },
+    "services{tag}.mesh_with[].disable_tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].domain_resolver": {
+      "kind": "object_or_scalar"
+    },
+    "services{tag}.mesh_with[].domain_resolver.server": {
+      "kind": "scalar",
+      "reference": "dns_server"
+    },
+    "services{tag}.mesh_with[].fallback_delay": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].fallback_network_type": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.mesh_with[].fallback_network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "services{tag}.mesh_with[].host": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].inet4_bind_address": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].inet6_bind_address": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].netns": {
+      "kind": "scalar",
+      "reference": "network_namespace"
+    },
+    "services{tag}.mesh_with[].network_strategy": {
+      "kind": "scalar",
+      "enum": [
+        "default",
+        "fallback",
+        "hybrid"
+      ]
+    },
+    "services{tag}.mesh_with[].network_type": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.mesh_with[].network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "services{tag}.mesh_with[].protect_path": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].reuse_addr": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].routing_mark": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].server": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].server_port": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].tcp_fast_open": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].tcp_keep_alive_interval": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].tcp_multi_path": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].tls": {
+      "kind": "object"
+    },
+    "services{tag}.mesh_with[].tls.alpn": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.mesh_with[].tls.certificate": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.mesh_with[].tls.certificate_path": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].tls.certificate_public_key_sha256": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.mesh_with[].tls.cipher_suites": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.mesh_with[].tls.client_certificate": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.mesh_with[].tls.client_certificate_path": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].tls.client_key": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.mesh_with[].tls.client_key_path": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].tls.curve_preferences": {
+      "kind": "scalar_list",
+      "enum": [
+        "P256",
+        "P384",
+        "P521",
+        "X25519",
+        "X25519MLKEM768"
+      ]
+    },
+    "services{tag}.mesh_with[].tls.disable_sni": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].tls.ech": {
+      "kind": "object"
+    },
+    "services{tag}.mesh_with[].tls.enabled": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].tls.engine": {
+      "kind": "scalar",
+      "enum": [
+        "go",
+        "apple",
+        "windows"
+      ]
+    },
+    "services{tag}.mesh_with[].tls.fragment": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].tls.fragment_fallback_delay": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].tls.handshake_timeout": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].tls.insecure": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].tls.kernel_rx": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].tls.kernel_tx": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].tls.max_version": {
+      "kind": "scalar",
+      "enum": [
+        "1.0",
+        "1.1",
+        "1.2",
+        "1.3"
+      ]
+    },
+    "services{tag}.mesh_with[].tls.min_version": {
+      "kind": "scalar",
+      "enum": [
+        "1.0",
+        "1.1",
+        "1.2",
+        "1.3"
+      ]
+    },
+    "services{tag}.mesh_with[].tls.reality": {
+      "kind": "object"
+    },
+    "services{tag}.mesh_with[].tls.record_fragment": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].tls.server_name": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].tls.spoof": {
+      "kind": "scalar"
+    },
+    "services{tag}.mesh_with[].tls.spoof_method": {
+      "kind": "scalar",
+      "enum": [
+        "wrong-sequence",
+        "wrong-checksum",
+        "wrong-ack",
+        "wrong-md5",
+        "wrong-timestamp"
+      ]
+    },
+    "services{tag}.mesh_with[].tls.utls": {
+      "kind": "object"
+    },
+    "services{tag}.mesh_with[].udp_fragment": {
+      "kind": "scalar"
+    },
+    "services{tag}.min_interval": {
+      "kind": "scalar"
+    },
+    "services{tag}.netns": {
+      "kind": "scalar",
+      "reference": "network_namespace"
+    },
+    "services{tag}.network_strategy": {
+      "kind": "scalar",
+      "enum": [
+        "default",
+        "fallback",
+        "hybrid"
+      ]
+    },
+    "services{tag}.network_type": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.network_type[]": {
+      "kind": "scalar",
+      "enum": [
+        "cellular",
+        "ethernet",
+        "other",
+        "wifi"
+      ]
+    },
+    "services{tag}.protect_path": {
+      "kind": "scalar"
+    },
+    "services{tag}.provider": {
+      "kind": "scalar"
+    },
+    "services{tag}.reuse_addr": {
+      "kind": "scalar"
+    },
+    "services{tag}.routing_mark": {
+      "kind": "scalar"
+    },
+    "services{tag}.safety_margin": {
+      "kind": "scalar"
+    },
+    "services{tag}.secret": {
+      "kind": "scalar"
+    },
+    "services{tag}.server": {
+      "kind": "scalar"
+    },
+    "services{tag}.server_port": {
+      "kind": "scalar"
+    },
+    "services{tag}.servers": {
+      "kind": "object"
+    },
+    "services{tag}.stream_receive_window": {
+      "kind": "scalar"
+    },
+    "services{tag}.stun": {
+      "kind": "object_or_scalar"
+    },
+    "services{tag}.stun.bind_interface": {
+      "kind": "scalar"
+    },
+    "services{tag}.stun.detour": {
+      "kind": "scalar",
+      "reference": "inbound"
+    },
+    "services{tag}.stun.disable_tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "services{tag}.stun.enabled": {
+      "kind": "scalar"
+    },
+    "services{tag}.stun.listen": {
+      "kind": "scalar"
+    },
+    "services{tag}.stun.listen_port": {
+      "kind": "scalar"
+    },
+    "services{tag}.stun.netns": {
+      "kind": "scalar",
+      "reference": "network_namespace"
+    },
+    "services{tag}.stun.reuse_addr": {
+      "kind": "scalar"
+    },
+    "services{tag}.stun.routing_mark": {
+      "kind": "scalar"
+    },
+    "services{tag}.stun.tcp_fast_open": {
+      "kind": "scalar"
+    },
+    "services{tag}.stun.tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "services{tag}.stun.tcp_keep_alive_interval": {
+      "kind": "scalar"
+    },
+    "services{tag}.stun.tcp_multi_path": {
+      "kind": "scalar"
+    },
+    "services{tag}.stun.udp_fragment": {
+      "kind": "scalar"
+    },
+    "services{tag}.stun.udp_timeout": {
+      "kind": "scalar"
+    },
+    "services{tag}.tag": {
+      "kind": "scalar"
+    },
+    "services{tag}.tcp_fast_open": {
+      "kind": "scalar"
+    },
+    "services{tag}.tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "services{tag}.tcp_keep_alive_interval": {
+      "kind": "scalar"
+    },
+    "services{tag}.tcp_multi_path": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls": {
+      "kind": "object"
+    },
+    "services{tag}.tls.alpn": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.tls.alpn[]": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.certificate": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.tls.certificate[]": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.certificate_path": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.certificate_provider": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.cipher_suites": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.tls.cipher_suites[]": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.client_authentication": {
+      "kind": "scalar",
+      "enum": [
+        "no",
+        "request",
+        "require-any",
+        "verify-if-given",
+        "require-and-verify"
+      ]
+    },
+    "services{tag}.tls.client_certificate": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.tls.client_certificate[]": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.client_certificate_path": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.tls.client_certificate_path[]": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.client_certificate_public_key_sha256": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.tls.client_certificate_public_key_sha256[]": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.tls.client_certificate_public_key_sha256[][]": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.curve_preferences": {
+      "kind": "scalar_list",
+      "enum": [
+        "P256",
+        "P384",
+        "P521",
+        "X25519",
+        "X25519MLKEM768"
+      ]
+    },
+    "services{tag}.tls.curve_preferences[]": {
+      "kind": "scalar",
+      "enum": [
+        "P256",
+        "P384",
+        "P521",
+        "X25519",
+        "X25519MLKEM768"
+      ]
+    },
+    "services{tag}.tls.ech": {
+      "kind": "object"
+    },
+    "services{tag}.tls.ech.enabled": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.ech.key": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.tls.ech.key[]": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.ech.key_path": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.enabled": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.handshake_timeout": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.insecure": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.kernel_rx": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.kernel_tx": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.key": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.tls.key[]": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.key_path": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.max_version": {
+      "kind": "scalar",
+      "enum": [
+        "1.0",
+        "1.1",
+        "1.2",
+        "1.3"
+      ]
+    },
+    "services{tag}.tls.min_version": {
+      "kind": "scalar",
+      "enum": [
+        "1.0",
+        "1.1",
+        "1.2",
+        "1.3"
+      ]
+    },
+    "services{tag}.tls.reality": {
+      "kind": "object"
+    },
+    "services{tag}.tls.reality.enabled": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.reality.handshake": {
+      "kind": "object"
+    },
+    "services{tag}.tls.reality.handshake.bind_address_no_port": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.reality.handshake.bind_interface": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.reality.handshake.connect_timeout": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.reality.handshake.detour": {
+      "kind": "scalar",
+      "reference": "outbound"
+    },
+    "services{tag}.tls.reality.handshake.disable_tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.reality.handshake.domain_resolver": {
+      "kind": "object_or_scalar"
+    },
+    "services{tag}.tls.reality.handshake.fallback_delay": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.reality.handshake.fallback_network_type": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.tls.reality.handshake.inet4_bind_address": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.reality.handshake.inet6_bind_address": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.reality.handshake.netns": {
+      "kind": "scalar",
+      "reference": "network_namespace"
+    },
+    "services{tag}.tls.reality.handshake.network_strategy": {
+      "kind": "scalar",
+      "enum": [
+        "default",
+        "fallback",
+        "hybrid"
+      ]
+    },
+    "services{tag}.tls.reality.handshake.network_type": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.tls.reality.handshake.protect_path": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.reality.handshake.reuse_addr": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.reality.handshake.routing_mark": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.reality.handshake.server": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.reality.handshake.server_port": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.reality.handshake.tcp_fast_open": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.reality.handshake.tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.reality.handshake.tcp_keep_alive_interval": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.reality.handshake.tcp_multi_path": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.reality.handshake.udp_fragment": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.reality.max_time_difference": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.reality.private_key": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.reality.short_id": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.tls.reality.short_id[]": {
+      "kind": "scalar"
+    },
+    "services{tag}.tls.server_name": {
+      "kind": "scalar"
+    },
+    "services{tag}.type": {
+      "kind": "scalar"
+    },
+    "services{tag}.udp_fragment": {
+      "kind": "scalar"
+    },
+    "services{tag}.udp_timeout": {
+      "kind": "scalar"
+    },
+    "services{tag}.usages_path": {
+      "kind": "scalar"
+    },
+    "services{tag}.users": {
+      "kind": "seq"
+    },
+    "services{tag}.users[]": {
+      "kind": "object"
+    },
+    "services{tag}.users[].name": {
+      "kind": "scalar"
+    },
+    "services{tag}.users[].token": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_endpoint": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.verify_client_endpoint[]": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.verify_client_url[]": {
+      "kind": "object_or_scalar"
+    },
+    "services{tag}.verify_client_url[].bind_address_no_port": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].bind_interface": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].connect_timeout": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].connection_receive_window": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].detour": {
+      "kind": "scalar",
+      "reference": "outbound"
+    },
+    "services{tag}.verify_client_url[].disable_path_mtu_discovery": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].disable_tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].disable_version_fallback": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].domain_resolver": {
+      "kind": "object_or_scalar"
+    },
+    "services{tag}.verify_client_url[].engine": {
+      "kind": "scalar",
+      "enum": [
+        "go",
+        "apple"
+      ]
+    },
+    "services{tag}.verify_client_url[].fallback_delay": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].fallback_network_type": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.verify_client_url[].headers": {
+      "kind": "object"
+    },
+    "services{tag}.verify_client_url[].idle_timeout": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].inet4_bind_address": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].inet6_bind_address": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].initial_packet_size": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].keep_alive_period": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].max_concurrent_streams": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].netns": {
+      "kind": "scalar",
+      "reference": "network_namespace"
+    },
+    "services{tag}.verify_client_url[].network_strategy": {
+      "kind": "scalar",
+      "enum": [
+        "default",
+        "fallback",
+        "hybrid"
+      ]
+    },
+    "services{tag}.verify_client_url[].network_type": {
+      "kind": "scalar_list"
+    },
+    "services{tag}.verify_client_url[].protect_path": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].reuse_addr": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].routing_mark": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].stream_receive_window": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].tag": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].tcp_fast_open": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].tcp_keep_alive": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].tcp_keep_alive_interval": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].tcp_multi_path": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].tls": {
+      "kind": "object"
+    },
+    "services{tag}.verify_client_url[].udp_fragment": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].url": {
+      "kind": "scalar"
+    },
+    "services{tag}.verify_client_url[].version": {
+      "kind": "scalar",
+      "enum": [
+        0,
+        1,
+        2,
+        3
+      ]
+    }
+  }
+}

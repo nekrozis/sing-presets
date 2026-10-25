@@ -2,3 +2,6 @@ subscription.txt
 __pycache__/
 *.json
 .venv/
+refs/
+.workbuddy/
+!schema/*.json

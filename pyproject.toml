@@ -9,3 +9,23 @@ dependencies = [
   "requests>=2.0",
 ]
 
+[dependency-groups]
+dev = [
+    "pyrefly>=1.4.0",
+    "pytest>=8.4.2",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.pyrefly]
+# `default` is the level this project wants: it reports the type errors that matter
+# (bad-assignment, bad-argument-type, missing-attribute, unsupported-operation) without
+# demanding an annotation on every container, which `strict` would.
+preset = "default"
+project-includes = ["sing_presets/**/*.py", "tools/**/*.py", "tests/**/*.py"]
+# Off limits: refs/ holds third party checkouts, and scripts/ is the legacy pipeline that
+# sing_presets replaces. Run `pyrefly check scripts` by hand to see its findings.
+project-excludes = ["refs/**", "scripts/**", ".venv/**"]
+
