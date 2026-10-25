@@ -156,6 +156,11 @@ outbound bodies; `build --nodes nodes.json` consumes them.
 Supported link schemes live in `sing_presets/protocols/`, one module per scheme. Adding one
 is adding a file: it registers itself, and nothing else has to be told about it.
 
+A parser converts the fields a link actually carries and does not rewrite them. The previous
+generator replaced the `host` of tcp and h2 nodes with a fixed image-hosting domain, which was
+a deployment-specific disguise rather than part of the protocol; a subscription that relied on
+it has to say so in its own `host` now.
+
 ## Verifying
 
 The build validates itself, in increasing cost:
@@ -206,17 +211,6 @@ uv run python tools/gen_surface.py schema/sing-box-<version>.json \
 
 `--strict` makes the declared tag-namespace table fail the run when upstream renames or
 removes a reference kind, so the classification cannot drift silently.
-
-## Legacy pipeline
-
-`scripts/` and `base.yaml` are the previous generator: a base YAML template plus
-`_PROXY_NODES_` and `_PROXY_TAGS_` placeholders, run from inside `scripts/` as
-`python main.py`.
-
-`fetch` and the capability library now cover what it did - subscription to configuration,
-verified - so it is kept only until the two are compared on real subscriptions and the
-output can be switched over. It needs `requests`, which the new pipeline does not use, and it
-is excluded from type checking.
 
 ## Requirements
 
