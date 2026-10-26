@@ -26,6 +26,10 @@ REMOTE_SERVER = "dns11.quad9.net"
 
 class DnsSplit(Capability):
     id = "dns-split"
+    #: The remote resolver detours through the selector that `outbound-groups` defines.
+    #: Declared rather than left to the dangling-reference check, which would report a tag
+    #: that "is not defined in outbounds" instead of naming the missing capability.
+    depends_on = ("outbound-groups",)
     owns = (
         f"dns.servers{{{LOCAL}}}",
         f"dns.servers{{{DIRECT}}}",

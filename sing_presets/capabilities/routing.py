@@ -84,7 +84,10 @@ class ChinaSplit(Capability):
 
     id = "china-split"
     owns = tuple(f"route.rule_set{{{tag}}}" for tag in CN_RULE_SETS)
-    depends_on = ("outbound-groups",)
+    #: `direct` comes from outbound-groups, and the domestic-names rule names the direct
+    #: resolver from dns-split. Both are tags, so dropping either leaves a rule pointing at
+    #: something that is not there.
+    depends_on = ("dns-split", "outbound-groups")
 
     def contribute(self, facts: Facts) -> Iterable[Contribution]:
         for tag in CN_RULE_SETS:

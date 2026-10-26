@@ -177,6 +177,24 @@ def test_equal_priority_with_different_values_conflicts(surface: Surface) -> Non
     assert builder.materialize()["route"]["final"] == "proxy"
 
 
+def test_priority_does_not_depend_on_the_order_capabilities_are_listed(
+    surface: Surface,
+) -> None:
+    """A lower priority arriving second is outvoted, not a conflict.
+
+    Only "the new value has a higher priority" used to replace the existing one, so the
+    same two capabilities were accepted in one order and reported as a conflict in the
+    other - and `--audit`'s shadowing verdict inherited that dependence.
+    """
+    strong = Setting("route.final", "proxy", priority=30, owner="strong")
+    weak = Setting("route.final", "direct", priority=10, owner="weak")
+    for order in ((strong, weak), (weak, strong)):
+        builder = Builder(surface)
+        builder.add_all(order)
+        assert builder.materialize()["route"]["final"] == "proxy"
+        assert builder.report.conflicts == [], order
+
+
 def test_identical_values_do_not_conflict(surface: Surface) -> None:
     builder = Builder(surface)
     builder.add(Setting("route.final", "proxy", priority=10, owner="a"))
@@ -341,7 +359,7 @@ def test_missing_fact_fails_loudly() -> None:
         requires = ("network.has_public_ipv6",)
 
         def contribute(self, facts: Facts):
-            yield self.setting("route.final", facts.require_bool("network.has_public_ipv6"))
+            yield self.setting("route.final", facts.get_bool("network.has_public_ipv6"))
 
     with pytest.raises(FactsError, match="undeclared facts"):
         NeedsFact().contributions(Facts())

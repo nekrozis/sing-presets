@@ -16,4 +16,4 @@ class Logging(Capability):
     owns = ("log.level",)
 
     def contribute(self, facts: Facts) -> Iterable[Contribution]:
-        yield self.setting("log.level", facts.get("log.level", DEFAULT_LEVEL), priority=10)
+        yield self.setting("log.level", facts.get_str("log.level", DEFAULT_LEVEL), priority=10)

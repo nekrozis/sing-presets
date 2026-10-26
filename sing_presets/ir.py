@@ -378,6 +378,11 @@ class Builder:
                 setting.owner,
             )
             return
+        if setting.priority < priority:
+            # Outvoted, and not a conflict: the answer was never in doubt. Reporting one
+            # would make the outcome depend on the order the capabilities are listed in,
+            # since the same pair is accepted when the weak setting arrives first.
+            return
         self.report.conflicts.append(
             Conflict(
                 path=setting.path,
@@ -491,7 +496,12 @@ class Builder:
         }
         everything = list(contributions)
         owners = sorted({item.owner for item in everything if item.owner})
-        full = leaf_multiset(compile_config(self.surface, everything)[0])
+        full_config = compile_config(self.surface, everything)[0]
+        full = leaf_multiset(full_config)
+        # A contribution list is not required to be a whole configuration, so a dangling
+        # reference may already be there. Only the ones disabling an owner introduces say
+        # anything about that owner.
+        baseline_dangling = set(self.surface.check_references(full_config))
         problems: list[str] = []
 
         for owner in owners:
@@ -500,7 +510,7 @@ class Builder:
             )
             without = [item for item in everything if item.owner != owner]
             try:
-                reduced = leaf_multiset(compile_config(self.surface, without)[0])
+                reduced_config = compile_config(self.surface, without)[0]
             except IRError as error:
                 if dependents:
                     continue  # declared dependency, not hidden coupling
@@ -508,6 +518,27 @@ class Builder:
                     f"{owner}: rebuild fails once disabled, so others depend on it ({error})"
                 )
                 continue
+            reduced = leaf_multiset(reduced_config)
+
+            # A reference to a tag this owner defines is coupling too, and it survives the
+            # rebuild because the referring field belongs to someone else: the value stays,
+            # its target does not. Compiling a preset would still catch it, but as a
+            # dangling reference rather than as "this capability is required".
+            dangling = (
+                []
+                if dependents
+                else [
+                    problem
+                    for problem in self.surface.check_references(reduced_config)
+                    if problem not in baseline_dangling
+                ]
+            )
+            if dangling:
+                problems.append(
+                    f"{owner}: disabling it leaves references to tags only it defines "
+                    f"({'; '.join(dangling)}); the capability that writes them should "
+                    "declare depends_on"
+                )
 
             own = _merge_tokens(
                 tokens_of(item) for item in everything if item.owner == owner

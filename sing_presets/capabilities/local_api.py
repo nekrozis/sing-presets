@@ -29,8 +29,9 @@ class ClashApi(Capability):
 
     def contribute(self, facts: Facts) -> Iterable[Contribution]:
         # Exposing the panel to the local network is a deliberate choice, so it comes
-        # from a fact rather than from the capability guessing.
-        allow_lan = bool(facts.get("network.allow_lan", False))
+        # from a fact rather than from the capability guessing. `get_bool` refuses a
+        # quoted "false": bool("false") is True, which would bind the panel to 0.0.0.0.
+        allow_lan = facts.get_bool("network.allow_lan")
         address = ANY_ADDRESS if allow_lan else LOOPBACK
 
         yield self.setting(
@@ -45,7 +46,7 @@ class ClashApi(Capability):
             "experimental.clash_api.external_ui_download_url", UI_DOWNLOAD_URL, priority=10
         )
         yield self.setting(
-            "experimental.clash_api.secret", facts.get("api.secret", ""), priority=10
+            "experimental.clash_api.secret", facts.get_str("api.secret"), priority=10
         )
         yield self.setting(
             "experimental.clash_api.access_control_allow_private_network",
