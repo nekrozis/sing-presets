@@ -1,11 +1,46 @@
 [project]
 name = "sing-presets"
 version = "0.1.0"
-description = "Sing-box config templates and generators."
+description = "Compile presets into verified sing-box configurations."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
   "PyYAML>=6.0",
-  "requests>=2.0",
 ]
+
+[project.scripts]
+sing-presets = "sing_presets.cli:main"
+
+# The project is installed rather than only imported, so the console script above exists
+# and `uv run sing-presets` works without a module path.
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["sing_presets"]
+
+[dependency-groups]
+dev = [
+    "pyrefly>=1.4.0",
+    "pytest>=8.4.2",
+    "types-pyyaml>=6.0.12.20260906",
+]
+
+[tool.pytest.ini_options]
+pythonpath = [".", "tools"]
+testpaths = ["tests"]
+
+[tool.pyrefly]
+# `default` is the level this project wants: it reports the type errors that matter
+# (bad-assignment, bad-argument-type, missing-attribute, unsupported-operation) without
+# demanding an annotation on every container, which `strict` would.
+preset = "default"
+project-includes = ["sing_presets/**/*.py", "tools/**/*.py", "tests/**/*.py"]
+# tools/ holds a script rather than a package, so its directory has to be searchable for
+# the test that imports it by module name.
+search-path = ["tools"]
+# Off limits: refs/ holds third party checkouts kept for reference, and .venv/ is the
+# environment.
+project-excludes = ["refs/**", ".venv/**"]
 

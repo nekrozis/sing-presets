@@ -1,0 +1,7 @@
+# Normalise text files to LF in the repository. The index is already LF, so this only
+# makes the behaviour explicit and independent of each clone's core.autocrlf setting,
+# which keeps generated files such as schema/*.json from churning on line endings.
+* text=auto
+
+# Generated and vendored content that should never be diffed as text.
+*.srs binary
