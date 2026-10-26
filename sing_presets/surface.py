@@ -58,10 +58,10 @@ class SurfaceError(Exception):
 class Slot:
     path: str
     kind: str
+    #: values the schema names for this field, when it names them. Empty means the field
+    #: is free-form (a URL, a number of bytes) and only its presence can be checked.
     enum: tuple = ()
     reference: str | None = None
-    variants: tuple = ()
-    deprecated: bool = False
     #: the object accepts properties the schema does not name, e.g. an HTTP header map.
     #: Without this the build would reject `headers.Host`, which is a legitimate field.
     open: bool = False
@@ -104,8 +104,6 @@ class Surface:
                 kind=entry["kind"],
                 enum=tuple(entry.get("enum") or ()),
                 reference=entry.get("reference"),
-                variants=tuple(entry.get("variants") or ()),
-                deprecated=bool(entry.get("deprecated")),
                 open=bool(entry.get("open")),
             )
         return cls(slots, raw.get("source") or {})
@@ -166,6 +164,61 @@ class Surface:
 
         walk(config, "", 0)
         return sorted(set(unknown))
+
+    def check_values(self, config: object) -> list[str]:
+        """Report values the schema does not list for their field.
+
+        `check_config` proves the path exists; this proves the value is one sing-box names.
+        Without it a typo like `log.level: verbose` or a protocol that the binary does not
+        build in compiles cleanly and only fails on the device - and with `--no-verify`, or
+        in CI without a binary, nothing catches it at all.
+
+        Only enumerated fields are checked. A field the schema leaves open (a server name, a
+        byte count) cannot be judged here, and guessing would reject correct builds.
+        """
+        problems: list[str] = []
+
+        def check(path: str, value: object) -> None:
+            slot = self.get(path)
+            if slot is None or not slot.enum:
+                return
+            if isinstance(value, (dict, list)):
+                return
+            try:
+                allowed = value in slot.enum
+            except TypeError:  # pragma: no cover - unhashable never compares unequal
+                allowed = False
+            if not allowed:
+                problems.append(
+                    f"{path}: {value!r} is not one of {', '.join(repr(v) for v in slot.enum)}"
+                )
+
+        def walk(node: object, path: str, depth: int) -> None:
+            if depth > 32:
+                return
+            slot = self.get(path) if path else None
+            if isinstance(node, dict):
+                for key, value in node.items():
+                    walk(value, f"{path}.{key}" if path else key, depth + 1)
+                return
+            if isinstance(node, list):
+                if slot is not None and slot.kind == "scalar_list":
+                    # The list is the field, so each element is a candidate value; an object
+                    # element is one alternative shape and is walked as usual.
+                    for item in node:
+                        if isinstance(item, (dict, list)):
+                            walk(item, f"{path}[]", depth + 1)
+                        else:
+                            check(path, item)
+                    return
+                suffix = "{tag}" if slot is not None and slot.kind in TAGGED_KINDS else "[]"
+                for item in node:
+                    walk(item, f"{path}{suffix}", depth + 1)
+                return
+            check(path, node)
+
+        walk(config, "", 0)
+        return sorted(set(problems))
 
     def check_references(self, config: object) -> list[str]:
         """Report references to tags that the configuration never defines.

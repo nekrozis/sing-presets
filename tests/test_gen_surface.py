@@ -103,3 +103,27 @@ def test_free_form_keys_are_accepted_by_the_build_but_invented_fields_are_not() 
 def test_the_shipped_surface_lets_a_transport_declare_several_hosts() -> None:
     """Regression guard on the artefact itself, since that is what the build reads."""
     assert Surface.load().kind_of("outbounds{tag}.transport.host") == "scalar_list"
+
+
+def test_a_discriminator_declared_by_several_variants_lists_all_of_them() -> None:
+    """`type` was recorded from the first variant only, so the enum was missing the rest.
+
+    Go writes a variant's discriminator as `const` when the variant is the only one of its
+    kind, so reading `enum` alone lost it as well. The shipped surface recorded
+    `route.rule_set{tag}.type` as ["inline", ""] while the build writes `remote`.
+    """
+    slots = build(POLYMORPHIC)
+    assert slots["boxes[].type"]["enum"] == ["first", "second"]
+    shipped = Surface.load().get("route.rule_set{tag}.type")
+    assert shipped is not None
+    assert shipped.enum == ("inline", "", "local", "remote")
+
+
+def test_a_value_the_schema_does_not_list_is_reported() -> None:
+    """The enum is only worth recording if something checks values against it."""
+    surface = Surface.load()
+    typo = {"outbounds": [{"tag": "n", "type": "shadowsockss", "server": "198.51.100.1"}]}
+    assert any("type: 'shadowsockss'" in problem for problem in surface.check_values(typo))
+
+    correct = {"outbounds": [{"tag": "n", "type": "shadowsocks", "server": "198.51.100.1"}]}
+    assert surface.check_values(correct) == []

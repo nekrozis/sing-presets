@@ -15,10 +15,10 @@ from dataclasses import dataclass
 from typing import Any, Iterable, Mapping, Sequence
 
 from . import capability as cap
-from .facts import Facts
-from .ir import Builder, Contribution, Report, compile_config
+from .facts import Facts, FactsError
+from .ir import Builder, Contribution, IRError, Report, compile_config
 from .presets import Preset
-from .surface import Surface
+from .surface import Surface, SurfaceError
 
 #: Capability that turns the subscription's nodes into outbounds. Added automatically
 #: when nodes are supplied, because a preset document has no business naming it.
@@ -71,13 +71,25 @@ def _validate_nodes(nodes: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
     return validated
 
 
-def _check_empty_lists(config: Mapping[str, Any]) -> list[str]:
-    """Report collections that ended up empty.
+def _must_have_members(path: str) -> bool:
+    """Whether an empty collection at this path is a defect rather than a choice.
 
-    An empty list is almost always a capability that expected something else to fill it:
-    an `urltest` group with no members is rejected by sing-box outright, and the same
-    mistake elsewhere fails quietly. The path includes the tag when there is one, so the
-    message names the member rather than its collection.
+    Enumerated rather than applied to every list, because an empty list is often legal:
+    `route.rule_set: []` is a configuration that defines no rule sets, and a blanket rule
+    would report a legitimate build as missing a capability. These two are the ones sing-box
+    rejects - an empty `outbounds` and a selector or urltest group with no members both fail
+    with "missing tags" - and both mean the subscription or a capability supplied nothing.
+    """
+    return path == "outbounds" or (
+        path.startswith("outbounds{") and path.endswith("}.outbounds")
+    )
+
+
+def _check_empty_lists(config: Mapping[str, Any]) -> list[str]:
+    """Report the collections that must have members and ended up with none.
+
+    The path includes the tag when there is one, so the message names the member rather
+    than its collection.
     """
     empty: list[str] = []
 
@@ -90,7 +102,8 @@ def _check_empty_lists(config: Mapping[str, Any]) -> list[str]:
                 walk(value, f"{path}.{key}" if path else key)
         elif isinstance(node, list):
             if not node:
-                empty.append(path)
+                if _must_have_members(path):
+                    empty.append(path)
                 return
             for item in node:
                 walk(item, path)
@@ -122,7 +135,24 @@ def compile_preset(
     preset: Preset,
     nodes: Sequence[Mapping[str, Any]] = (),
 ) -> Build:
-    """Compile a preset, raising CompileError on anything that would not ship."""
+    """Compile a preset, raising CompileError on anything that would not ship.
+
+    Every failure mode is funnelled into CompileError. Steps below raise their own errors
+    - a missing fact, a path outside the surface, an anchor that was never declared - and
+    letting those escape would break the promise `compile_all` makes: the caller would see
+    one traceback naming a fact instead of every preset that failed.
+    """
+    try:
+        return _compile_preset(surface, preset, nodes)
+    except (FactsError, SurfaceError, IRError) as error:
+        raise CompileError(str(error)) from error
+
+
+def _compile_preset(
+    surface: Surface,
+    preset: Preset,
+    nodes: Sequence[Mapping[str, Any]] = (),
+) -> Build:
     capability_ids = list(preset.capabilities)
     facts_values = dict(preset.facts)
     if nodes:
@@ -159,6 +189,10 @@ def compile_preset(
         raise CompileError(
             "the build uses paths outside the field surface: " + ", ".join(unknown)
         )
+
+    wrong = surface.check_values(config)
+    if wrong:
+        raise CompileError("values the schema does not list for their field: " + "; ".join(wrong))
 
     dangling = surface.check_references(config)
     if dangling:

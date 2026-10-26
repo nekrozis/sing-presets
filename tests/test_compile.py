@@ -140,3 +140,65 @@ presets:
         comp.compile_all(surface, document.presets.values(), NODES)
     message = str(caught.value)
     assert "a:" in message and "b:" in message
+
+
+def test_a_missing_fact_is_reported_as_a_compile_error(surface: Surface, tmp_path: Path) -> None:
+    """A capability raises FactsError, which is not a CompileError and used to escape.
+
+    The user then saw a traceback naming one fact instead of the summary that says which
+    preset is broken.
+    """
+    body = """
+defaults:
+  capabilities: [logging, tun-inbound]
+presets:
+  one: {}
+"""
+    document = preset_lib.load(write_presets(tmp_path, body))
+    with pytest.raises(comp.CompileError, match="tun-inbound' needs undeclared facts"):
+        comp.compile_preset(surface, document.presets["one"])
+
+
+def test_compile_all_collects_failures_that_are_not_compile_errors(
+    surface: Surface, tmp_path: Path
+) -> None:
+    """The "report every preset" promise has to hold for missing facts too, not just for
+    the errors compile_all already knew about."""
+    body = """
+defaults:
+  capabilities: [logging, tun-inbound]
+presets:
+  a: {}
+  b: {}
+"""
+    document = preset_lib.load(write_presets(tmp_path, body))
+    with pytest.raises(comp.CompileError) as caught:
+        comp.compile_all(surface, document.presets.values(), NODES)
+    message = str(caught.value)
+    assert "a:" in message and "b:" in message
+
+
+def test_a_value_outside_the_field_enum_is_rejected(surface: Surface, tmp_path: Path) -> None:
+    """Spelling a value wrong must fail here rather than on the device.
+
+    `log.level: verbose` is the smallest example; the same check covers outbound types,
+    transports and rule actions, none of which the binary can be asked about when it is
+    absent or `--no-verify` is in use.
+    """
+    body = MINIMAL.replace("device.mtu: 1500", "device.mtu: 1500, log.level: verbose")
+    document = preset_lib.load(write_presets(tmp_path, body))
+    with pytest.raises(comp.CompileError, match="log.level: 'verbose' is not one of"):
+        comp.compile_preset(surface, document.presets["one"], NODES)
+
+
+def test_only_the_collections_sing_box_needs_are_required_to_have_members() -> None:
+    """An empty list is usually legal; reporting every one of them is a false-positive trap.
+
+    `route.rule_set: []` is a configuration without rule sets, and `outbounds{auto}` seeds
+    its member list empty on purpose so the subscription can fill it.
+    """
+    assert comp._check_empty_lists({"route": {"rule_set": [], "rules": []}}) == []
+    assert comp._check_empty_lists({"outbounds": []}) == ["outbounds"]
+    assert comp._check_empty_lists(
+        {"outbounds": [{"tag": "auto", "type": "urltest", "outbounds": []}]}
+    ) == ["outbounds{auto}.outbounds"]

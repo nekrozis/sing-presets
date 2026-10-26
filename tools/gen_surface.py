@@ -179,21 +179,6 @@ class SurfaceBuilder:
             return found
         return [node]
 
-    def variant_types(self, node: object) -> list[str]:
-        """Discriminator values (const / enum of the `type` field) of a polymorphic node."""
-        out: list[str] = []
-        for branch in self.deref(node).get("oneOf", []) or []:
-            discriminator = self.collect_props(branch, ()).get("type")
-            if not isinstance(discriminator, dict):
-                continue
-            if "const" in discriminator:
-                out.append(str(discriminator["const"]))
-            for value in discriminator.get("enum", []) or []:
-                text = str(value)
-                if text and text not in out:
-                    out.append(text)
-        return out
-
     def array_kind(self, items: object, path: str, stack: tuple[str, ...]) -> str:
         if "tag" not in self.collect_props(items, stack):
             return "seq"
@@ -210,8 +195,6 @@ class SurfaceBuilder:
         kind: str,
         *,
         enum: list | None = None,
-        deprecated: bool = False,
-        variants: list[str] | None = None,
         open: bool = False,
     ) -> None:
         existing = self.slots.get(path)
@@ -219,18 +202,20 @@ class SurfaceBuilder:
             entry: dict = {"kind": kind}
             if enum:
                 entry["enum"] = list(enum)
-            if deprecated:
-                entry["deprecated"] = True
-            if variants:
-                entry["variants"] = list(variants)
             if open:
                 entry["open"] = True
             self.slots[path] = entry
             return
 
-        # Only the kind is merged. An enum describes the values of one variant, so taking
-        # the union of two variants' enums would claim values that neither accepts.
+        # A path reached twice was reached through two variants of the same object, so the
+        # two value sets are alternatives the field accepts, not competing claims: the union
+        # is exactly the accepted set. Keeping only the first is what recorded
+        # `route.rule_set{tag}.type` as `["inline", ""]` while the build legitimately writes
+        # `remote`, which made the enum unusable for validation.
         existing["kind"] = merge_kind(path, existing["kind"], kind, self.kind_conflicts)
+        if enum:
+            known = existing.setdefault("enum", [])
+            known.extend(value for value in enum if value not in known)
         if open:
             existing["open"] = True
 
@@ -264,7 +249,14 @@ class SurfaceBuilder:
             arrays = [b for b in branches if shape_of(b) == "array"]
             objects = [b for b in branches if shape_of(b) == "object"]
             scalars = [b for b in branches if b not in arrays and b not in objects]
-            enum = next((self.enum_of(b) for b in scalars if self.enum_of(b)), None)
+            # The scalar branches are alternatives of one path, so the accepted values are
+            # their union - not the first branch's alone, which is how `type` of a
+            # rule-set ended up offering `inline` and nothing else.
+            enum: list = []
+            for branch in scalars:
+                for value in self.enum_of(branch):
+                    if value not in enum:
+                        enum.append(value)
             if arrays:
                 # Listable: one element or a list of them. An object alternative is one
                 # element of the list, not a different shape of the container, so its
@@ -278,16 +270,9 @@ class SurfaceBuilder:
             if objects:
                 # The branches are alternative shapes of the same path, so they do not
                 # consume depth: otherwise a nested Listable one level down would fall off
-                # the end of MAX_DEPTH and vanish.
-                variants = [
-                    name for branch in objects for name in self.variant_types(branch)
-                ]
-                self.record(
-                    path,
-                    "object_or_scalar",
-                    enum=enum,
-                    variants=list(dict.fromkeys(variants)) or None,
-                )
+                # the end of MAX_DEPTH and vanish. Their discriminators are collected by
+                # walking each branch, which merges them into `<path>.type`'s enum.
+                self.record(path, "object_or_scalar", enum=enum)
                 for branch in objects:
                     self.walk(branch, path, depth, stack)
                 return
@@ -314,7 +299,6 @@ class SurfaceBuilder:
             self.record(
                 path,
                 "object",
-                variants=self.variant_types(node) or None,
                 open=node.get("additionalProperties") not in (None, False),
             )
             for prop, child in self.collect_props(node, stack).items():
@@ -347,10 +331,19 @@ class SurfaceBuilder:
 
     @staticmethod
     def enum_of(node: object) -> list:
+        """The values a scalar accepts, whether they are spelled `enum` or `const`.
+
+        Go's schema generator writes the discriminator of an "only this variant" object as
+        `const` rather than a one-element `enum`, so reading only `enum` loses those values:
+        a rule-set declared `const: remote` recorded no accepted value at all.
+        """
         if not isinstance(node, dict):
             return []
         values = node.get("enum")
-        return list(values) if values else []
+        if values:
+            return list(values)
+        const = node.get("const")
+        return [const] if const is not None else []
 
     def build(self) -> None:
         for prop, child in (self.schema.get("properties") or {}).items():

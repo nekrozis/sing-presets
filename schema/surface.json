@@ -85,12 +85,7 @@
       "kind": "map_tag"
     },
     "certificate_providers{tag}": {
-      "kind": "object",
-      "variants": [
-        "acme",
-        "cloudflare-origin-ca",
-        "tailscale"
-      ]
+      "kind": "object"
     },
     "certificate_providers{tag}.account_key": {
       "kind": "scalar"
@@ -141,7 +136,12 @@
       "kind": "scalar"
     },
     "certificate_providers{tag}.dns01_challenge.provider": {
-      "kind": "scalar"
+      "kind": "scalar",
+      "enum": [
+        "alidns",
+        "cloudflare",
+        "acmedns"
+      ]
     },
     "certificate_providers{tag}.dns01_challenge.region_id": {
       "kind": "scalar"
@@ -603,7 +603,12 @@
       "kind": "scalar"
     },
     "certificate_providers{tag}.type": {
-      "kind": "scalar"
+      "kind": "scalar",
+      "enum": [
+        "acme",
+        "cloudflare-origin-ca",
+        "tailscale"
+      ]
     },
     "dns": {
       "kind": "object"
@@ -640,14 +645,18 @@
       "kind": "seq_tagged"
     },
     "dns.rules{tag}": {
-      "kind": "object",
-      "variants": [
-        "default",
-        "logical"
-      ]
+      "kind": "object"
     },
     "dns.rules{tag}.action": {
-      "kind": "scalar"
+      "kind": "scalar",
+      "enum": [
+        "route",
+        "evaluate",
+        "respond",
+        "route-options",
+        "reject",
+        "predefined"
+      ]
     },
     "dns.rules{tag}.answer": {
       "kind": "scalar_list"
@@ -1088,11 +1097,7 @@
       "kind": "seq"
     },
     "dns.rules{tag}.rules[]": {
-      "kind": "object",
-      "variants": [
-        "default",
-        "logical"
-      ]
+      "kind": "object"
     },
     "dns.rules{tag}.rules[].auth_user": {
       "kind": "scalar_list"
@@ -1293,7 +1298,8 @@
       "kind": "scalar",
       "enum": [
         "default",
-        ""
+        "",
+        "logical"
       ]
     },
     "dns.rules{tag}.rules[].user": {
@@ -1358,7 +1364,8 @@
       "kind": "scalar",
       "enum": [
         "default",
-        ""
+        "",
+        "logical"
       ]
     },
     "dns.rules{tag}.user": {
@@ -1389,24 +1396,7 @@
       "kind": "map_tag"
     },
     "dns.servers{tag}": {
-      "kind": "object",
-      "variants": [
-        "dhcp",
-        "fakeip",
-        "h3",
-        "hosts",
-        "https",
-        "local",
-        "mdns",
-        "openconnect",
-        "openvpn",
-        "quic",
-        "resolved",
-        "tailscale",
-        "tcp",
-        "tls",
-        "udp"
-      ]
+      "kind": "object"
     },
     "dns.servers{tag}.accept_default_resolvers": {
       "kind": "scalar"
@@ -1786,7 +1776,24 @@
       ]
     },
     "dns.servers{tag}.type": {
-      "kind": "scalar"
+      "kind": "scalar",
+      "enum": [
+        "dhcp",
+        "fakeip",
+        "h3",
+        "hosts",
+        "https",
+        "local",
+        "mdns",
+        "openconnect",
+        "openvpn",
+        "quic",
+        "resolved",
+        "tailscale",
+        "tcp",
+        "tls",
+        "udp"
+      ]
     },
     "dns.servers{tag}.udp_fragment": {
       "kind": "scalar"
@@ -1809,14 +1816,7 @@
       "kind": "map_tag"
     },
     "endpoints{tag}": {
-      "kind": "object",
-      "variants": [
-        "openconnect",
-        "openvpn-client",
-        "openvpn-server",
-        "tailscale",
-        "wireguard"
-      ]
+      "kind": "object"
     },
     "endpoints{tag}.accept_routes": {
       "kind": "scalar"
@@ -2807,7 +2807,14 @@
       "kind": "scalar"
     },
     "endpoints{tag}.type": {
-      "kind": "scalar"
+      "kind": "scalar",
+      "enum": [
+        "openconnect",
+        "openvpn-client",
+        "openvpn-server",
+        "tailscale",
+        "wireguard"
+      ]
     },
     "endpoints{tag}.udp_filtering": {
       "kind": "scalar",
@@ -3359,28 +3366,7 @@
       "kind": "map_tag"
     },
     "inbounds{tag}": {
-      "kind": "object",
-      "variants": [
-        "anytls",
-        "cloudflared",
-        "direct",
-        "http",
-        "hysteria",
-        "hysteria2",
-        "mixed",
-        "naive",
-        "redirect",
-        "shadowsocks",
-        "shadowtls",
-        "snell",
-        "socks",
-        "tproxy",
-        "trojan",
-        "tuic",
-        "tun",
-        "vless",
-        "vmess"
-      ]
+      "kind": "object"
     },
     "inbounds{tag}.address": {
       "kind": "scalar_list"
@@ -3940,12 +3926,7 @@
       "kind": "scalar"
     },
     "inbounds{tag}.masquerade": {
-      "kind": "object_or_scalar",
-      "variants": [
-        "file",
-        "proxy",
-        "string"
-      ]
+      "kind": "object_or_scalar"
     },
     "inbounds{tag}.masquerade.content": {
       "kind": "scalar"
@@ -3964,7 +3945,12 @@
       "kind": "scalar"
     },
     "inbounds{tag}.masquerade.type": {
-      "kind": "scalar"
+      "kind": "scalar",
+      "enum": [
+        "file",
+        "proxy",
+        "string"
+      ]
     },
     "inbounds{tag}.masquerade.url": {
       "kind": "scalar"
@@ -4037,11 +4023,7 @@
       ]
     },
     "inbounds{tag}.obfs": {
-      "kind": "object_or_scalar",
-      "variants": [
-        "salamander",
-        "gecko"
-      ]
+      "kind": "object_or_scalar"
     },
     "inbounds{tag}.obfs.max_packet_size": {
       "kind": "scalar"
@@ -4053,7 +4035,11 @@
       "kind": "scalar"
     },
     "inbounds{tag}.obfs.type": {
-      "kind": "scalar"
+      "kind": "scalar",
+      "enum": [
+        "salamander",
+        "gecko"
+      ]
     },
     "inbounds{tag}.obfs_mode": {
       "kind": "scalar",
@@ -4585,11 +4571,6 @@
     },
     "inbounds{tag}.tls.certificate_provider": {
       "kind": "object_or_scalar",
-      "variants": [
-        "acme",
-        "cloudflare-origin-ca",
-        "tailscale"
-      ],
       "reference": "certificate_provider"
     },
     "inbounds{tag}.tls.certificate_provider.account_key": {
@@ -4641,7 +4622,12 @@
       "kind": "scalar"
     },
     "inbounds{tag}.tls.certificate_provider.dns01_challenge.provider": {
-      "kind": "scalar"
+      "kind": "scalar",
+      "enum": [
+        "alidns",
+        "cloudflare",
+        "acmedns"
+      ]
     },
     "inbounds{tag}.tls.certificate_provider.dns01_challenge.region_id": {
       "kind": "scalar"
@@ -4866,7 +4852,12 @@
       ]
     },
     "inbounds{tag}.tls.certificate_provider.type": {
-      "kind": "scalar"
+      "kind": "scalar",
+      "enum": [
+        "acme",
+        "cloudflare-origin-ca",
+        "tailscale"
+      ]
     },
     "inbounds{tag}.tls.cipher_suites": {
       "kind": "scalar_list"
@@ -5103,14 +5094,7 @@
       "kind": "scalar"
     },
     "inbounds{tag}.transport": {
-      "kind": "object",
-      "variants": [
-        "http",
-        "ws",
-        "quic",
-        "grpc",
-        "httpupgrade"
-      ]
+      "kind": "object"
     },
     "inbounds{tag}.transport.early_data_header_name": {
       "kind": "scalar"
@@ -5147,7 +5131,14 @@
       "kind": "scalar"
     },
     "inbounds{tag}.transport.type": {
-      "kind": "scalar"
+      "kind": "scalar",
+      "enum": [
+        "http",
+        "ws",
+        "quic",
+        "grpc",
+        "httpupgrade"
+      ]
     },
     "inbounds{tag}.tunnel_dialer": {
       "kind": "object"
@@ -5284,7 +5275,28 @@
       "kind": "scalar"
     },
     "inbounds{tag}.type": {
-      "kind": "scalar"
+      "kind": "scalar",
+      "enum": [
+        "anytls",
+        "cloudflared",
+        "direct",
+        "http",
+        "hysteria",
+        "hysteria2",
+        "mixed",
+        "naive",
+        "redirect",
+        "shadowsocks",
+        "shadowtls",
+        "snell",
+        "socks",
+        "tproxy",
+        "trojan",
+        "tuic",
+        "tun",
+        "vless",
+        "vmess"
+      ]
     },
     "inbounds{tag}.udp_filtering": {
       "kind": "scalar",
@@ -5360,7 +5372,9 @@
       "enum": [
         1,
         2,
-        3
+        3,
+        5,
+        6
       ]
     },
     "inbounds{tag}.wildcard_sni": {
@@ -5404,11 +5418,7 @@
       "kind": "map_tag"
     },
     "network_namespaces{tag}": {
-      "kind": "object",
-      "variants": [
-        "default",
-        "unshare"
-      ]
+      "kind": "object"
     },
     "network_namespaces{tag}.path": {
       "kind": "scalar"
@@ -5423,7 +5433,8 @@
       "kind": "scalar",
       "enum": [
         "default",
-        ""
+        "",
+        "unshare"
       ]
     },
     "ntp": {
@@ -5579,29 +5590,7 @@
       "kind": "map_tag"
     },
     "outbounds{tag}": {
-      "kind": "object",
-      "variants": [
-        "anytls",
-        "block",
-        "bridge",
-        "direct",
-        "http",
-        "hysteria",
-        "hysteria2",
-        "naive",
-        "selector",
-        "shadowsocks",
-        "shadowtls",
-        "snell",
-        "socks",
-        "ssh",
-        "tor",
-        "trojan",
-        "tuic",
-        "urltest",
-        "vless",
-        "vmess"
-      ]
+      "kind": "object"
     },
     "outbounds{tag}.alter_id": {
       "kind": "scalar"
@@ -5960,11 +5949,7 @@
       ]
     },
     "outbounds{tag}.obfs": {
-      "kind": "object_or_scalar",
-      "variants": [
-        "salamander",
-        "gecko"
-      ]
+      "kind": "object_or_scalar"
     },
     "outbounds{tag}.obfs.max_packet_size": {
       "kind": "scalar"
@@ -5976,7 +5961,11 @@
       "kind": "scalar"
     },
     "outbounds{tag}.obfs.type": {
-      "kind": "scalar"
+      "kind": "scalar",
+      "enum": [
+        "salamander",
+        "gecko"
+      ]
     },
     "outbounds{tag}.obfs_host": {
       "kind": "scalar"
@@ -6636,14 +6625,7 @@
       "open": true
     },
     "outbounds{tag}.transport": {
-      "kind": "object",
-      "variants": [
-        "http",
-        "ws",
-        "quic",
-        "grpc",
-        "httpupgrade"
-      ]
+      "kind": "object"
     },
     "outbounds{tag}.transport.early_data_header_name": {
       "kind": "scalar"
@@ -6680,10 +6662,39 @@
       "kind": "scalar"
     },
     "outbounds{tag}.transport.type": {
-      "kind": "scalar"
+      "kind": "scalar",
+      "enum": [
+        "http",
+        "ws",
+        "quic",
+        "grpc",
+        "httpupgrade"
+      ]
     },
     "outbounds{tag}.type": {
-      "kind": "scalar"
+      "kind": "scalar",
+      "enum": [
+        "anytls",
+        "block",
+        "bridge",
+        "direct",
+        "http",
+        "hysteria",
+        "hysteria2",
+        "naive",
+        "selector",
+        "shadowsocks",
+        "shadowtls",
+        "snell",
+        "socks",
+        "ssh",
+        "tor",
+        "trojan",
+        "tuic",
+        "urltest",
+        "vless",
+        "vmess"
+      ]
     },
     "outbounds{tag}.udp_fragment": {
       "kind": "scalar"
@@ -6737,7 +6748,12 @@
       "enum": [
         1,
         2,
-        3
+        3,
+        4,
+        6,
+        "4",
+        "4a",
+        "5"
       ]
     },
     "outbounds{tag}.zero_rtt_handshake": {
@@ -6862,12 +6878,7 @@
       "kind": "map_tag"
     },
     "route.rule_set{tag}": {
-      "kind": "object",
-      "variants": [
-        "inline",
-        "local",
-        "remote"
-      ]
+      "kind": "object"
     },
     "route.rule_set{tag}.format": {
       "kind": "scalar",
@@ -7183,11 +7194,7 @@
       "kind": "seq"
     },
     "route.rule_set{tag}.rules[]": {
-      "kind": "object",
-      "variants": [
-        "default",
-        "logical"
-      ]
+      "kind": "object"
     },
     "route.rule_set{tag}.rules[].default_interface_address": {
       "kind": "scalar_list"
@@ -7284,7 +7291,8 @@
       "kind": "scalar",
       "enum": [
         "default",
-        ""
+        "",
+        "logical"
       ]
     },
     "route.rule_set{tag}.rules[].wifi_bssid": {
@@ -7303,7 +7311,9 @@
       "kind": "scalar",
       "enum": [
         "inline",
-        ""
+        "",
+        "local",
+        "remote"
       ]
     },
     "route.rule_set{tag}.update_interval": {
@@ -7316,14 +7326,19 @@
       "kind": "seq"
     },
     "route.rules[]": {
-      "kind": "object",
-      "variants": [
-        "default",
-        "logical"
-      ]
+      "kind": "object"
     },
     "route.rules[].action": {
-      "kind": "scalar"
+      "kind": "scalar",
+      "enum": [
+        "route",
+        "route-options",
+        "bypass",
+        "reject",
+        "hijack-dns",
+        "sniff",
+        "resolve"
+      ]
     },
     "route.rules[].auth_user": {
       "kind": "scalar_list"
@@ -7588,11 +7603,7 @@
       "kind": "seq"
     },
     "route.rules[].rules[]": {
-      "kind": "object",
-      "variants": [
-        "default",
-        "logical"
-      ]
+      "kind": "object"
     },
     "route.rules[].rules[].auth_user": {
       "kind": "scalar_list"
@@ -7747,7 +7758,8 @@
       "kind": "scalar",
       "enum": [
         "default",
-        ""
+        "",
+        "logical"
       ]
     },
     "route.rules[].rules[].user": {
@@ -7869,7 +7881,8 @@
       "kind": "scalar",
       "enum": [
         "default",
-        ""
+        "",
+        "logical"
       ]
     },
     "route.rules[].udp_connect": {
@@ -7909,19 +7922,7 @@
       "kind": "seq_tagged"
     },
     "services{tag}": {
-      "kind": "object",
-      "variants": [
-        "api",
-        "ccm",
-        "derp",
-        "hysteria-realm",
-        "ocm",
-        "oom-killer",
-        "resolved",
-        "ssm-api",
-        "usbip-client",
-        "usbip-server"
-      ]
+      "kind": "object"
     },
     "services{tag}.access_control_allow_origin": {
       "kind": "scalar_list"
@@ -8689,7 +8690,8 @@
       "kind": "scalar",
       "enum": [
         "default",
-        ""
+        "",
+        "dynamic"
       ]
     },
     "services{tag}.reuse_addr": {
@@ -8802,11 +8804,6 @@
     },
     "services{tag}.tls.certificate_provider": {
       "kind": "object_or_scalar",
-      "variants": [
-        "acme",
-        "cloudflare-origin-ca",
-        "tailscale"
-      ],
       "reference": "certificate_provider"
     },
     "services{tag}.tls.certificate_provider.account_key": {
@@ -8858,7 +8855,12 @@
       "kind": "scalar"
     },
     "services{tag}.tls.certificate_provider.dns01_challenge.provider": {
-      "kind": "scalar"
+      "kind": "scalar",
+      "enum": [
+        "alidns",
+        "cloudflare",
+        "acmedns"
+      ]
     },
     "services{tag}.tls.certificate_provider.dns01_challenge.region_id": {
       "kind": "scalar"
@@ -9083,7 +9085,12 @@
       ]
     },
     "services{tag}.tls.certificate_provider.type": {
-      "kind": "scalar"
+      "kind": "scalar",
+      "enum": [
+        "acme",
+        "cloudflare-origin-ca",
+        "tailscale"
+      ]
     },
     "services{tag}.tls.cipher_suites": {
       "kind": "scalar_list"
@@ -9317,7 +9324,19 @@
       "kind": "scalar"
     },
     "services{tag}.type": {
-      "kind": "scalar"
+      "kind": "scalar",
+      "enum": [
+        "api",
+        "ccm",
+        "derp",
+        "hysteria-realm",
+        "ocm",
+        "oom-killer",
+        "resolved",
+        "ssm-api",
+        "usbip-client",
+        "usbip-server"
+      ]
     },
     "services{tag}.udp_fragment": {
       "kind": "scalar"
