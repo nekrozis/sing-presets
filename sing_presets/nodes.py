@@ -17,6 +17,7 @@ from collections import Counter
 from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Any, Iterable, Sequence
+from urllib.parse import urlsplit
 from urllib.request import Request, urlopen
 
 from .capabilities.outbounds import AUTO, DIRECT, PROXY
@@ -75,6 +76,20 @@ def extract_links(text: str) -> list[str]:
 def is_url(source: str) -> bool:
     """Whether a source is fetched over HTTP rather than read from disk or taken literally."""
     return source.startswith(("http://", "https://"))
+
+
+def redact(source: str) -> str:
+    """The source without whatever identifies the subscription to the panel.
+
+    A subscription URL usually carries its token, and a fetch keeps the source in
+    `nodes.json` and prints failures to stderr - a file and a place that both end up in CI
+    logs and bug reports. The scheme and host say which source it was; the path and query
+    add only the secret.
+    """
+    if not is_url(source):
+        return source
+    parts = urlsplit(source)
+    return f"{parts.scheme}://{parts.netloc}"
 
 
 def read_source(source: str, timeout: float = 10.0) -> str:
@@ -157,7 +172,7 @@ def fetch(sources: Sequence[str], timeout: float = 10.0) -> Feed:
     and reading `ss://...` as a relative path fails with an `Invalid argument` that names
     nothing. Links are recognised instead of read, which makes the mixed case work too.
     """
-    feed = Feed(sources=list(sources))
+    feed = Feed(sources=[redact(source) for source in sources])
     texts: list[str] = []
     for source in sources:
         if LINK.match(source.strip()) and not is_url(source):
@@ -168,7 +183,7 @@ def fetch(sources: Sequence[str], timeout: float = 10.0) -> Feed:
         except OSError as error:
             # URLError, HTTPError and socket timeouts are all OSError, and so is a missing
             # file, so one clause covers a source that could not be read for any reason.
-            feed.failures.append(f"{source}: {error}")
+            feed.failures.append(f"{redact(source)}: {error}")
     return collect(texts, feed)
 
 

@@ -114,6 +114,24 @@ def test_a_source_that_is_neither_readable_nor_a_link_is_reported() -> None:
     assert feed.failures[0].startswith("does-not-exist.txt")
 
 
+def test_a_subscription_token_is_not_written_down_or_printed() -> None:
+    """A subscription URL carries its token, and both the record and the log are published.
+
+    `nodes.json` is committed nowhere, but it is an artefact of a CI run, and a failure line
+    goes to stderr - a log anyone on the project can read.
+    """
+    source = "https://panel.example.net/api/v1/client/subscribe?token=s3cret"
+    assert node_lib.redact(source) == "https://panel.example.net"
+
+    # Port 1 refuses at once, so this costs no network round trip and no waiting.
+    unreachable = "http://127.0.0.1:1/api/v1/client/subscribe?token=s3cret"
+    feed = node_lib.fetch([unreachable], timeout=1.0)
+    assert feed.sources == ["http://127.0.0.1:1"]
+    assert feed.failures, "an unreachable source should be reported"
+    assert "s3cret" not in " ".join(feed.failures)
+    assert "s3cret" not in json.dumps(feed.payload())
+
+
 def test_the_payload_is_what_the_build_reads(tmp_path: Path) -> None:
     """`build --nodes` reads `{"nodes": [...]}`, each entry an outbound with a tag."""
     feed = node_lib.collect([link("Tokyo")])
