@@ -167,3 +167,56 @@ def test_a_document_without_presets_is_rejected(tmp_path: Path) -> None:
     path.write_text("defaults: {}\n", encoding="utf-8")
     with pytest.raises(preset_lib.PresetError, match="defines no presets"):
         preset_lib.load(path)
+
+
+def test_a_capability_listed_twice_is_rejected(tmp_path: Path) -> None:
+    """It contributes its fields twice, so duplicate rules appear with no error anywhere."""
+    with pytest.raises(preset_lib.PresetError, match="lists route-baseline more than once"):
+        load(
+            tmp_path,
+            """
+  one:
+    capabilities: [logging, route-baseline, route-baseline]
+""",
+        )
+
+
+def test_an_unknown_defaults_key_is_rejected(tmp_path: Path) -> None:
+    """`capabilites:` would otherwise be an empty defaults section, not an error."""
+    path = tmp_path / "presets.yaml"
+    path.write_text(
+        """
+defaults:
+  capabilites: [logging]
+presets:
+  one: {}
+""",
+        encoding="utf-8",
+    )
+    with pytest.raises(preset_lib.PresetError, match="defaults: unknown keys"):
+        preset_lib.load(path)
+
+
+def test_a_document_version_this_loader_cannot_read_is_rejected(tmp_path: Path) -> None:
+    path = tmp_path / "presets.yaml"
+    path.write_text(
+        """
+version: 99
+presets:
+  one: {}
+""",
+        encoding="utf-8",
+    )
+    with pytest.raises(preset_lib.PresetError, match="unsupported document version"):
+        preset_lib.load(path)
+
+
+def test_the_loaded_defaults_keep_their_facts(tmp_path: Path) -> None:
+    """The document object reports what defaults were applied, facts included."""
+    document = load(
+        tmp_path,
+        """
+  one: {}
+""",
+    )
+    assert document.defaults["facts"] == {"log.level": "info", "device.mtu": 1500}

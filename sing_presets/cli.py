@@ -26,17 +26,18 @@ DEFAULT_PRESETS = REPO_ROOT / "presets.yaml"
 DEFAULT_OUT = REPO_ROOT / "build"
 DEFAULT_NODES = REPO_ROOT / "nodes.json"
 
-#: Places to look for the binary that validates output. `sing-box` from PATH is the
-#: normal case in CI; the explicit path keeps a local Windows setup working.
-BINARY_CANDIDATES = (
-    os.environ.get("SING_BOX"),
-    shutil.which("sing-box"),
-    r"C:\Users\Lyra\scoop\shims\sing-box.exe",
-)
+#: Environment variable holding an explicit binary path, for a setup where the binary is
+#: not on PATH. Read when the lookup happens rather than at import, so setting it from a
+#: wrapper or a test after the module is loaded still has an effect.
+SING_BOX_ENV = "SING_BOX"
 
 
 def find_sing_box() -> str | None:
-    for candidate in BINARY_CANDIDATES:
+    """The sing-box binary to verify output with, or None when there is none.
+
+    `sing-box` from PATH is the normal case, in CI and on a machine that has it installed.
+    """
+    for candidate in (os.environ.get(SING_BOX_ENV), shutil.which("sing-box")):
         if candidate and Path(candidate).exists():
             return candidate
     return None
@@ -228,7 +229,13 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    return args.handler(args)
+    try:
+        return args.handler(args)
+    except preset_lib.PresetError as error:
+        # The document is the file a user edits, so a mistake in it is expected input, not
+        # a crash: a traceback ending in "PresetError" tells them nothing they can act on.
+        print(f"{args.presets}: {error}", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

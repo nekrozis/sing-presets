@@ -40,7 +40,11 @@ PRESET_KEYS = frozenset(
         "capabilities_remove",
     }
 )
+DEFAULTS_KEYS = frozenset({"facts", "capabilities"})
 TOP_KEYS = frozenset({"version", "defaults", "presets"})
+#: The only document version this loader understands. Accepting any number would let a
+#: document written for a future shape load under today's rules and be read wrongly.
+SUPPORTED_VERSION = 1
 
 
 class PresetError(Exception):
@@ -85,6 +89,12 @@ def _validate_facts(raw: Mapping[str, Any], where: str) -> dict[str, Any]:
 def _capability_list(raw: Any, where: str) -> list[str]:
     if not isinstance(raw, list) or not all(isinstance(item, str) for item in raw):
         raise PresetError(f"{where} must be a list of capability ids")
+    # A repeated id contributes its fields twice, which shows up as duplicated rules in the
+    # finished configuration rather than as an error anywhere downstream. It is almost
+    # always a copy-paste while merging two presets.
+    repeated = sorted({item for item in raw if raw.count(item) > 1})
+    if repeated:
+        raise PresetError(f"{where} lists {', '.join(repeated)} more than once")
     return list(raw)
 
 
@@ -105,8 +115,19 @@ def load(path: Path | str) -> PresetFile:
     extra = sorted(set(document) - TOP_KEYS)
     if extra:
         raise PresetError(f"unknown top-level keys: {extra}")
+    version = document.get("version")
+    if version is not None and version != SUPPORTED_VERSION:
+        raise PresetError(
+            f"unsupported document version {version!r}; this loader reads version "
+            f"{SUPPORTED_VERSION}"
+        )
 
     defaults = _require_mapping(document.get("defaults"), "defaults")
+    extra = sorted(set(defaults) - DEFAULTS_KEYS)
+    if extra:
+        # Without this a misspelled `capabilites:` is an empty defaults section rather than
+        # an error, and the build fails later for a reason that names nothing.
+        raise PresetError(f"defaults: unknown keys {extra}")
     default_facts = _validate_facts(
         _require_mapping(defaults.get("facts"), "defaults.facts"), "defaults.facts"
     )
@@ -192,4 +213,7 @@ def load(path: Path | str) -> PresetFile:
     for name in raw_presets:
         resolve(name)
 
-    return PresetFile(presets=presets, defaults={"capabilities": default_capabilities})
+    return PresetFile(
+        presets=presets,
+        defaults={"facts": default_facts, "capabilities": default_capabilities},
+    )
