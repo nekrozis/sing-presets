@@ -98,20 +98,27 @@ Create a module in `sing_presets/capabilities/`, subclass `Capability`, and it r
 itself on import — there is no table to update:
 
 ```python
-class BittorrentDirect(Capability):
-    id = "bittorrent-direct"
-    owns = ("route.rules",)
+class LanDirect(Capability):
+    """Settle `.lan` names locally, so the router answers them, not the tunnel."""
+
+    id = "lan-direct"
 
     def contribute(self, facts: Facts) -> Iterable[Contribution]:
         yield self.entry(
             "route.rules",
-            {"outbound": "direct", "protocol": "bittorrent"},
-            Position.at(RouteRank.BITTORRENT_DIRECT),
+            {"outbound": "direct", "domain_suffix": [".lan"]},
+            Position.at(RouteRank.PRIVATE_DIRECT),
         )
 ```
 
 Then list its id in a preset. Ranks for the shared ordered lists live in
 `sing_presets/capabilities/ordering.py`, so rule order stays visible in one place.
+
+`owns` is deliberately absent here, and that is the rule rather than an omission: it names
+addresses a capability claims exclusively — a tagged member such as `outbounds{proxy}`, or a
+scalar path such as `log.level`. An entry into a shared ordered list claims nothing; where it
+lands is decided by the rank, and two capabilities writing to `route.rules` is the normal
+case.
 
 A build fails loudly if a capability writes a path outside the field surface, writes into
 someone else's member without declaring `depends_on`, leaves a reference dangling, or
@@ -151,7 +158,9 @@ outbound bodies; `build --nodes nodes.json` consumes them.
 - A source that cannot be read is reported and skipped. Pass `--strict` to fail instead,
   which is what CI should do: otherwise a dead subscription quietly halves the node list.
 
-`nodes.json` contains credentials. It is ignored by git, and it should stay that way.
+`nodes.json` contains credentials. It is ignored by git, and it should stay that way. The
+`sources` it records are reduced to scheme and host: a subscription URL carries its token, and
+the file and the failure lines both end up in a CI log.
 
 Supported link schemes live in `sing_presets/protocols/`, one module per scheme. Adding one
 is adding a file: it registers itself, and nothing else has to be told about it.
@@ -169,6 +178,7 @@ The build validates itself, in increasing cost:
 |---|---|---|
 | no conflicting contributions | `compile.py` | two capabilities claiming the same scalar |
 | fields exist in the surface | `compile.py` | misspelled or invented field names |
+| values are ones the schema lists | `compile.py` | `log.level: verbose`, `type: shadowsock` |
 | references resolve | `compile.py` | a selector pointing at a node that is not there |
 | no empty collections | `compile.py` | an empty subscription, or a missing capability |
 | `sing-box check` | `cli.py` | anything the binary disagrees with |

@@ -1,7 +1,7 @@
 [project]
 name = "sing-presets"
 version = "0.1.0"
-description = "Sing-box config templates and generators."
+description = "Compile presets into verified sing-box configurations."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
