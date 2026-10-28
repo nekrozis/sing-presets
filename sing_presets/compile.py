@@ -18,6 +18,7 @@ from . import capability as cap
 from .facts import Facts, FactsError
 from .ir import Builder, Contribution, IRError, Report, compile_config
 from .presets import Preset
+from .rules import merge_adjacent_rules
 from .surface import Surface, SurfaceError
 
 #: Capability that turns the subscription's nodes into outbounds. Added automatically
@@ -179,6 +180,9 @@ def _compile_preset(
         raise CompileError("; ".join(trespass))
 
     config, report = compile_config(surface, contributions)
+    # Folded here rather than in the builder, so the checks below see the rules as they
+    # ship and the audit keeps comparing contributions against their own shape.
+    config = merge_adjacent_rules(surface, config)
     if report.conflicts:
         raise CompileError(
             "conflicting contributions: " + "; ".join(str(item) for item in report.conflicts)

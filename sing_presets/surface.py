@@ -174,6 +174,17 @@ class Surface:
         slot = self.get(path)
         return slot.kind if slot else None
 
+    def fields_below(self, path: str) -> list[str]:
+        """The field names directly below a path, without their sub-fields or elements."""
+        prefix = normalize(path).rstrip(".") + "."
+        names: set[str] = set()
+        for key in self._slots:
+            if key.startswith(prefix):
+                head = key[len(prefix) :].split(".")[0].split("[")[0]
+                if head:
+                    names.add(head)
+        return sorted(names)
+
     def top_level(self) -> list[str]:
         return list(self.source.get("top_level") or [])
 
@@ -203,6 +214,16 @@ class Surface:
                         continue
                     walk(value, child, depth + 1)
             elif isinstance(node, list):
+                if slot is not None and slot.kind == "scalar_list":
+                    # The field is the list, so its elements are values and there is no
+                    # field below them to look up. The surface does record `<path>[]`, but
+                    # only as deep as the generator walks, and a rule nested inside a rule
+                    # list is already past that: deriving the element here keeps a
+                    # legitimate list from being reported as an invented path.
+                    for item in node:
+                        if isinstance(item, (dict, list)):
+                            walk(item, f"{path}[]", depth + 1)
+                    return
                 # Element notation follows the collection's slot kind, matching what
                 # tools/gen_surface.py emits: tagged collections use {tag}, others use [].
                 suffix = "{tag}" if slot is not None and slot.kind in TAGGED_KINDS else "[]"
@@ -296,6 +317,22 @@ class Surface:
 
         dangling: list[str] = []
 
+        def check(path: str, slot: Slot | None, value: object) -> None:
+            if slot is None or slot.reference is None or not isinstance(value, str):
+                return
+            if value == "":
+                return
+            collections = REFERENCE_COLLECTIONS.get(slot.reference)
+            if collections is None:
+                dangling.append(f"{path}: reference kind {slot.reference!r} is not mapped")
+                return
+            known: set[str] = set()
+            for collection in collections:
+                known |= tags_at(collection)
+            if value not in known:
+                missing = " or ".join(collections)
+                dangling.append(f"{path}: {value!r} is not defined in {missing}")
+
         def walk(node: object, path: str, depth: int) -> None:
             if depth > 32:
                 return
@@ -305,23 +342,17 @@ class Surface:
                     walk(value, f"{path}.{key}" if path else key, depth + 1)
                 return
             if isinstance(node, list):
+                if slot is not None and slot.kind == "scalar_list":
+                    # A list-valued reference such as `rule_set`: each element names a tag,
+                    # and the field is what carries the reference kind.
+                    for item in node:
+                        check(path, slot, item)
+                    return
                 suffix = "{tag}" if slot is not None and slot.kind in TAGGED_KINDS else "[]"
                 for item in node:
                     walk(item, f"{path}{suffix}", depth + 1)
                 return
-            if slot is None or slot.reference is None or not isinstance(node, str):
-                return
-            collections = REFERENCE_COLLECTIONS.get(slot.reference)
-            if collections is None:
-                dangling.append(f"{path}: reference kind {slot.reference!r} is not mapped")
-                return
-            known: set[str] = set()
-            for collection in collections:
-                known |= tags_at(collection)
-            if node not in known and node != "":
-                dangling.append(
-                    f"{path}: {node!r} is not defined in {' or '.join(collections)}"
-                )
+            check(path, slot, node)
 
         walk(config, "", 0)
         return sorted(set(dangling))
