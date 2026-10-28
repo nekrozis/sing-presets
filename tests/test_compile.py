@@ -23,6 +23,41 @@ NODES = [
      "server_port": 8388, "method": "aes-128-gcm", "password": "x"},
 ]
 
+#: Two nodes of the same protocol, one of which has a host header to replace and one of
+#: which has nothing to replace: a grpc transport has no host concept at all.
+WS_NODES = [
+    {
+        "tag": "ws-a",
+        "type": "vmess",
+        "server": "198.51.100.10",
+        "server_port": 443,
+        "uuid": "b831381d-6324-4d53-ad4f-8cda48b30811",
+        "security": "auto",
+        "transport": {"type": "ws", "path": "/ws", "headers": {"Host": "origin.example"}},
+        "tls": {"enabled": True, "server_name": "origin.example"},
+    },
+    {
+        "tag": "grpc-b",
+        "type": "vmess",
+        "server": "198.51.100.11",
+        "server_port": 443,
+        "uuid": "b831381d-6324-4d53-ad4f-8cda48b30812",
+        "security": "auto",
+        "transport": {"type": "grpc", "service_name": "tunnel"},
+    },
+]
+
+DISGUISED = """
+defaults:
+  facts: {device.mtu: 1500, transport.host: cdn.example}
+  capabilities: [logging, tun-inbound, dns-split, outbound-groups, route-baseline, china-split]
+presets:
+  one:
+    facts:
+      device.tun_address: ["172.18.0.1/30"]
+    capabilities_add: [transport-host]
+"""
+
 
 @pytest.fixture(scope="module")
 def surface() -> Surface:
@@ -202,3 +237,43 @@ def test_only_the_collections_sing_box_needs_are_required_to_have_members() -> N
     assert comp._check_empty_lists(
         {"outbounds": [{"tag": "auto", "type": "urltest", "outbounds": []}]}
     ) == ["outbounds{auto}.outbounds"]
+
+
+# ------------------------------------------------------------------ transport host
+
+
+def test_the_transport_host_is_replaced_and_nothing_else_is(
+    surface: Surface, tmp_path: Path
+) -> None:
+    document = preset_lib.load(write_presets(tmp_path, DISGUISED))
+    build = comp.compile_preset(surface, document.presets["one"], WS_NODES)
+    nodes = {item["tag"]: item for item in build.config["outbounds"]}
+    assert nodes["ws-a"]["transport"]["headers"]["Host"] == "cdn.example"
+    # The path and the server name are what the subscription said: only the header moved.
+    assert nodes["ws-a"]["transport"]["path"] == "/ws"
+    assert nodes["ws-a"]["tls"]["server_name"] == "origin.example"
+    # A transport with no host header is left as it is, rather than given one it rejects.
+    assert nodes["grpc-b"]["transport"] == {"type": "grpc", "service_name": "tunnel"}
+
+
+def test_a_disguised_build_survives_its_own_audit(surface: Surface, tmp_path: Path) -> None:
+    """Replacing a header is an override, so the audit must not report it as residue."""
+    document = preset_lib.load(write_presets(tmp_path, DISGUISED))
+    build = comp.compile_preset(surface, document.presets["one"], WS_NODES)
+    assert surface.check_config(build.config) == []
+    assert comp.audit(surface, build) == []
+
+
+def test_a_preset_that_disguises_nothing_is_rejected(surface: Surface, tmp_path: Path) -> None:
+    """A capability that cannot take effect says so, instead of building the same file."""
+    document = preset_lib.load(write_presets(tmp_path, DISGUISED))
+    with pytest.raises(comp.CompileError, match="no node carries its host in a header"):
+        comp.compile_preset(surface, document.presets["one"], NODES)
+
+
+def test_a_host_that_cannot_be_a_header_is_rejected(surface: Surface, tmp_path: Path) -> None:
+    document = preset_lib.load(
+        write_presets(tmp_path, DISGUISED.replace("cdn.example", "'cdn.example/a path'"))
+    )
+    with pytest.raises(comp.CompileError, match="is not a host name"):
+        comp.compile_preset(surface, document.presets["one"], WS_NODES)

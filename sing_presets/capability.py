@@ -96,8 +96,10 @@ class Capability:
     def entry(self, path: str, value: Any, position: Position | None = None) -> Entry:
         return Entry(path=path, value=value, position=position or Position.last())
 
-    def setting(self, path: str, value: Any, priority: int = 0) -> Setting:
-        return Setting(path=path, value=value, priority=priority)
+    def setting(
+        self, path: str, value: Any, priority: int = 0, override: bool = False
+    ) -> Setting:
+        return Setting(path=path, value=value, priority=priority, override=override)
 
     def anchor(self, path: str, name: str, rank: int) -> Anchor:
         return Anchor(path=path, name=name, rank=rank)
