@@ -77,6 +77,25 @@ def test_normalize_folds_concrete_tags(surface: Surface) -> None:
     assert surface.kind_of("dns.servers{dns-direct}.tag") == "scalar"
 
 
+def test_a_key_of_an_open_object_is_a_writable_scalar(surface: Surface) -> None:
+    """Header names are data, so the schema cannot list them and writing one still works.
+
+    `transport.headers` is declared open because its keys are HTTP header names. A key of
+    it is therefore a legitimate address, and the only value it can take is a scalar.
+    """
+    slot = surface.require(
+        "outbounds{tag}.transport.headers.Host", {"scalar", "scalar_list"}
+    )
+    assert slot.kind == "scalar"
+
+
+def test_a_key_of_a_closed_object_is_still_unknown(surface: Surface) -> None:
+    """Openness is not inherited: the transport itself has fields the schema names."""
+    assert surface.get("outbounds{tag}.transport.headers.Host") is None
+    with pytest.raises(SurfaceError, match="not part of the field surface"):
+        surface.require("outbounds{tag}.transport.invented", {"scalar", "scalar_list"})
+
+
 # ------------------------------------------------------------------ members
 
 
@@ -108,6 +127,25 @@ def test_nested_bodies_merge_recursively(surface: Surface) -> None:
         "enabled": True,
         "server_name": "example.com",
     }
+
+
+def test_materializing_does_not_write_back_into_a_contribution(surface: Surface) -> None:
+    """A nested body is copied, not shared, so a rebuild starts from what was contributed.
+
+    A setting that lands inside a nested object used to reach through the shallow copy and
+    change the caller's mapping. The audit rebuilds from the same contribution list, so the
+    "before" of its comparison was already the "after" - and an override looked invisible.
+    """
+    body = {"type": "vmess", "transport": {"type": "ws", "headers": {"Host": "origin"}}}
+    builder = Builder(surface)
+    builder.add(Member("outbounds", "n", body, owner="nodes"))
+    builder.add(
+        Setting(
+            "outbounds{n}.transport.headers.Host", "chosen", priority=10, owner="x", override=True
+        )
+    )
+    assert builder.materialize()["outbounds"][0]["transport"]["headers"]["Host"] == "chosen"
+    assert body["transport"]["headers"]["Host"] == "origin"
 
 
 # ------------------------------------------------------------------ ordering
@@ -280,7 +318,54 @@ def test_isolation_detects_shadowing(surface: Surface) -> None:
     assert any("strong" in problem and "leaves appear" in problem for problem in problems)
 
 
-def test_isolation_does_not_flag_a_capability_removing_its_own_rules(surface: Surface) -> None:
+def test_isolation_does_not_flag_an_override(surface: Surface) -> None:
+    """Replacing a member body's field is the intent, not residue.
+
+    Switching the override off brings the original header back, which the check would
+    otherwise read as a value appearing out of nowhere. The `override` flag says that value
+    was underneath all along.
+    """
+    contributions = [
+        Member(
+            "outbounds",
+            "n",
+            {"type": "vmess", "transport": {"type": "ws", "headers": {"Host": "origin"}}},
+            owner="nodes",
+        ),
+        Setting(
+            "outbounds{n}.transport.headers.Host",
+            "chosen",
+            priority=10,
+            owner="disguise",
+            override=True,
+        ),
+    ]
+    builder = Builder(surface)
+    builder.add_all(contributions)
+    assert builder.materialize()["outbounds"][0]["transport"]["headers"]["Host"] == "chosen"
+    # The dependency is declared, as it is in the capability that uses this: without the
+    # node there is no member to address, and the check would report that instead.
+    assert Builder(surface).verify_isolation(contributions, {"disguise": {"nodes"}}) == []
+
+
+def test_an_override_without_the_flag_is_reported_as_shadowing(surface: Surface) -> None:
+    """The flag is not implied by priority: an unmarked setting still has to justify itself."""
+    contributions = [
+        Member(
+            "outbounds",
+            "n",
+            {"type": "vmess", "transport": {"type": "ws", "headers": {"Host": "origin"}}},
+            owner="nodes",
+        ),
+        Setting("outbounds{n}.transport.headers.Host", "chosen", priority=10, owner="other"),
+    ]
+    problems = Builder(surface).verify_isolation(contributions, {"other": {"nodes"}})
+    assert any("other" in problem and "leaves appear" in problem for problem in problems)
+
+
+def test_isolation_does_not_flag_a_capability_removing_its_own_rules(
+    surface: Surface,
+) -> None:
     """Ordered lists have no identity, so a removal must not look like a modification.
 
     Removing one item shifts every later index. Comparing builds by index would report

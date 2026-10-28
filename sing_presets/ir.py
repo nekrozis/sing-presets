@@ -27,6 +27,7 @@ Items in the same band keep insertion order, so results are deterministic.
 
 from __future__ import annotations
 
+import copy
 import json
 from dataclasses import dataclass, field
 from collections import Counter
@@ -116,6 +117,11 @@ class Setting:
     value: Any
     priority: int = 0
     owner: str = ""
+    #: The value is meant to replace one that is already there - a member body's field, or
+    #: another contributor's - rather than to be merged next to it. Placement is the same
+    #: either way, since settings are evaluated last; the flag exists so the audit can tell
+    #: the value underneath from residue (see `Builder.verify_isolation`).
+    override: bool = False
 
 
 @dataclass(frozen=True)
@@ -313,13 +319,18 @@ class Builder:
         if not member.tag:
             raise IRError(f"member of {member.collection} has no tag")
         bucket = self._members.setdefault(member.collection, {})
+        # A deep copy, because the body nests: a later contribution that puts a value
+        # inside a nested object would otherwise write into the caller's mapping as well,
+        # and a rebuild from the same contribution list would start from the previous
+        # build's output instead of from what was contributed.
+        body = copy.deepcopy(dict(member.body))
         existing = bucket.get(member.tag)
         if existing is None:
             bucket[member.tag] = _MergedMember(
-                tag=member.tag, body=dict(member.body), owner=member.owner
+                tag=member.tag, body=body, owner=member.owner
             )
             return
-        self._merge_body(existing, dict(member.body), member.path, member.owner)
+        self._merge_body(existing, body, member.path, member.owner)
 
     def _merge_body(self, target: _MergedMember, incoming: dict, path: str, owner: str) -> None:
         """Merge by tag instead of duplicating the member, which sing-box would reject.
@@ -431,7 +442,9 @@ class Builder:
             if not isinstance(items, list):
                 raise IRError(f"{collection} is already occupied by a non-collection")
             for member in self._members[collection].values():
-                body = dict(member.body)
+                # Copied again, so the config this returns never aliases the builder's own
+                # state: the builder may be asked to materialize more than once.
+                body = copy.deepcopy(member.body)
                 body["tag"] = member.tag
                 items.append(body)
         for path in sorted(self._entries):
@@ -543,13 +556,23 @@ class Builder:
             own = _merge_tokens(
                 tokens_of(item) for item in everything if item.owner == owner
             )
+            # An overridden path is one whose value the owner was asked to replace, so the
+            # value that surfaces when it is switched off is the thing it replaced, not
+            # residue. Shadowing is still reported: there the owner merely happened to win.
+            overridden = {
+                item.path
+                for item in everything
+                if item.owner == owner and isinstance(item, Setting) and item.override
+            }
             appeared: list[str] = []
             for path in sorted(set(reduced) - set(full)):
+                if path in overridden:
+                    continue
                 appeared.append(path)
             rogue: list[str] = []
             for path in sorted(set(full) & set(reduced)):
                 added = reduced[path] - full[path]
-                if added:
+                if added and path not in overridden:
                     appeared.append(f"{path} ({_describe(added)})")
                 removed = full[path] - reduced[path]
                 unexplained = removed - own.get(path, Counter())

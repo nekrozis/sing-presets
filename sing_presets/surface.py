@@ -137,9 +137,30 @@ class Surface:
     def get(self, path: str) -> Slot | None:
         return self._slots.get(normalize(path))
 
+    def slot_for(self, path: str) -> Slot | None:
+        """The slot a path denotes, including a key inside an open object.
+
+        An open object's keys are data rather than fields - an HTTP header name, a server
+        name to fall back for - so neither the schema nor this surface can list them, and
+        `get` answers nothing for them. They are still addresses a capability may write:
+        the key is free-form, the value is a plain scalar, which is the only shape an
+        override of one can take. A key of a closed object stays unknown, because there the
+        schema has said the field does not exist.
+        """
+        slot = self.get(path)
+        if slot is not None:
+            return slot
+        parent, _, key = path.rpartition(".")
+        if not key:
+            return None
+        parent_slot = self.get(parent)
+        if parent_slot is None or not parent_slot.open:
+            return None
+        return Slot(path=path, kind="scalar", open=True)
+
     def require(self, path: str, allowed: Iterable[str]) -> Slot:
         """Fetch a slot and check its kind, so writing outside it fails loudly."""
-        slot = self.get(path)
+        slot = self.slot_for(path)
         if slot is None:
             raise SurfaceError(f"path is not part of the field surface: {path}")
         allowed = frozenset(allowed)
