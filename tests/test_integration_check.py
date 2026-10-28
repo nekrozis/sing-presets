@@ -90,15 +90,87 @@ def test_the_binary_and_the_surface_agree_on_the_version() -> None:
     )
 
 
-def test_the_v6_exception_changes_exactly_one_field() -> None:
-    """The whole point of the design: one fact, one difference, no second template."""
+def local_resolvers(config: dict) -> set[str]:
+    """Resolver tags that answer from this machine rather than through the tunnel."""
+    return {entry["tag"] for entry in config["dns"]["servers"] if "detour" not in entry}
+
+
+def test_the_v6_exception_changes_exactly_one_rule() -> None:
+    """The whole point of the design: one fact, one difference, no second template.
+
+    The exception is an empty answer to an AAAA query rather than a global `dns.strategy`:
+    a name that goes through the tunnel is resolved on the far side, so a global strategy
+    would take IPv6 away from the traffic that can still use it.
+    """
     builds = {item.preset: item for item in all_builds()}
     with_v6 = builds["desktop"].config
     without_v6 = builds["desktop-no-v6"].config
 
     assert "strategy" not in with_v6["dns"]
-    assert without_v6["dns"].pop("strategy") == "ipv4_only"
+    assert "strategy" not in without_v6["dns"]
+
+    added = [
+        rule for rule in without_v6["dns"]["rules"] if rule not in with_v6["dns"]["rules"]
+    ]
+    assert added == [
+        {
+            "action": "predefined",
+            "rcode": "NOERROR",
+            "type": "logical",
+            "mode": "or",
+            "rules": [
+                {"query_type": "AAAA", "clash_mode": "direct"},
+                {"query_type": "AAAA", "rule_set": ["geosite-cn"]},
+            ],
+        }
+    ]
+    without_v6["dns"]["rules"].remove(added[0])
     assert without_v6 == with_v6
+
+
+def test_every_query_answered_locally_is_answered_without_ipv6() -> None:
+    """The guard mirrors the branches of the rule that answers from this machine.
+
+    An answer from a local resolver is an address this machine has to dial itself, so on a
+    network without public IPv6 none of them work. A branch the guard does not cover would
+    still hand one out, so the two lists are the same list of conditions - and the guard
+    comes first, or the rule it guards would match before it.
+    """
+    config = next(item for item in all_builds() if item.preset == "desktop-no-v6").config
+    rules = config["dns"]["rules"]
+    local = local_resolvers(config)
+
+    guarded = next(index for index, rule in enumerate(rules) if rule.get("server") in local)
+    guard = next(rule for rule in rules if rule.get("action") == "predefined")
+    assert rules.index(guard) < guarded
+    assert guard["rules"] == [
+        {**branch, "query_type": "AAAA"} for branch in rules[guarded]["rules"]
+    ]
+
+
+
+def test_the_domestic_branch_is_one_group() -> None:
+    """The name, address and BitTorrent rules all go direct, so they ship as one branch.
+
+    Nothing else could have matched between them - they are neighbours in a first-match
+    list - so folding them changes what the file says, not what it does.
+    """
+    build = next(item for item in all_builds() if item.preset == "desktop")
+    grouped = [
+        rule for rule in build.config["route"]["rules"] if rule.get("type") == "logical"
+    ]
+    assert grouped == [
+        {
+            "outbound": "direct",
+            "type": "logical",
+            "mode": "or",
+            "rules": [
+                {"rule_set": ["geosite-cn"]},
+                {"rule_set": ["geoip-cn"]},
+                {"protocol": "bittorrent"},
+            ],
+        }
+    ]
 
 
 def test_a_different_device_changes_only_device_facts() -> None:
