@@ -148,9 +148,11 @@ outbound bodies; `build --nodes nodes.json` consumes them.
   skipped 1x: no parser for scheme 'trojan'; known: ss, vmess
 ```
 
-- **Duplicates** are links for the same protocol, host and port. Credentials are not part of
-  the key: a subscription that lists one server twice with different passwords still offers
-  one server.
+- **Duplicates** are links that describe the same outbound: the key is the whole body, not
+  just protocol, host and port. A panel can front a list of exits through one host and one
+  port and tell them apart only by the path of their WebSocket transport, and a subscription
+  of that shape loses all but one node under a host-and-port key. Another password on the
+  same server is another account, so it is kept for the same reason.
 - **Skipped links** are counted with the reason. One unusable link never costs the others.
 - **Tags** come from the link's display name. A duplicate name gains a suffix, because
   sing-box refuses a configuration with two outbounds sharing a tag; a name that collides

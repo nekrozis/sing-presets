@@ -21,6 +21,7 @@ from __future__ import annotations
 import base64
 import binascii
 import importlib
+import json
 import pkgutil
 from dataclasses import dataclass
 from typing import Any, Iterable, Mapping
@@ -43,18 +44,21 @@ class Node:
     outbound: Mapping[str, Any]
 
     @property
-    def dedup_key(self) -> tuple[str, str, int]:
-        """What makes two links the same node: protocol, host and port.
+    def dedup_key(self) -> str:
+        """What makes two links the same node: the outbound body, tag aside.
 
-        Credentials are deliberately not part of it. A subscription that lists one server
-        twice with different passwords still offers one server, and keeping both would put
-        two entries in the selector that nobody can tell apart.
+        Protocol, host and port are not enough to tell nodes apart. A panel can front a
+        whole list of exits through one host and one port and distinguish them only by the
+        path of their WebSocket transport; on a live subscription of 41 links there were
+        two hosts, one port and 41 paths, so keying on the triple kept two nodes and
+        dropped 39 that sing-box would happily have used.
+
+        Two links are the same node exactly when sing-box would treat them as the same
+        outbound, so the comparison is the body itself, canonicalised. Credentials are part
+        of it for the same reason: a second password on one server is a second account, not
+        a repeat of the first.
         """
-        return (
-            str(self.outbound.get("type", "")),
-            str(self.outbound.get("server", "")).strip().lower(),
-            int(self.outbound.get("server_port", 0) or 0),
-        )
+        return json.dumps(self.outbound, sort_keys=True, default=str, separators=(",", ":"))
 
     def as_dict(self) -> dict[str, Any]:
         """The node in the nodes.json form: the outbound body with its tag folded in."""

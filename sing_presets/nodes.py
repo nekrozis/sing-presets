@@ -140,7 +140,7 @@ def collect(texts: Iterable[str], feed: Feed | None = None) -> Feed:
     enough that the alternative - last wins - would be arbitrary.
     """
     feed = Feed() if feed is None else feed
-    seen: set[tuple[str, str, int]] = set()
+    seen: set[str] = set()
     collected: list[Node] = []
 
     for text in texts:
