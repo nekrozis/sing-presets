@@ -20,7 +20,9 @@ GEOSITE_UPSTREAM = "https://cdn.jsdelivr.net/gh/SagerNet/sing-geosite@refs/heads
 GEOIP_UPSTREAM = "https://cdn.jsdelivr.net/gh/SagerNet/sing-geoip@refs/heads/rule-set"
 
 ADS_RULE_SET = "geosite-category-ads-all"
-CN_RULE_SETS = ("geosite-cn", "geoip-cn")
+CN_DOMAIN_RULE_SET = "geosite-cn"
+CN_IP_RULE_SET = "geoip-cn"
+CN_RULE_SETS = (CN_DOMAIN_RULE_SET, CN_IP_RULE_SET)
 
 
 def remote_rule_set(tag: str, detour: str = OUTBOUND_DIRECT) -> dict:
@@ -95,19 +97,19 @@ class ChinaSplit(Capability):
 
         yield self.entry(
             "route.rules",
-            {"outbound": OUTBOUND_DIRECT, "rule_set": ["geosite-cn"]},
+            {"outbound": OUTBOUND_DIRECT, "rule_set": [CN_DOMAIN_RULE_SET]},
             Position.at(RouteRank.CN_DIRECT),
         )
         yield self.entry(
             "route.rules",
-            {"outbound": OUTBOUND_DIRECT, "rule_set": ["geoip-cn"]},
+            {"outbound": OUTBOUND_DIRECT, "rule_set": [CN_IP_RULE_SET]},
             Position.at(RouteRank.CN_IP_DIRECT),
         )
         # Domestic names are resolved by the direct resolver even when the routing mode
         # sends everything else through the tunnel.
         yield self.entry(
             "dns.rules",
-            {"server": DNS_DIRECT, "rule_set": ["geosite-cn"]},
+            {"server": DNS_DIRECT, "rule_set": [CN_DOMAIN_RULE_SET]},
             Position.at(DnsRank.CN_DIRECT),
         )
 
@@ -137,6 +139,8 @@ __all__ = [
     "ADS_RULE_SET",
     "BlockAds",
     "ChinaSplit",
+    "CN_DOMAIN_RULE_SET",
+    "CN_IP_RULE_SET",
     "CN_RULE_SETS",
     "OUTBOUND_PROXY",
     "RouteBaseline",

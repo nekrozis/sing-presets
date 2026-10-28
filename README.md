@@ -26,6 +26,11 @@ ls build/
 
 Output is one file per preset, `build/<preset>.json`. Nothing else is written.
 
+Neighbouring rules that share an outcome are written as one rule. The domestic name, the
+domestic address and the BitTorrent rules all mean "direct", so they ship as a single
+`logical` rule with `mode: or` instead of three in a row; no other rule could have matched
+between them, so this changes what the file says rather than what it does.
+
 ## Single file
 
 For a machine that should not grow a virtualenv, build one archive:
@@ -47,9 +52,9 @@ in the working directory, because there is no checkout beside an archive.
 `network.allow_lan`. Facts are data, so the same capability works on every device.
 
 **Capability** — one intent, as code. `dns-split` decides resolvers and the rules that pick
-between them; `ipv4-only` stops AAAA lookups on a network without public IPv6. A
-capability reads facts and emits contributions; it never assembles JSON and never knows
-which preset uses it.
+between them; `ipv4-only` answers AAAA queries with an empty response wherever the answer
+would come from this machine, on a network without public IPv6. A capability reads facts
+and emits contributions; it never assembles JSON and never knows which preset uses it.
 
 A capability must be one intent (a group of fields always decided together), switchable
 independently (disable it and its fields vanish, leaving no residue), and must not write
@@ -105,8 +110,10 @@ adjust it. Unknown keys, unknown capability names, and undotted fact names are r
 a preset document that silently ignores a setting is worse than one that refuses to load.
 
 Build output for the three presets above differs only where the presets differ: the
-no-IPv6 one gains exactly `dns.strategy`, the router changes exactly its TUN addresses and
-its control panel binding.
+no-IPv6 one gains exactly one DNS rule, which answers AAAA queries with an empty response
+where the answer would come from this machine — the direct mode and the domestic names —
+and leaves the queries that resolve through the tunnel alone; the router changes exactly
+its TUN addresses and its control panel binding.
 
 ## Adding a capability
 

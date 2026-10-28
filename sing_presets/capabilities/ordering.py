@@ -18,7 +18,6 @@ class RouteRank:
     SNIFF = 0
     HIJACK_DNS = 10
     PRIVATE_DIRECT = 20
-    IPV4_ONLY_REJECT = 30
     ADS_REJECT = 100
     CLASH_GLOBAL = 200
     CLASH_DIRECT = 210
@@ -32,8 +31,12 @@ class DnsRank:
 
     ADS_REJECT = 100
     CLASH_GLOBAL = 200
-    CLASH_DIRECT = 210
-    CN_DIRECT = 300
+    #: The empty-AAAA answers, ahead of every rule that picks a resolver answering from
+    #: this machine. They are one band because they are one decision; the rules they guard
+    #: all come after, so none of them can be reached first.
+    NO_AAAA = 210
+    CLASH_DIRECT = 300
+    CN_DIRECT = 310
 
 
 __all__ = ["DnsRank", "RouteRank"]

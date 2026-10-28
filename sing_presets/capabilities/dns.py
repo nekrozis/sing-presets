@@ -23,6 +23,12 @@ LOCAL_SERVER = "180.184.1.1"
 DIRECT_SERVER = "dot.pub"
 REMOTE_SERVER = "dns11.quad9.net"
 
+#: Clash modes the resolvers follow. `global` sends every query through the tunnel and
+#: `direct` answers everything from this machine, which is a distinction other modules
+#: reason about - so they name these modes rather than repeating the strings.
+MODE_GLOBAL = "global"
+MODE_DIRECT = "direct"
+
 
 class DnsSplit(Capability):
     id = "dns-split"
@@ -53,11 +59,11 @@ class DnsSplit(Capability):
 
         yield self.entry(
             "dns.rules",
-            {"server": REMOTE, "clash_mode": "global"},
+            {"server": REMOTE, "clash_mode": MODE_GLOBAL},
             Position.at(DnsRank.CLASH_GLOBAL),
         )
         yield self.entry(
             "dns.rules",
-            {"server": DIRECT, "clash_mode": "direct"},
+            {"server": DIRECT, "clash_mode": MODE_DIRECT},
             Position.at(DnsRank.CLASH_DIRECT),
         )

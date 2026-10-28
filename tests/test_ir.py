@@ -282,6 +282,41 @@ def test_check_config_accepts_a_real_config(surface: Surface) -> None:
     assert surface.check_config(config) == []
 
 
+def test_check_config_accepts_a_list_inside_a_nested_rule(surface: Surface) -> None:
+    """A rule inside a rule list is deeper than the generator walks.
+
+    The elements of a scalar list are values, not fields, so there is nothing below the
+    field to look up - but the surface only records `<path>[]` as far down as it goes, and
+    reporting the rest as invented paths would reject a legitimate configuration.
+    """
+    config = {
+        "route": {
+            "rules": [
+                {
+                    "type": "logical",
+                    "mode": "or",
+                    "outbound": "direct",
+                    "rules": [{"rule_set": ["geosite-cn"]}, {"domain": ["a.example"]}],
+                }
+            ]
+        }
+    }
+    assert surface.check_config(config) == []
+
+
+def test_check_references_looks_inside_a_list_of_tags(surface: Surface) -> None:
+    """`rule_set` is a list, so checking the field name alone would let a typo through."""
+    config = {
+        "route": {
+            "rule_set": [{"tag": "geosite-cn"}],
+            "rules": [{"action": "reject", "rule_set": ["geosite-cnn"]}],
+        }
+    }
+    assert surface.check_references(config) == [
+        "route.rules[].rule_set: 'geosite-cnn' is not defined in route.rule_set"
+    ]
+
+
 # ------------------------------------------------------------------ isolation
 
 
