@@ -153,8 +153,9 @@ def test_nodes_parsed_from_links_survive_the_binary(tmp_path: Path) -> None:
     """
     surface = Surface.load()
     document = preset_lib.load(PRESET_FILE)
-    # Each node needs its own port: the deduplication key is protocol, host and port, so
-    # four links to one endpoint would collapse into one node and test nothing.
+    # These differ in transport as well as port, so no two are a repeat of each other: the
+    # deduplication key is the outbound body. The mKCP one is skipped on purpose - no
+    # parser implements that transport yet.
     text = "\n".join(
         [
             "ss://YWVzLTEyOC1nY206ZXhhbXBsZQ@198.51.100.10:8388#Tokyo",

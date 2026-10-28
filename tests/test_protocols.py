@@ -69,6 +69,25 @@ VMESS_KCP = (
 )
 
 
+def _vmess_with_path(path: str) -> str:
+    """A WebSocket link whose only difference from its sibling is the path."""
+    payload = {
+        "v": "2",
+        "ps": "Hong Kong",
+        "add": "198.51.100.30",
+        "port": "8080",
+        "id": "b831381d-6324-4d53-ad4f-8cda48b30811",
+        "aid": "0",
+        "scy": "auto",
+        "net": "ws",
+        "type": "none",
+        "host": "cdn.example.net",
+        "path": path,
+        "tls": "tls",
+    }
+    return "vmess://" + base64.b64encode(json.dumps(payload).encode()).decode()
+
+
 def test_sip002_link_keeps_the_host_readable_and_the_tag_in_the_fragment() -> None:
     node = parse_link(SS_SIP002)
     assert node.tag == "Tokyo"
@@ -169,9 +188,24 @@ def test_a_port_that_is_not_a_number_is_reported_not_raised() -> None:
         parse_link("ss://YWVzLTEyOC1nY206ZXhhbXBsZQ@198.51.100.10:not-a-port")
 
 
-def test_the_dedup_key_ignores_the_password() -> None:
-    """One endpoint listed twice with different credentials is still one server."""
+def test_a_second_account_on_one_server_is_a_second_node() -> None:
+    """Credentials are part of what a node is: another password is another account."""
     first = parse_link(SS_SIP002)
     second = parse_link("ss://YWVzLTEyOC1nY206b3RoZXI@198.51.100.10:8388#Other")
-    assert first.dedup_key == second.dedup_key
+    assert first.dedup_key != second.dedup_key
     assert first.tag != second.tag
+
+
+def test_two_paths_on_one_host_and_port_are_two_nodes() -> None:
+    """Host and port do not identify a node.
+
+    A panel can front a list of exits through one host and one port and tell the customers
+    apart by nothing but the path of their WebSocket transport. A live 41-link subscription
+    of that shape turned into two nodes under the old key, and 39 the binary would have
+    accepted were dropped without a word.
+    """
+    first = parse_link(_vmess_with_path("/ray"))
+    second = parse_link(_vmess_with_path("/ray2"))
+    assert first.outbound["server"] == second.outbound["server"]
+    assert first.outbound["server_port"] == second.outbound["server_port"]
+    assert first.dedup_key != second.dedup_key

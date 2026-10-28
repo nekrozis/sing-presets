@@ -66,6 +66,15 @@ def test_a_different_port_is_a_different_server() -> None:
     assert len(feed.nodes) == 2
 
 
+def test_a_second_account_on_the_same_server_is_kept() -> None:
+    """The same host and port with another password is another account, not a repeat."""
+    feed = node_lib.collect(
+        [link("Tokyo"), "ss://YWVzLTEyOC1nY206b3RoZXI@198.51.100.10:8388#Tokyo backup"]
+    )
+    assert [item.tag for item in feed.nodes] == ["Tokyo", "Tokyo backup"]
+    assert feed.duplicates == 0
+
+
 def test_a_broken_link_is_counted_with_its_reason() -> None:
     feed = node_lib.collect([link("Good"), "vmess://not-base64-at-all", "kcp://example"])
     assert [item.tag for item in feed.nodes] == ["Good"]
