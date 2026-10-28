@@ -20,10 +20,32 @@ import json
 import re
 from dataclasses import dataclass
 from functools import lru_cache
+from importlib.resources import files
 from pathlib import Path
 from typing import Iterable
 
-DEFAULT_SURFACE_PATH = Path(__file__).resolve().parent.parent / "schema" / "surface.json"
+#: Where the generated field surface lives inside the package: an installed copy carries it,
+#: and a zipapp can only read what is inside the archive. Regenerate it with
+#: tools/gen_surface.py. Kept as two names rather than one `Path` because the archive branch
+#: below walks entries, where a separator inside a single name is a character, not a break:
+#: `Path("data") / "surface.json"` is `data\surface.json` on Windows, and no such entry exists.
+SURFACE_DIRECTORY = "data"
+SURFACE_FILENAME = "surface.json"
+
+
+def load_surface_text() -> str:
+    """The surface this code ships with, as text.
+
+    Read from the file beside this module when there is one, and through the import machinery
+    when there is not: inside a zipapp the package is an archive entry, so a path built from
+    `__file__` names something that cannot be opened.
+    """
+    beside = Path(__file__).resolve().parent / SURFACE_DIRECTORY / SURFACE_FILENAME
+    if beside.is_file():
+        return beside.read_text(encoding="utf-8")
+    return (
+        files("sing_presets") / SURFACE_DIRECTORY / SURFACE_FILENAME
+    ).read_text(encoding="utf-8")
 
 ORDERED_KINDS = frozenset({"seq", "seq_tagged"})
 MAP_KINDS = frozenset({"map_tag"})
@@ -90,13 +112,17 @@ class Surface:
         self.source = source
 
     @classmethod
-    def load(cls, path: Path | str = DEFAULT_SURFACE_PATH) -> "Surface":
-        return cls._load_cached(Path(path))
+    def load(cls, path: Path | str | None = None) -> "Surface":
+        """Load a surface from a file, or the one this code ships with when given no path."""
+        text = (
+            load_surface_text() if path is None else Path(path).read_text(encoding="utf-8")
+        )
+        return cls._parse_cached(text)
 
     @classmethod
     @lru_cache(maxsize=4)
-    def _load_cached(cls, path: Path) -> "Surface":
-        raw = json.loads(path.read_text(encoding="utf-8"))
+    def _parse_cached(cls, text: str) -> "Surface":
+        raw = json.loads(text)
         slots: dict[str, Slot] = {}
         for key, entry in (raw.get("slots") or {}).items():
             slots[key] = Slot(

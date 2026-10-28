@@ -21,10 +21,21 @@ from . import nodes as node_lib
 from . import presets as preset_lib
 from .surface import Surface
 
+#: The checkout this package sits in, when it sits in one. A packaged build - a wheel in
+#: site-packages, or a zipapp - has none, so every default falls back to the working
+#: directory, which is where a user of a packaged build keeps their own documents.
 REPO_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_PRESETS = REPO_ROOT / "presets.yaml"
-DEFAULT_OUT = REPO_ROOT / "build"
-DEFAULT_NODES = REPO_ROOT / "nodes.json"
+CHECKOUT = (REPO_ROOT / "pyproject.toml").is_file()
+
+
+def _default(name: str) -> Path:
+    """A default path: beside the checkout's own documents, else in the working directory."""
+    return (REPO_ROOT / name) if CHECKOUT else Path(name)
+
+
+DEFAULT_PRESETS = _default("presets.yaml")
+DEFAULT_OUT = _default("build")
+DEFAULT_NODES = _default("nodes.json")
 
 #: Environment variable holding an explicit binary path, for a setup where the binary is
 #: not on PATH. Read when the lookup happens rather than at import, so setting it from a

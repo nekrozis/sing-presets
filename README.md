@@ -26,6 +26,21 @@ ls build/
 
 Output is one file per preset, `build/<preset>.json`. Nothing else is written.
 
+## Single file
+
+For a machine that should not grow a virtualenv, build one archive:
+
+```bash
+python tools/build_pyz.py                     # dist/sing-presets.pyz, about 100 KiB
+python dist/sing-presets.pyz fetch --urls subscription.txt
+python dist/sing-presets.pyz build --nodes nodes.json
+```
+
+The archive carries the package, its generated field surface and PyYAML, so it runs on any
+Python 3.10 or newer with nothing installed — which is the condition its own tests run it
+under. It is not a standalone binary: an interpreter is still required. Its default paths are
+in the working directory, because there is no checkout beside an archive.
+
 ## Concepts
 
 **Fact** — an observed property of the environment, such as `device.mtu` or
@@ -44,8 +59,9 @@ and the audit in `sing_presets/ir.py`, not by convention.
 **Preset** — a capability list plus fact values. This is the file you edit.
 
 **Field surface** — the set of objects sing-box accepts, generated from `sing-box schema`
-into `schema/surface.json`. Every contribution is checked against it, so a misspelled
-field fails the build instead of failing on the device.
+into `sing_presets/data/surface.json`. Every contribution is checked against it, so a
+misspelled field fails the build instead of failing on the device. It lives inside the
+package because an installed copy and the single-file archive both have to carry it.
 
 ## Editing presets
 
@@ -204,10 +220,11 @@ sing_presets/
   presets.py                 preset document loading and validation
   compile.py                 preset + nodes -> checked configuration
   cli.py                     command line entry point
+  data/surface.json          generated field surface and slot classification
 schema/
   sing-box-<version>.json    raw `sing-box schema` output
-  surface.json               generated field surface and slot classification
-tools/gen_surface.py         regenerates surface.json from a binary
+tools/gen_surface.py         regenerates the surface from a binary
+tools/build_pyz.py           packs the command line into one runnable archive
 tests/                       unit, integration, and binary verification
 ```
 
@@ -218,7 +235,7 @@ When targeting a newer sing-box, regenerate rather than editing by hand:
 ```bash
 sing-box schema > schema/sing-box-<version>.json
 uv run python tools/gen_surface.py schema/sing-box-<version>.json \
-    -o schema/surface.json --binary-version <version> --strict
+    -o sing_presets/data/surface.json --binary-version <version> --strict
 ```
 
 `--strict` makes the declared tag-namespace table fail the run when upstream renames or
