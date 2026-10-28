@@ -25,7 +25,7 @@ constitutes an addressing namespace.
 
 Usage:
     sing-box schema > schema/sing-box-<version>.json
-    python tools/gen_surface.py schema/sing-box-<version>.json -o schema/surface.json
+    python tools/gen_surface.py schema/sing-box-<version>.json -o sing_presets/data/surface.json
 """
 
 from __future__ import annotations
